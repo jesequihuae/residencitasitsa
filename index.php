@@ -26,13 +26,6 @@
         <div class="container">
             <div class="row">
 
-                <?php 
-                  if(isset($_POST) && isset($_POST['login'])) {
-                    include_once 'php/connection.php';
-                    $ObjectDashboard->login($_POST);
-                  }
-                  // print_r($_POST);
-                ?>
                 <div class="col-md-4 col-md-offset-4">
                     <div class="login-panel panel panel-default">
                         <div class="panel-heading">
