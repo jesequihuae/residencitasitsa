@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
-    <title>Index</title>
+    <title>Proyectos</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -34,21 +34,28 @@
 
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
+    <?php 
+        include '../php/connection.php';
+        if($ObjectITSA->checkSession()){  
+            if(!$ObjectITSA->checkPermission("proyectos")) {
+                echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
+                exit;
+            }
+        } else {
+            echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
+            exit;
+        }
+    ?>
 
     <!-- Page Content -->
     <div id="page-wrapper">
         <div class="container-fluid">
             <!-- <input type="hidden" id="idUsuario" value="<?php @session_start(); echo $_SESSION['idUsuario']; ?>"> -->
             <div class="row">
-            <?php 
-              include '../php/connection.php';
-              if(!$ObjectITSA->checkSession()){ 
-                 // echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
-                 // exit;
-              }
-            ?>
+
                 <div class="col-lg-12">
-                    <!-- <h1 class="page-header"><i class="fa fa-briefcase"></i> Cursos</h1> -->
+                    <h1 class="page-header"><i class="fa fa-briefcase"></i> Cursos </h1>
+                   
                 </div>
             </div>
 
