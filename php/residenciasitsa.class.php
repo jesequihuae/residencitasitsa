@@ -105,9 +105,9 @@
 		public function checkPermission($Pagina) {
 			@session_start();
 			if(in_array($Pagina, $_SESSION['permisos'])) {
-				echo true;
+				return true;
 			} else {				
-				echo false;
+				return false;
 			}
 		}
 	}
