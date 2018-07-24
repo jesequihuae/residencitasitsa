@@ -38,11 +38,11 @@
     <!-- Page Content -->
     <div id="page-wrapper">
         <div class="container-fluid">
-            <input type="hidden" id="idUsuario" value="<?php @session_start(); echo $_SESSION['idUsuario']; ?>">
+            <!-- <input type="hidden" id="idUsuario" value="<?php @session_start(); echo $_SESSION['idUsuario']; ?>"> -->
             <div class="row">
                
                 <div class="col-lg-12">
-                    <h1 class="page-header"><i class="fa fa-briefcase"></i> Cursos</h1>
+                    <!-- <h1 class="page-header"><i class="fa fa-briefcase"></i> Cursos</h1> -->
                 </div>
             </div>
 

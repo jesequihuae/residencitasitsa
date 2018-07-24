@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Startmin - Bootstrap Admin Theme</title>
+        <title>Residencias - ITSA</title>
         <!-- Bootstrap Core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <!-- MetisMenu CSS -->
@@ -25,7 +25,13 @@
 
         <div class="container">
             <div class="row">
-
+                <?php 
+                  if(isset($_POST) && isset($_POST['login'])) {
+                    include_once 'php/connection.php';
+                    $ObjectITSA->login($_POST);
+                  }
+                  // print_r($_POST);
+                ?>
                 <div class="col-md-4 col-md-offset-4">
                     <div class="login-panel panel panel-default">
                         <div class="panel-heading">
@@ -35,14 +41,13 @@
                             <form method="post">
                                 <fieldset>
                                     <div class="form-group">
-                                        <input class="form-control" placeholder="E-mail" name="email" type="text" required autofocus>
+                                        <input class="form-control" placeholder="Numero de Contról" name="usuario" type="text" required autofocus>
                                     </div>
                                     <div class="form-group">
-                                        <input class="form-control" placeholder="Contraseña" name="password" type="password"  required >
+                                        <input class="form-control" placeholder="Contraseña" name="contrasena" type="password"  required >
                                     </div>
                                     <!-- Change this to a button or input when using this as a form -->
                                     <button type="submit" href="index.html" class="btn btn-lg btn-success btn-block" name="login">Iniciar Sesión</button>
-                                    <center>¿No tienes una cuenta? <br><a href="nuevousuario">Haz click aquí para crear tu cuenta</a></center>
                                 </fieldset>
                             </form>
                         </div>
