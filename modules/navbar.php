@@ -34,7 +34,7 @@
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu" >
                     <li>
-                        <a href="#" class="active"><!-- <i class="fa fa-globe fa-fw"></i>  --><center> Bienvenido </center></a>
+                        <a href="index.php" class="active"><!-- <i class="fa fa-globe fa-fw"></i>  --><center> Bienvenido </center></a>
                     </li>
                     <?php @session_start(); echo $_SESSION['navbar']; ?>
                 </ul>
