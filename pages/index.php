@@ -54,12 +54,23 @@
             </div>
 
             <!-- ... Your content goes here ... --> 
+            <?php
+                switch (@$_GET["opt"]) {
+                case '1':
+                    include 'adminFiles/filesManager.php';   
+                break;
+                
+                default:
+                    # code...
+                    break;
+                 }
+            ?>
             <div class="row">
               <pre>
                 <?php print_r($_SESSION); ?>
               </pre>
               
-                <img src="https://www.paypalobjects.com/webstatic/es_MX/mktg/logos-buttons/redesign/btn_10.png" alt="PayPal" />
+               <!-- <img src="https://www.paypalobjects.com/webstatic/es_MX/mktg/logos-buttons/redesign/btn_10.png" alt="PayPal" />-->
             </div>
         </div>
     </div>
