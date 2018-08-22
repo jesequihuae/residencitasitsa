@@ -1,0 +1,11 @@
+.titleFile{
+	margin-top: 10px;
+	size: 10pt;
+	font-family: sans-serif;
+	font-weight: bold;
+}
+.borderFile{
+	background: #F2F2F2;
+	margin: 10px;
+	border-radius: 10px;
+}
