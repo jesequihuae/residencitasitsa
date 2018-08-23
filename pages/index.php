@@ -88,5 +88,15 @@
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
      <script src="../js/index.js"></script>
+
+         <script src="../js/pdfobject.min.js"></script>  
+
+        <script type="text/javascript">
+            $(document).on("click", ".open-AddBookDialog", function () {
+                 var myBookId = $(this).data('id');
+                 PDFObject.embed(myBookId, "#example1");
+                $("#myModal").modal();
+            });
+        </script>
 </body>
 </html>
