@@ -1,10 +1,11 @@
 	<?php
 		$data 		= $_POST["filter"];
 		$idCarrera	= $_POST["idCarrera"];
-
+		$idPeriodo  = $_POST["idPeriodo"];
 
 		include '../../php/connection.php';
-		$files = $ObjectITSAFiles->getAllFilesForAdmin($data,$idCarrera); 
+
+		$files = $ObjectITSAFiles->getAllFilesForAdmin($data,$idCarrera,$idPeriodo); 
 		$idAlumno 		  = 0;
 		$idAlumnoAnterior = 0;
 		echo "<div class='col-md-12'>";

@@ -1,6 +1,9 @@
 <?php
 	include '../php/connection.php';
 	$carreras = $ObjectITSAFiles->getCarreras();
+	$periodos = $ObjectITSAFiles->getPeriodos();
+
+
 
 ?>
 
@@ -21,6 +24,17 @@
 		</select>
 	</div>
 </div>
+<div class="col-md-2">
+	<div class="form-group">
+		<label>Periodo</label>
+		<select class="form-control" name="periodo" id="periodo">
+			<option value="0">Todos</option>
+			<?php foreach ($periodos as $p): ?>
+				<option value="<?php echo $p["idPeriodo"]; ?>"><?php echo $p["vPeriodo"] ?></option>
+			<?php endforeach ?>
+		</select>
+	</div>
+</div>
 <div class="row">
 	<div class="col-md-2">
 		<button class="btn btn-primary" style="margin-top: 25px;" onclick="return findUsers()">Buscar</button>
@@ -29,21 +43,23 @@
 
 <div id="data"></div>
 <script type="text/javascript">
-		callAjax('',0);
+		callAjax('',0,0);
 		function findUsers(){
 				$data 			= $("#filter").val();
 				$idCarrera		= $("#carreras").val();
-				callAjax($data,$idCarrera);	
+				$idPeriodo 		= $("#periodo").val();
+				callAjax($data,$idCarrera,$idPeriodo);	
 		}
 
-		function callAjax($data,$idCarrera){
+		function callAjax($data,$idCarrera,$idPeriodo){
 
 			$.ajax({
 				  type: "POST",
 				  url: 'helper/obtenerArchivosAsync.php',
 				  data: {
 				  			filter:$data,
-				  			idCarrera:$idCarrera
+				  			idCarrera:$idCarrera,
+				  			idPeriodo:$idPeriodo
 				  		},
 				  beforeSend: function(){
 				  			$("#data").html('<center><img width="250" height="250" style="margin-top:50px;" src="../img/loader.gif" /></center>');
