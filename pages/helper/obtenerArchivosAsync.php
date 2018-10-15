@@ -8,6 +8,9 @@
 		$files = $ObjectITSAFiles->getAllFilesForAdmin($data,$idCarrera,$idPeriodo); 
 		$idAlumno 		  = 0;
 		$idAlumnoAnterior = 0;
+		//echo "<pre>";
+		//print_r($files);
+		//echo "</pre>";
 		echo "<div class='col-md-12'>";
 		foreach ($files as $file) {
 			$idAlumno = $file["idAlumno"];
@@ -26,22 +29,32 @@
 					echo "<center><p class='titleFile'>".$file["nombreDocumento"]."</p></center>";
 				echo "</div>";
 				echo "<div class='col-md-12'>";
-				echo "<div class='col-md-6'>";
-				    echo "<div class='col-md-12'>AI</div>";
-					 if($file["bAceptadoAI"] == 1){
-					     	echo "<img src='../img/check.png' />";
-					 }else{
-					     	echo "<img src='../img/uncheck.png' />";
-					 }
+					echo "<div class='col-md-6'>";
+					    echo "<div class='col-md-12'>AI</div>";
+						 if($file["bAceptadoAI"] == 1){
+						     	echo "<img src='../img/check.png' />";
+						 }else{
+						     	echo "<img src='../img/uncheck.png' />";
+						 }
+					echo "</div>";
+					echo "<div class='col-md-6'>";
+					    echo "<div class='col-md-12'>AE</div>";
+						 if($file["bAceptadoAE"] == 1){
+						     	echo "<img src='../img/check.png' />";
+						 }else{
+						     	echo "<img src='../img/uncheck.png' />";
+						 }
+					echo "</div>";
 				echo "</div>";
-				echo "<div class='col-md-6'>";
-				    echo "<div class='col-md-12'>AE</div>";
-					 if($file["bAceptadoAE"] == 1){
-					     	echo "<img src='../img/check.png' />";
-					 }else{
-					     	echo "<img src='../img/uncheck.png' />";
-					 }
-				echo "</div>";
+				echo "<div class='col-md-12'>";
+					echo "<div class='col-md-12'>";
+					    echo "<div class='col-md-12'><center><strong>A Tiempo</strong></center></center></div>";
+						 if($file["aTiempo"] >= 0){
+						     	echo "<center><img src='../img/check.png' /></center>";
+						 }else{
+						     	echo "<center><img src='../img/uncheck.png' /></center>";
+						 }
+					echo "</div>";
 				echo "</div>";
 			echo "</div>";
 		}

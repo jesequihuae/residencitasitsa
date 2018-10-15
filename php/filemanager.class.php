@@ -7,7 +7,7 @@
 		}
 
 		public function getAllFilesForAdmin($filter,$idCarrera,$idPeriodo){
-
+			$currentDate = "'".date('Y-m-d')."'";
 			if (!empty($filter)) {
 				$filter = " WHERE al.vNumeroControl LIKE \"%".$filter."%\"";
 
@@ -30,10 +30,12 @@
 			}
 
 
-			$sql = "SELECT al.idAlumno,al.vNombre,al.vApellidoPaterno,al.vApellidoMaterno,al.vNumeroControl,d.vNombre as UUIDDoc,td.vNombre as   	nombreDocumento,d.bAceptadoAI,d.bAceptadoAE FROM alumnos as al
+			$sql = "SELECT al.idAlumno,al.vNombre,al.vApellidoPaterno,al.vApellidoMaterno,al.vNumeroControl,d.vNombre as UUIDDoc,td.vNombre as   	nombreDocumento,d.bAceptadoAI,d.bAceptadoAE,d.dFechaRegistro,DATEDIFF(fe.dFechaLimite,d.dFechaRegistro) as aTiempo FROM alumnos as al
 				 							   INNER JOIN proyectoseleccionado ps ON(ps.idAlumno = al.idAlumno)
 											   INNER JOIN documentos d ON(d.idProyectoSeleccionado = ps.idProyectoSeleccionado AND d.idAlumno = al.idAlumno)
-											   INNER JOIN tiposdocumento td ON(td.idTipoDocumento = d.idTipoDocumento) ".@$filter;
+											   INNER JOIN tiposdocumento td ON(td.idTipoDocumento = d.idTipoDocumento) 
+											   INNER  JOIN fechaEntregaPorDocumento fe ON (fe.idTipoDocumento = td.idTipoDocumento)
+											   ".@$filter;
 
 			$SQL = $this->CONNECTION->prepare($sql);
 			$SQL->execute(); 
