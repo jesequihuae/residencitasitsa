@@ -21,9 +21,10 @@
 
 		}
 	</style>
+	<script type="text/javascript" src="../../js/jquery.js"></script>
 </head>
 <body>
-	<table>
+	<table id="Cronograma">
 		<tr class="color-head">
 			<th rowspan="2">Actividades</th>
 			<th colspan="4">1</th>
@@ -64,16 +65,24 @@
 			<td>24</td>
 			<td>25</td>
 		</tr>
-		<?php for($i = 0;$i<12;$i++){ ?>
-			<tr>
-				<td>Actividad uno <?php echo $i; ?></td>
-				<?php for($j = 0;$j<24;$j++){ ?>
-					<td>
-						<input type="checkbox" name="checkbox1" />
-					</td>
-				<?php } ?>
-			</tr>
-		<?php } ?>
+	
 	</table>
+	<button id="agregar"> Agregar</button>
 </body>
+<script type="text/javascript">
+	var $contador = 0;
+	$("#agregar").click(function(e){
+		localStorage.setItem("actividades",$contador);
+		var semanas;
+		for($j = 0;$j<24;$j++){ 	
+			semanas += '<td><input type="checkbox" name="checkbox1" id="'+$contador+''+$j+'" /></td>';
+		}
+		$("#Cronograma").append(
+								"<tr>"+
+									"<td><input placeholder='Actividad'  /></td>"+semanas+
+								"</tr>"
+							 );
+		$contador++;
+	});
+</script>
 </html>
