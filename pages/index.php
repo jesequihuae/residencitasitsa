@@ -62,9 +62,14 @@
                 case '1':
                     include 'adminFiles/filesManager.php';   
                 break;
-                
+                case '2':
+                    include 'cronograma/cronogramaActividades.php';
+                break;
+                case '3':
+                    include 'alertas/alertasPorAlumno.php';
+                break; 
                 default:
-                    # code...
+                    
                     break;
                  }
             ?>

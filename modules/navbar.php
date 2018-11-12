@@ -20,7 +20,29 @@
                     <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li> -->
                     <!-- <li class="divider"></li> -->
-                    <li><a href="../php/logout.php"><i class="fa fa-sign-out fa-fw"></i> Mostrar Archivos</a>
+                    <li><a href="../pages?opt=1"><i class="fa fa-sign-out fa-fw"></i> Mostrar Archivos</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+         <ul class="nav navbar-left navbar-top-links">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> Cronograma <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a href="../pages?opt=2"><i class="fa fa-sign-out fa-fw"></i> Generar Cronograma</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-left navbar-top-links">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-bell fa-fw"></i> Alertas <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a href="../pages?opt=3"><i class="fa fa-bell fa-fw"></i> Administrar alertas</a>
                     </li>
                 </ul>
             </li>

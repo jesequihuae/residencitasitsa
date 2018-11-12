@@ -18,12 +18,24 @@
 			border:1px solid;
 			width: 50px;
 			text-align: center;
-
+		}
+		.top{
+			margin-top: 10px;
 		}
 	</style>
-	<script type="text/javascript" src="../../js/jquery.js"></script>
+
 </head>
 <body>
+	<div class="row">
+		<div class="col-md-2">
+			<div class="form-group">
+				<label>Selecciona un documento</label>
+				<select class="form-control" id="SDocumento" name="documentos">
+
+				</select>
+			</div>
+		</div>
+	</div>	
 	<table id="Cronograma">
 		<tr class="color-head">
 			<th rowspan="2">Actividades</th>
@@ -35,54 +47,91 @@
 			<th colspan="4">6</th>
 		</tr>
 		<tr class="color-head">
-			<td>1</td>
-			<td>2</td>
-			<td>3</td>
-			<td>4</td>
-
-			<td>6</td>
-			<td>5</td>
-			<td>7</td>
-			<td>8</td>
-
-			<td>9</td>
-			<td>10</td>
-			<td>11</td>
-			<td>12</td>
-
-			<td>13</td>
-			<td>14</td>
-			<td>15</td>
-			<td>16</td>
-
-			<td>17</td>
-			<td>18</td>
-			<td>19</td>
-			<td>20</td>
-
-			<td>22</td>
-			<td>23</td>
-			<td>24</td>
-			<td>25</td>
+			<?php
+				for($i = 0;$i<24;$i++){
+					echo "<td id=\"semana$i\">".($i+1)."</td>";
+				}
+			?>
+			
+		
 		</tr>
 	
 	</table>
-	<button id="agregar"> Agregar</button>
+	<button id="agregar" class="btn btn-primary top"> Agregar</button>
+	<button id="guardar" class="btn btn-primary top" onclick="return guardar()"> Agregar</button>
+	<div id="salida">
+
+	</div>
 </body>
 <script type="text/javascript">
-	var $contador = 0;
+	var contador = 0;
+	cargarSelect();
+	function cargarSelect(){
+		$.ajax({
+			url:'../php/cronograma.php',
+			type:'POST',
+			data:{"operacion":"2"},
+			beforeSend: function(e){
+
+			},
+			success: function(e){
+				$("#SDocumento").append(e);
+			},
+			error: function(e){
+				$("#salida").html(e);
+			}
+		});
+	}
+
 	$("#agregar").click(function(e){
-		localStorage.setItem("actividades",$contador);
 		var semanas;
 		for($j = 0;$j<24;$j++){ 	
-			semanas += '<td><input type="checkbox" name="checkbox1" id="'+$contador+''+$j+'" /></td>';
+			semanas += '<td><input type="checkbox" name="checkbox1" id="'+contador+''+$j+'" /></td>';
 		}
 		$("#Cronograma").append(
 								"<tr>"+
-									"<td><input placeholder='Actividad'  /></td>"+semanas+
+									"<td><input placeholder='Actividad' id='actividad"+contador+"'  /></td>"+semanas+
 								"</tr>"
 							 );
-		$contador++;
+		contador++;
 	});
+	function guardar(){
+		var cronograma = "[";
+		var idTipoDeDocumento = $("#SDocumento").val();
+		for(i = 0;i < contador;i++){
+			cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",";
+			for(j = 0; j<24;j++){
+				if(j<23){
+					cronograma += "\"valor"+i+""+j+"\":\""+$("#"+i+""+j).is(":checked")+"\",\"iSemana"+i+""+j+"\":\""+$("#semana"+j).text().trim()+"\",";
+				}else{
+					cronograma += "\"valor"+i+""+j+"\":\""+$("#"+i+""+j).is(":checked")+"\",\"iSemana"+i+""+j+"\":\""+$("#semana"+j).text().trim()+"\"";
+				}
+				
+			}
+			if(i<(contador-1)){
+				cronograma += "},";
+			}else{
+				cronograma += "}";
+			}
+		}
+		cronograma+=']';
+		
+	
+
+		$.ajax({
+			url: '../php/cronograma.php',
+			type:'POST',
+			data:{"cronograma":cronograma,operacion:1,size:24},
+			beforeSend: function(e){
+
+			},
+			success: function(e){
+				$("#salida").html(e);
+			},
+			error: function(e){
+				$("#salida").html(e);	
+			}
+		});
+	}
 </script>
 </html>
