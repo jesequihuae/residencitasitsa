@@ -23,8 +23,17 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/styleFiles.css">
 
+    <!-- ALERTIFY JS-->
+    <link  href="../css/alertify.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Default theme -->
+    <link rel="stylesheet" href="../css/themes/default.min.css"/>
+
+
+
      <!-- jQuery -->
     <script src="../js/jquery.min.js"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -93,7 +102,10 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
-     <script src="../js/index.js"></script>
+    <script src="../js/index.js"></script>
+
+     <!--ALERTIFY JS-->
+    <script src="../js/alertify.min.js"></script>
 
          <script src="../js/pdfobject.min.js"></script>  
 

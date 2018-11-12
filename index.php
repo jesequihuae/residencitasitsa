@@ -13,6 +13,7 @@
         <link href="css/startmin.css" rel="stylesheet">
         <!-- Custom Fonts -->
         <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        
 
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -66,5 +67,6 @@
         <script src="js/metisMenu.min.js"></script>
         <!-- Custom Theme JavaScript -->
         <script src="js/startmin.js"></script>
+       
     </body>
 </html>

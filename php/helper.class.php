@@ -29,16 +29,41 @@
 			$alumnos = $this->conection->prepare($sql);
 			$alumnos->execute();
 
-			if($alumnos->rowCount() > 0){
-				$respuesta = $alumnos->fetchAll();
-			}else{
-				$respuesta = null;
-			}
+			
+			$respuesta = $alumnos->fetchAll();
+
 
 			return $respuesta;
 		}
+
+		public function getCarreras(){
+			$sql = "SELECT 
+						idCarrera AS id,
+						vCarrera AS descripcion
+					FROM carreras WHERE bActivo = 1 ";
+			$carreras = $this->conection->prepare($sql);
+			$carreras->execute();
+			return $carreras->fetchAll();
+		}
 	}
 	
-	
+	$operacion = @$_POST["operacion"];
+
+	switch ($operacion) {
+			case 1:
+				$helper = new helper();
+				$idCarrera = $_POST["idCarrera"];
+				$alumnos = $helper->obtenerAlumnosPorCarrera($idCarrera);
+				echo "<option value='0'>Selecciona uno</option>";
+				foreach ($alumnos AS $k) {
+					echo "<option value=".$k["id"].">".$k["descripcion"]."</option>";
+				}
+				
+			break;
+			
+			default:
+				
+				break;
+		}	
 ?>
 
