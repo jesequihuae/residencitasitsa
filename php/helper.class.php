@@ -2,7 +2,7 @@
 	class helper
 	{
 		private $conection;
-	
+
 		function __construct()
 		{
 			$this->abrirConexion();
@@ -15,12 +15,12 @@
 			} catch(PDOException $e) {
 				echo $e->getMessage();
 			}
-			$this->conection = $handler;	
+			$this->conection = $handler;
 		}
 
 		function obtenerAlumnosPorCarrera($idCarrera){
 			$sql = "
-				SELECT 
+				SELECT
 					idAlumno AS id,
 					CONCAT(vNombre,' ',vApellidoPaterno,' ',vApellidoMaterno,' ',vNumeroControl) AS descripcion
 				FROM alumnos
@@ -29,7 +29,7 @@
 			$alumnos = $this->conection->prepare($sql);
 			$alumnos->execute();
 
-			
+
 			$respuesta = $alumnos->fetchAll();
 
 
@@ -37,7 +37,7 @@
 		}
 
 		public function getCarreras(){
-			$sql = "SELECT 
+			$sql = "SELECT
 						idCarrera AS id,
 						vCarrera AS descripcion
 					FROM carreras WHERE bActivo = 1 ";
@@ -45,8 +45,25 @@
 			$carreras->execute();
 			return $carreras->fetchAll();
 		}
+		function guardarMensaje($idAlumno,$msg,$bActive){
+			$sql = "
+					   INSERT INTO mensajesporalumno
+						 (
+							 	idAlumno,
+								vMensaje,
+								bActive
+						 )
+						 VALUES(
+							 $idAlumno,
+							 '".$msg."',
+							 $bActive
+						)
+			";
+			$mensajes = $this->conection->prepare($sql);
+			return $mensajes->execute();
+		}
 	}
-	
+
 	$operacion = @$_POST["operacion"];
 
 	switch ($operacion) {
@@ -58,12 +75,19 @@
 				foreach ($alumnos AS $k) {
 					echo "<option value=".$k["id"].">".$k["descripcion"]."</option>";
 				}
-				
-			break;
-			
-			default:
-				
-				break;
-		}	
-?>
 
+			break;
+			case 2:
+				$helper = new helper();
+				$idAlumno = $_POST["idAlumno"];
+				$msg      = $_POST["mensaje"];
+				$bActive  = $_POST["bActive"];
+
+			  echo	$helper->guardarMensaje($idAlumno,$msg,$bActive);
+			break;
+
+			default:
+
+				break;
+		}
+?>
