@@ -62,6 +62,19 @@
 			$mensajes = $this->conection->prepare($sql);
 			return $mensajes->execute();
 		}
+
+		function getMensajes($inicio,$rowMax){
+			$sql = "
+					SELECT
+						idMensaje,
+						vMensaje
+					FROM mensajesporalumno
+					WHERE bActive = 1
+					LIMIT $inicio,$rowMax
+			";
+			$mensajes = $this->conection->prepare($sql);
+			return $mensajes->fetchAll();
+		}
 	}
 
 	$operacion = @$_POST["operacion"];
@@ -84,6 +97,16 @@
 				$bActive  = $_POST["bActive"];
 
 			  echo	$helper->guardarMensaje($idAlumno,$msg,$bActive);
+			break;
+			case 3:
+				$helper = new helper();
+				$mensajes = $helper->getMensajes(0,10);
+
+				$select = "";
+				foreach ($mensajes as $m) {
+					$select .= $select
+				}
+
 			break;
 
 			default:

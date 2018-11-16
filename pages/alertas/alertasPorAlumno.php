@@ -98,13 +98,16 @@
 												<!--FIN DEL FORMULARIO DE MENSAJES-->
                       </div>
                       <div class="tab-pane fade" id="settings">
-                          <h3 class="head text-center">Create a Bootsnipp<sup>™</sup> Profile</h3>
-                          <p class="narrow text-center">
-                              Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                          </p>
-                          <p class="text-center">
-					                    <a href="" class="btn btn-success btn-outline-rounded green"> create your profile <span style="margin-left:10px;" class="glyphicon glyphicon-send"></span></a>
-					                </p>
+                        <table class="table table-bordered">
+													<tr>
+														<th class="center">id mensaje</th>
+														<th class="center">mensaje</th>
+														<th class="center">activo</th>
+													</tr>
+													<tr id="bodyTable">
+
+													<tr>
+												</table>
                       </div>
                       <div class="tab-pane fade" id="doner">
                           <h3 class="head text-center">Bootsnipp goodies</h3>
