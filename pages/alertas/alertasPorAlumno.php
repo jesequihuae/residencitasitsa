@@ -3,7 +3,7 @@
 	$helper = new helper();
 ?>
 
-<section style="background:#efefe9;">
+<section style="background:#efefe9; height:800px;">
         <div class="container">
             <div class="row">
                 <div class="board">
@@ -98,17 +98,28 @@
 												<!--FIN DEL FORMULARIO DE MENSAJES-->
                       </div>
                       <div class="tab-pane fade" id="settings">
-                        <table class="table table-bordered">
+												<div class="col-md-3 col-md-offset-9">
+													<div class="form-group">
+														<label>Activo</label>
+														<select id="activo" class="form-control" onchange="changeItem(this)">
+															<option value="-1">Todos</option>
+															<option value="1">Si</option>
+															<option value="0">No</option>
+														</select>
+													</div>
+												</div>
+                        <table class="table table-hover" id="tablaMensajes">
 													<tr>
 														<th class="center">id mensaje</th>
 														<th class="center">mensaje</th>
 														<th class="center">activo</th>
 													</tr>
-													<tr id="bodyTable">
-
-													<tr>
 												</table>
+												<div id="paginador">
+
+												</div>
                       </div>
+
                       <div class="tab-pane fade" id="doner">
                           <h3 class="head text-center">Bootsnipp goodies</h3>
                           <p class="narrow text-center">
@@ -128,8 +139,121 @@
 </section>
 
 <script type="text/javascript">
+	cargarAlumnos(0,7,-1);
+
+	function changeItem(e){
+		cargarAlumnos(0,7,e.value);
+	}
+
+	function editar(id){
+		alertify.confirm('ITSA', 'Estas seguro que deseas editar?',
+											function(){
+												$.ajax({
+												 type:"POST",
+												 url:"../php/helper.class.php",
+												 data:{
+													 "operacion":5,
+													 "idMensaje":id
+												 },
+												 beforeSend: function(){
+
+												 },
+												 success: function(e){
+													 var json = JSON.parse(e);
+
+													 $("#mensaje").val(json[0].vMensaje);
+													 $("#carreras").val(json[0].idCarrera);
+													 cargarComboAlumnos(json[0].idCarrera,json[0].idAlumno);
+
+												 },
+												 error: function(e){
+
+												 }
+											 });
+										 },
+										 function(){
+												alertify.error('Cancel');
+										});
+	}
+	function DesactivarActivar(id,bit){
+		var mensaje = "";
+
+		if(mensaje == 0){
+			mensaje = "Estas seguro que deseas desactivarlo?";
+		}else{
+			mensaje = "Estas seguro que deseas activarlo?";
+		}
+		alertify.confirm('ITSA', mensaje,
+											function(){
+												$.ajax({
+												 type:"POST",
+												 url:"../php/helper.class.php",
+												 data:{
+													 "operacion":4,
+													 "idMensaje":id,
+													 "activo":bit
+												 },
+												 beforeSend: function(){
+
+												 },
+												 success: function(e){
+
+													 if(e == 1){
+														 	var itemSelected = $("#activo").val();
+													 		cargarAlumnos(0,7,itemSelected);
+															if(bit == 1){
+																alertify.success('Activado con exito');
+															}else{
+																alertify.success('Desactivado con exito');
+															}
+
+												 	 }else{
+														 alertify.error('Ocurrio un error inesperado');
+													 }
+												 },
+												 error: function(e){
+
+												 }
+											 });
+										 },
+										 function(){
+											  alertify.error('Cancel');
+										});
+
+	}
+
+	function cargarAlumnos(inicio,fin,filtroActivo){
+		if(filtroActivo == -2){
+			filtroActivo = $("#activo").val();
+		}
+		$.ajax({
+			type:"POST",
+			url:"../php/helper.class.php",
+			data:{
+				"operacion":3,
+				"inicio":inicio,
+				"fin":fin,
+				"activo":filtroActivo
+			},
+			beforeSend: function(){
+
+			},
+			success: function(e){
+				var res = JSON.parse(e);
+				$("#tablaMensajes").html(res.mensajes);
+				$("#paginador").html(res.paginador);
+			},
+			error: function(e){
+			}
+		});
+	}
+
 	$("#carreras").change(function(e){
-		idCarr = this.value;
+		cargarComboAlumnos(this.value,null);
+	});
+
+	function cargarComboAlumnos(idCarr,idAlumno){
+
 		$.ajax({
 			  type: "POST",
 			  url: '../php/helper.class.php',
@@ -142,29 +266,15 @@
 			  },
 			  success: function(res){
 			  	$("#alumnos").html(res);
-			  	 //alertify.success('custom message.');
-			  	 /*alertify.prompt(
-			  	 		'Prompt Title',
-			  	 		'Prompt Message',
-			  	 		'Prompt Value'
-               			,
-               			function(evt, value)
-               			{
-               				alertify.success('You entered: ' + value);
-               			}
-               			,function()
-               			{
-               				alertify.error('Cancel');
-               			}
-               		);*/
-               		//alertify.set('notifier','position', 'top-center');
-               		//alertify.success('Guardado con exito');
+					if(idAlumno != null){
+						$("#alumnos").val(idAlumno);
+					}
 			 	 }
 			});
-	});
+	}
 	function guardar(){
 		var idAlumno = $("#alumnos").val();
-		var mensaje = $("#mensaje").val();
+		var mensaje = $("#mensaje").val().trim();
 		alertify.set('notifier','position', 'top-center');
 		if(idAlumno == 0 || mensaje.trim() == ""){
 			alertify.error("Campos vacios");
@@ -183,22 +293,27 @@
 			 	operacion:2
 			 },
 			 beforeSend: function(e){
-			 	$("#divContent").addClass("hide");
-			 	$("#divLoad").addClass("show");
-			 	$("#load").html("<img src='../img/loader.gif' />");
+				 	$("#divContent").addClass("hide");
+				 	$("#divLoad").addClass("show");
+				 	$("#load").html("<img src='../img/loader.gif' />");
 			 },
 			 success: function(e){
-				$("#divContent").removeClass("hide");
- 			 	$("#divLoad").removeClass("show");
+					$("#divContent").removeClass("hide");
+	 			 	$("#divLoad").removeClass("show");
 
-				$("#divContent").addClass("show");
- 			 	$("#divLoad").addClass("hide");
-					if(e == 1){
-						 alertify.success("Guardado con exito", "", 0);
-					}else{
-						 alertify.error(e, "", 0);
-					}
-				$("#guardar").prop("disabled",false);
+					$("#divContent").addClass("show");
+	 			 	$("#divLoad").addClass("hide");
+
+						if(e == 1){
+							alertify.notify("Guardado con exito", "success",5);
+								var itemSelected = $("#activo").val();
+							 cargarAlumnos(0,7,itemSelected);
+						}else{
+							 alertify.error(e, "", 0);
+						}
+						$("#alumnos").val(0);
+						$("#mensaje").val("");
+					$("#guardar").prop("disabled",false);
 			},
 			error: function(e){
 					$("#guardar").prop("disabled",false);

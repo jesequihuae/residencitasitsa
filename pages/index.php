@@ -53,9 +53,9 @@
         <div class="container-fluid">
             <!-- <input type="hidden" id="idUsuario" value="<?php @session_start(); echo $_SESSION['idUsuario']; ?>"> -->
             <div class="row">
-            <?php 
+            <?php
               include '../php/connection.php';
-              if(!$ObjectITSA->checkSession()){ 
+              if(!$ObjectITSA->checkSession()){
                  echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                  exit;
               }
@@ -65,36 +65,36 @@
                 </div>
             </div>
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <?php
                 switch (@$_GET["opt"]) {
                 case '1':
-                    include 'adminFiles/filesManager.php';   
+                    include 'adminFiles/filesManager.php';
                 break;
                 case '2':
                     include 'cronograma/cronogramaActividades.php';
                 break;
                 case '3':
                     include 'alertas/alertasPorAlumno.php';
-                break; 
+                break;
                 default:
-                    
+
                     break;
                  }
             ?>
-            <div class="row">
-              <pre>
-                <?php print_r($_SESSION); ?>
-              </pre>
-              
-               <!-- <img src="https://www.paypalobjects.com/webstatic/es_MX/mktg/logos-buttons/redesign/btn_10.png" alt="PayPal" />-->
-            </div>
+
         </div>
     </div>
+    <div class="row">
+      <!--<pre>
+        <?php //print_r($_SESSION); ?>
+      </pre>-->
 
+       <!-- <img src="https://www.paypalobjects.com/webstatic/es_MX/mktg/logos-buttons/redesign/btn_10.png" alt="PayPal" />-->
+    </div>
 </div>
-    
-   
+
+
     <!-- Bootstrap Core JavaScript -->
     <script src="../js/bootstrap.min.js"></script>
     <!-- Metis Menu Plugin JavaScript -->
@@ -107,7 +107,7 @@
      <!--ALERTIFY JS-->
     <script src="../js/alertify.min.js"></script>
 
-         <script src="../js/pdfobject.min.js"></script>  
+         <script src="../js/pdfobject.min.js"></script>
 
         <script type="text/javascript">
             $(document).on("click", ".open-AddBookDialog", function () {
