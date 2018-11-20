@@ -45,17 +45,19 @@
 			$carreras->execute();
 			return $carreras->fetchAll();
 		}
-		function guardarMensaje($idAlumno,$msg,$bActive){
+		function guardarMensaje($idAlumno,$msg,$titulo,$bActive){
 			$sql = "
 					   INSERT INTO mensajesporalumno
 						 (
 							 	idAlumno,
 								vMensaje,
+								vTitulo,
 								bActive
 						 )
 						 VALUES(
 							 $idAlumno,
 							 '".$msg."',
+							 '".$titulo."',
 							 $bActive
 						)
 			";
@@ -138,9 +140,10 @@
 				$helper = new helper();
 				$idAlumno = $_POST["idAlumno"];
 				$msg      = $_POST["mensaje"];
+				$titulo   = $_POST["titulo"];
 				$bActive  = $_POST["bActive"];
 
-			  echo	$helper->guardarMensaje($idAlumno,$msg,$bActive);
+			  echo	$helper->guardarMensaje($idAlumno,$msg,$titulo,$bActive);
 			break;
 			case 3:
 				$helper = new helper();

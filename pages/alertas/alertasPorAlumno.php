@@ -45,7 +45,7 @@
 														    <h3 class="panel-title">Administración de alertas</h3>
 														  </div>
 														  <div class="panel-body">
-														  		<div class="col-md-12">
+														  		<div class="col-md-6">
 														  			<div class="form-group">
 														  				<label>Carrera</label>
 														  				<select class="form-control" id="carreras">
@@ -54,6 +54,12 @@
 														  						<option value="<?php echo $k["id"];?>"><?php echo $k["descripcion"]; ?></option>
 														  					<?php } ?>
 														  				</select>
+														  			</div>
+														  		</div>
+																	<div class="col-md-6">
+														  			<div class="form-group">
+														  				<label>Titulo</label>
+														  				<input type="text" id="titulo" class="form-control" />
 														  			</div>
 														  		</div>
 															    <div class="col-md-12">
@@ -275,8 +281,9 @@
 	function guardar(){
 		var idAlumno = $("#alumnos").val();
 		var mensaje = $("#mensaje").val().trim();
+		var titulo = $("#titulo").val().trim();
 		alertify.set('notifier','position', 'top-center');
-		if(idAlumno == 0 || mensaje.trim() == ""){
+		if(idAlumno == 0 || mensaje.trim() == "" || titulo.trim() == ""){
 			alertify.error("Campos vacios");
 			return;
 		}
@@ -289,6 +296,7 @@
 			 data:{
 			 	"idAlumno":idAlumno,
 			 	"mensaje":mensaje,
+				"titulo":titulo,
 				"bActive":1,
 			 	operacion:2
 			 },
