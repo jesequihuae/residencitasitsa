@@ -522,6 +522,46 @@
 				return false;
 			}
 		}
+
+
+		/* ADMINISTRADOR */
+		public function getAlumnos() {
+		try {
+			$SQL = $this->CONNECTION->PREPARE("SELECT
+												  A.idAlumno,
+												  C.vCarrera,
+												  A.idUsuario,
+												  A.bSexo,
+												  A.vNumeroControl,
+												  A.vNombre,
+												  A.vApellidoPaterno,
+												  A.vApellidoMaterno,
+												  A.vSemestre,
+												  A.vPlanEstudios,
+												  A.dFechaIngreso,
+												  A.dFechaTermino,
+												  A.iCreditosTotales,
+												  A.iCreditosAcumulados,
+												  A.fPorcentaje,
+												  A.iPeriodo,
+												  A.fPromedio,
+												  A.vSituacion,
+												  A.bServicioSocial,
+												  A.bActividadesComplementarias,
+												  A.bMateriasEspecial,
+												  A.vCorreoInstitucional,
+												  A.dFechaNacimiento
+												FROM alumnos A
+												INNER JOIN carreras C
+												ON A.idCarrera = C.idCarrera");
+			$SQL->execute();
+			return $SQL;
+		} catch (PDOException $e) {
+			echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+					<button type="button" class="close" data-dismiss="alert">x</button>
+				  </div>';
+		}
+	}
 	}
 
 ?>
