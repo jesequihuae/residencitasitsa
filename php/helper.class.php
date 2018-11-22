@@ -57,22 +57,32 @@
 			$carreras->execute();
 			return $carreras->fetchAll();
 		}
-		function guardarMensaje($idAlumno,$msg,$titulo,$bActive){
-			$sql = "
-					   INSERT INTO mensajesporalumno
-						 (
-							 	idAlumno,
-								vMensaje,
-								vTitulo,
-								bActive
-						 )
-						 VALUES(
-							 $idAlumno,
-							 '".$msg."',
-							 '".$titulo."',
-							 $bActive
-						)
-			";
+		function guardarMensaje($idAlumno,$msg,$titulo,$bActive,$idMensaje){
+			if($idMensaje == 0){
+				$sql = "
+							 INSERT INTO mensajesporalumno
+							 (
+									idAlumno,
+									vMensaje,
+									vTitulo,
+									bActive
+							 )
+							 VALUES(
+								 $idAlumno,
+								 '".$msg."',
+								 '".$titulo."',
+								 $bActive
+							)
+				";
+			}else{
+				$sql = "
+							 UPDATE mensajesporalumno
+							 SET
+									vMensaje = '".$msg."',
+									vTitulo = '".$titulo."'
+							 WHERE idMensaje = $idMensaje
+				";
+			}
 			$mensajes = $this->conection->prepare($sql);
 			return $mensajes->execute();
 		}
@@ -125,8 +135,10 @@
 		function obtenerInformacionMensaje($idMensaje){
 			$sql = "
 				SELECT
+						a.idMensaje,
 						a.vMensaje,
 						a.idAlumno,
+						a.vTitulo,
 						b.idCarrera
 				FROM mensajesporalumno AS a
 				INNER JOIN alumnos b ON(a.idAlumno = b.idAlumno)
@@ -154,12 +166,13 @@
 			break;
 			case 2:
 				$helper = new helper();
+				$idMensaje = $_POST["idMensaje"];
 				$idAlumno = $_POST["idAlumno"];
 				$msg      = $_POST["mensaje"];
 				$titulo   = $_POST["titulo"];
 				$bActive  = $_POST["bActive"];
 
-			  echo	$helper->guardarMensaje($idAlumno,$msg,$titulo,$bActive);
+			  echo	$helper->guardarMensaje($idAlumno,$msg,$titulo,$bActive,$idMensaje);
 			break;
 			case 3:
 				$helper = new helper();

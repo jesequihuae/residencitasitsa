@@ -83,10 +83,11 @@
 																	</div>
 																</div>
 																<center>
+																	<input type="hidden" id="idMensaje" value="0"/>
 																	<button class="btn btn-primary" onclick="return guardar()" id="guardar">
 																		Guardar <i class="fa fa-save"></i>
 																	</button>
-																	<button class="btn btn-danger">
+																	<button class="btn btn-danger" onclick="limpiar()">
 																		Cancelar <i class="fa fa-save"></i>
 																	</button>
 																</center>
@@ -159,13 +160,20 @@
 
 <script type="text/javascript">
 	cargarAlumnos(0,7,-1,0);
-
+	function limpiar(){
+		$("#mensaje").val("");
+		$("#titulo").val("");
+		$("#alumnos").val(0);
+		$("#carreras").val(0);
+		$("#idMensaje").val(0);
+	}
 	function changeItem(e){
 		var idAlumno = $("#idAlumnoFilter").val();
 		cargarAlumnos(0,7,e.value,idAlumno);
 	}
 	function changeAlumno(e){
-		cargarAlumnos(0,7,e.value,e.value);
+		var activo = $("#activo").val();
+		cargarAlumnos(0,7,activo,e.value);
 	}
 	function editar(id){
 		alertify.confirm('ITSA', 'Estas seguro que deseas editar?',
@@ -183,8 +191,11 @@
 												 success: function(e){
 													 var json = JSON.parse(e);
 
+													 $('.nav-tabs a[href="#home"]').tab('show');
+													 $("#idMensaje").val(json[0].idMensaje);
 													 $("#mensaje").val(json[0].vMensaje);
 													 $("#carreras").val(json[0].idCarrera);
+													 $("#titulo").val(json[0].vTitulo);
 													 cargarComboAlumnos(json[0].idCarrera,json[0].idAlumno);
 
 												 },
@@ -297,6 +308,7 @@
 		var idAlumno = $("#alumnos").val();
 		var mensaje = $("#mensaje").val().trim();
 		var titulo = $("#titulo").val().trim();
+		var idMensaje = $("#idMensaje").val();
 		alertify.set('notifier','position', 'top-center');
 		if(idAlumno == 0 || mensaje.trim() == "" || titulo.trim() == ""){
 			alertify.error("Campos vacios");
@@ -312,6 +324,7 @@
 			 	"idAlumno":idAlumno,
 			 	"mensaje":mensaje,
 				"titulo":titulo,
+				"idMensaje":idMensaje,
 				"bActive":1,
 			 	operacion:2
 			 },
@@ -329,8 +342,9 @@
 
 						if(e == 1){
 							alertify.notify("Guardado con exito", "success",5);
-								var itemSelected = $("#activo").val();
-								var idAlumno = $("#idAlumnoFilter").val();
+							 limpiar();
+							var itemSelected = $("#activo").val();
+							var idAlumno = $("#idAlumnoFilter").val();
 							 cargarAlumnos(0,7,itemSelected,idAlumno);
 						}else{
 							 alertify.error(e, "", 0);
