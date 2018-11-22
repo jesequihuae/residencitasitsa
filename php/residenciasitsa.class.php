@@ -526,42 +526,210 @@
 
 		/* ADMINISTRADOR */
 		public function getAlumnos() {
-		try {
-			$SQL = $this->CONNECTION->PREPARE("SELECT
-												  A.idAlumno,
-												  C.vCarrera,
-												  A.idUsuario,
-												  A.bSexo,
-												  A.vNumeroControl,
-												  A.vNombre,
-												  A.vApellidoPaterno,
-												  A.vApellidoMaterno,
-												  A.vSemestre,
-												  A.vPlanEstudios,
-												  A.dFechaIngreso,
-												  A.dFechaTermino,
-												  A.iCreditosTotales,
-												  A.iCreditosAcumulados,
-												  A.fPorcentaje,
-												  A.iPeriodo,
-												  A.fPromedio,
-												  A.vSituacion,
-												  A.bServicioSocial,
-												  A.bActividadesComplementarias,
-												  A.bMateriasEspecial,
-												  A.vCorreoInstitucional,
-												  A.dFechaNacimiento
-												FROM alumnos A
-												INNER JOIN carreras C
-												ON A.idCarrera = C.idCarrera");
-			$SQL->execute();
-			return $SQL;
-		} catch (PDOException $e) {
-			echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-					<button type="button" class="close" data-dismiss="alert">x</button>
-				  </div>';
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT
+													  A.idAlumno,
+													  A.idCarrera,
+													  C.vCarrera,
+													  A.idUsuario,
+													  A.bSexo,
+													  A.vNumeroControl,
+													  A.vNombre,
+													  A.vApellidoPaterno,
+													  A.vApellidoMaterno,
+													  A.vSemestre,
+													  A.vPlanEstudios,
+													  A.dFechaIngreso,
+													  A.dFechaTermino,
+													  A.iCreditosTotales,
+													  A.iCreditosAcumulados,
+													  A.fPorcentaje,
+													  A.iPeriodo,
+													  A.fPromedio,
+													  A.vSituacion,
+													  A.bServicioSocial,
+													  A.bActividadesComplementarias,
+													  A.bMateriasEspecial,
+													  A.vCorreoInstitucional,
+													  A.dFechaNacimiento
+													FROM alumnos A
+													INNER JOIN carreras C
+													ON A.idCarrera = C.idCarrera");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
 		}
-	}
-	}
 
+		public function getCarreras() {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idCarrera, vCarrera, vClave FROM carreras WHERE bActivo = 1");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		// public function getAlumnoById($idAlumno){
+		// 	try {
+		// 		$SQL = $this->CONNECTION->PREPARE("
+		// 									SELECT 
+		// 										idAlumno,
+		// 										idCarrera,
+		// 										bSexo,
+		// 										vNumeroControl,
+		// 										vNombre,
+		// 										vApellidoPaterno,
+		// 										vApellidoMaterno,
+		// 										vSemestre,
+		// 										vPlanEstudios,
+		// 										dFechaIngreso,
+		// 										dFechaTermino,
+		// 										iCreditosTotales,
+		// 										iCreditosAcumulados,
+		// 										fPorcentaje,
+		// 										iPeriodo,
+		// 										fPromedio,
+		// 										vSituacion,
+		// 										bServicioSocial,
+		// 										bActividadesComplementarias,
+		// 										bMateriasEspecial,
+		// 										vCorreoInstitucional,
+		// 										dFechaNacimiento
+		// 									FROM alumnos
+		// 									WHERE idAlumno = :idAlumno 
+		// 							");
+		// 		$SQL->bindParam(":idAlumno", $idAlumno);
+		// 		$SQL->execute();
+		// 		$ALUMNO_ = $SQL->FETCH(PDO::FETCH_ASSOC);
+		// 		return $ALUMNO_['idAlumno'].'|'.$ALUMNO_['idCarrera'].'|'.$ALUMNO_['bSexo'].'|'.$ALUMNO_['vNumeroControl'].'|'.$ALUMNO_['vNombre'].'|'.$ALUMNO_['vApellidoPaterno'].'|'.$ALUMNO_['vApellidoMaterno'].'|'.$ALUMNO_['vSemestre'].'|'.$ALUMNO_['vPlanEstudios'].'|'.$ALUMNO_['dFechaIngreso'].'|'.$ALUMNO_['dFechaTermino'].'|'.$ALUMNO_['iCreditosTotales'].'|'.$ALUMNO_['iCreditosAcumulados'].'|'.$ALUMNO_['fPorcentaje'].'|'.$ALUMNO_['fPromedio'].'|'.$ALUMNO_['vSituacion'].'|'.$ALUMNO_['bServicioSocial'].'|'.$ALUMNO_['bActividadesComplementarias'].'|'.$ALUMNO_['bMateriasEspecial'].'|'.$ALUMNO_['vCorreoInstitucional'].'|'.$ALUMNO_['dFechaNacimiento'];
+		// 	} catch (PDOException $e) {
+		// 		echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+		// 				<button type="button" class="close" data-dismiss="alert">x</button>
+		// 			  </div>';
+		// 	}
+		// }
+
+		public function registrarAlumno($idCarrera, $Sexo, $NumeroControl, $Nombre, $ApellidoPaterno, $ApellidoMaterno, $Semestre, $PlanEstudios, $FechaIngreso, $FechaTermino, $CreditosTotales, $CreditosAcumulados, $Porcentaje, $Periodo, $Promedio, $Situacion, $ServicioSocial, $ActividadesComplementarias, $MateriasEspecial, $CorreoInstitucional, $FechaNacimiento) {
+			try {
+				$SQLEXISTE = $this->CONNECTION->PREPARE("SELECT COUNT(idUsuario) AS Total FROM alumnos WHERE vNumeroControl = :NumeroControl");
+				$SQLEXISTE->bindParam(":NumeroControl", $NumeroControl);
+				$SQLEXISTE->execute();
+
+				$TOTAL = $SQLEXISTE->FETCH(PDO::FETCH_ASSOC);
+
+				if($TOTAL['Total'] == 0) {
+					$SQLID = $this->CONNECTION->PREPARE("
+						INSERT INTO usuarios (idTipoUsuario,vUsuario,vContrasena) VALUES (1,:Usuario,:Contrasena);
+					");
+					$this->CONNECTION->beginTransaction();
+					$SQLID->bindParam(":Usuario",$NumeroControl);
+					$SQLID->bindParam(":Contrasena",$NumeroControl);
+					$SQLID->execute();
+
+					$IDUSUARIO_ = $this->CONNECTION->lastInsertId();
+
+					$SQL = $this->CONNECTION->PREPARE("
+							INSERT INTO alumnos
+							(
+								idCarrera,
+								idUsuario,
+								bSexo,
+								vNumeroControl,
+								vNombre,
+								vApellidoPaterno,
+								vApellidoMaterno,
+								vSemestre,
+								vPlanEstudios,
+								dFechaIngreso,
+								dFechaTermino,
+								iCreditosTotales,
+								iCreditosAcumulados,
+								fPorcentaje,
+								iPeriodo,
+								fPromedio,
+								vSituacion,
+								bServicioSocial,
+								bActividadesComplementarias,
+								bMateriasEspecial,
+								vCorreoInstitucional,
+								dFechaNacimiento
+							)
+							VALUES
+							(
+								:idCarrera,
+								:idUsuario,
+								:bSexo,
+								:vNumeroControl,
+								:vNombre,
+								:vApellidoPaterno,
+								:vApellidoMaterno,
+								:vSemestre,
+								:vPlanEstudios,
+								:dFechaIngreso,
+								:dFechaTermino,
+								:iCreditosTotales,
+								:iCreditosAcumulados,
+								:fPorcentaje,
+								:iPeriodo,
+								:fPromedio,
+								:vSituacion,
+								:bServicioSocial,
+								:bActividadesComplementarias,
+								:bMateriasEspecial,
+								:vCorreoInstitucional,
+								:dFechaNacimiento
+							);
+						");
+
+					$SQL->bindParam(":idCarrera",$idCarrera);
+					$SQL->bindParam(":idUsuario",$IDUSUARIO_);
+					$SQL->bindParam(":bSexo",$Sexo);
+					$SQL->bindParam(":vNumeroControl",$NumeroControl);
+					$SQL->bindParam(":vNombre",$Nombre);
+					$SQL->bindParam(":vApellidoPaterno",$ApellidoPaterno);
+					$SQL->bindParam(":vApellidoMaterno",$ApellidoMaterno);
+					$SQL->bindParam(":vSemestre",$Semestre);
+					$SQL->bindParam(":vPlanEstudios",$PlanEstudios);
+					$SQL->bindParam(":dFechaIngreso",$FechaIngreso);
+					$SQL->bindParam(":dFechaTermino",$FechaTermino);
+					$SQL->bindParam(":iCreditosTotales",$CreditosTotales);
+					$SQL->bindParam(":iCreditosAcumulados",$CreditosAcumulados);
+					$SQL->bindParam(":fPorcentaje",$Porcentaje);
+					$SQL->bindParam(":iPeriodo",$Periodo);
+					$SQL->bindParam(":fPromedio",$Promedio);
+					$SQL->bindParam(":vSituacion",$Situacion);
+					$SQL->bindParam(":bServicioSocial",$ServicioSocial);
+					$SQL->bindParam(":bActividadesComplementarias",$ActividadesComplementariasc);
+					$SQL->bindParam(":bMateriasEspecial",$MateriasEspecial);
+					$SQL->bindParam(":vCorreoInstitucional",$CorreoInstitucional);
+					$SQL->bindParam(":dFechaNacimiento",$FechaNacimiento);
+
+					$SQL->execute();
+					$this->CONNECTION->commit();	
+					echo '<div class="alert alert-dismissable alert-success">¡Alumno con número de Control: '.$NumeroControl.'  registrado exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+				} else {
+					echo '<div class="alert alert-dismissable alert-warning">Ya existe un alumno registrado con el número de control: '.$NumeroControl.'
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+				}
+			} catch (PDOException $e) {
+				$this->CONNECTION->rollback();
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+
+
+	}
 ?>

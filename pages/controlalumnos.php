@@ -54,12 +54,47 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header"><i class="fa fa-user"></i> Alumnos </h1>
-                   
+                    <?php 
+                        if(isset($_POST) && isset($_POST['guardarAlumno'])) {
+                            if($_POST['idAlumno'] == 0) {     
+
+                                $SC = (isset($_POST['bServicioSocial']) ? '1' : '0');
+                                $ME = (isset($_POST['bMateriasEspecial']) ? '1' : '0');
+                                $AC = (isset($_POST['bActividadesComplementarias']) ? '1' : '0');
+
+                                $ObjectITSA->registrarAlumno(
+                                    $_POST['idCarrera'],
+                                    $_POST['idSexo'],
+                                    $_POST['vNumeroControl'],
+                                    $_POST['vNombre'],
+                                    $_POST['vApellidoPaterno'],
+                                    $_POST['vApellidoMaterno'],
+                                    $_POST['vSemestre'],
+                                    $_POST['vPlanEstudios'],
+                                    $_POST['dFechaIngreso'],
+                                    $_POST['dFechaTermino'],
+                                    $_POST['iCreditosTotales'],
+                                    $_POST['iCreditosAcumulados'],
+                                    $_POST['fPorcentaje'],
+                                    $_POST['iPeriodo'],
+                                    $_POST['fPromedio'],
+                                    $_POST['vSituacion'],
+                                    $SC,
+                                    $AC,
+                                    $ME,
+                                    $_POST['vCorreoInstitucional'],
+                                    $_POST['dFechaNacimiento']
+                                );
+                            } else {
+
+                            }
+                        }
+                    ?>
                 </div>
             </div>
 
             <!-- ... Your content goes here ... --> 
-            <section id="registroAlumnos">
+            <section id="panelRegistroEdicion">
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="panel panel-primary">
@@ -92,7 +127,7 @@
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Sexo:</label>
                                        <div class="col-lg-9">
-                                           <select class="form-control">
+                                           <select class="form-control" name="idSexo" id="idSexo">
                                                <option value="0">Femenino</option>
                                                <option value="1">Masculino</option>
                                            </select>
@@ -111,15 +146,28 @@
                                        </div>                                    
                                     </div>
                                     <div class="form-group">
+                                        <label class="control-label col-lg-3">Carrera</label>
+                                        <div class="col-lg-9">
+                                            <?php 
+                                                $CARRERAS_QUERY = $ObjectITSA->getCarreras();
+                                            ?>
+                                            <select class="form-control" name="idCarrera" id="idCarrera">
+                                                <?php while($CARRERAS_ = $CARRERAS_QUERY->FETCH(PDO::FETCH_ASSOC))  { ?>
+                                                    <option value="<?php echo $CARRERAS_['idCarrera'] ?>"><?php echo $CARRERAS_['vClave'].' - '.$CARRERAS_['vCarrera']; ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                        <label class="control-label col-lg-3">Plan de Estudios:</label>
                                        <div class="col-lg-9">
                                             <input type="text" class="form-control" name="vPlanEstudios" id="vPlanEstudios" placeholder="Plan de Estudios" required>
                                        </div>                                    
                                     </div>
                                     <div class="form-group">
-                                       <label class="control-label col-lg-3">Plan de Estudios:</label>
+                                       <label class="control-label col-lg-3">Situación:</label>
                                        <div class="col-lg-9">
-                                            <input type="text" class="form-control" name="vPlanEstudios" id="vPlanEstudios" placeholder="Plan de Estudios" required>
+                                            <input type="text" class="form-control" name="vSituacion" id="vSituacion" placeholder="Situación" required>
                                        </div>                                    
                                     </div>
                                     <div class="form-group">
@@ -134,6 +182,68 @@
                                             <input type="number" class="form-control" name="iCreditosAcumulados" id="iCreditosAcumulados" placeholder="Créditos Acumulados" required>
                                        </div>                                    
                                     </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Porcentaje:</label>
+                                       <div class="col-lg-9">
+                                            <input type="text" class="form-control" name="fPorcentaje" id="fPorcentaje" placeholder="Porcentaje" required>
+                                       </div>                                    
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Periodo:</label>
+                                       <div class="col-lg-9">
+                                            <input type="text" class="form-control" name="iPeriodo" id="iPeriodo" placeholder="Periodo" required>
+                                       </div>                                    
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Promedio:</label>
+                                       <div class="col-lg-9">
+                                            <input type="text" class="form-control" name="fPromedio" id="fpromedio" placeholder="Promedio" required>
+                                       </div>                                    
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Correo Institucional:</label>
+                                       <div class="col-lg-9">
+                                            <input type="text" class="form-control" name="vCorreoInstitucional" id="vCorreoInstitucional" placeholder="Correo Institucional" required>
+                                       </div>                                    
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Fecha Ingreso:</label>
+                                       <div class="col-lg-9">
+                                            <input type="date" class="form-control" name="dFechaIngreso" id="dFechaIngreso" placeholder="Fecha Ingreso" required>
+                                       </div>                                    
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Fecha Termino:</label>
+                                       <div class="col-lg-9">
+                                            <input type="date" class="form-control" name="dFechaTermino" id="dFechaTermino" placeholder="Fecha Termino" required>
+                                       </div>                                    
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Fecha Nacimiento:</label>
+                                       <div class="col-lg-9">
+                                            <input type="date" class="form-control" name="dFechaNacimiento" id="dFechaNacimiento" placeholder="Fecha de Nacimiento" required>
+                                       </div>                                    
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Servicio Social:</label>
+                                       <div class="col-lg-9">
+                                            <input type="checkbox" class="form-control" name="bServicioSocial" id="bServicioSocial">
+                                       </div>                                    
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Actividades Complementarias:</label>
+                                       <div class="col-lg-9">
+                                            <input type="checkbox" class="form-control" name="bActividadesComplementarias" id="bActividadesComplementarias">
+                                       </div>                                    
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Materias Especial:</label>
+                                       <div class="col-lg-9">
+                                            <input type="checkbox" class="form-control" name="bMateriasEspecial" id="bMateriasEspecial">
+                                       </div>                                    
+                                    </div>
+                                    <button type="button" class="btn btn-default" id="cancelarRegistro"><i class="fa fa-times-circle"></i> Cancelar</button>
+                                    <button type="submit" class="btn btn-info pull-right" name="guardarAlumno"><i class="fa fa-paper-plane"></i> Guardar</button>
                                  </form>
                             </div>
                         </div>
@@ -175,6 +285,7 @@
                                          <th>Fecha Nacimiento</th>
                                          <th>Fecha Ingreso</th>
                                          <th>Fecha Termino</th>
+                                         <th>Editar</th>
                                      </thead>                                     
                                     <?php 
                                         $ALUMNOS_QUERY = $ObjectITSA->getAlumnos();
@@ -200,6 +311,38 @@
                                          <td><?php echo $ALUMNOS_['dFechaNacimiento']; ?></td>
                                          <td><?php echo $ALUMNOS_['dFechaIngreso']; ?></td>
                                          <td><?php echo $ALUMNOS_['dFechaTermino']; ?></td>
+                                         <td>
+                                            <center>
+                                                <button 
+                                                    type="button" 
+                                                    data-idalumno="<?php echo $ALUMNOS_['idAlumno']; ?>" 
+                                                    data-idcarrera="<?php echo $ALUMNOS_['idCarrera']; ?>"
+                                                    data-bsexo="<?php echo $ALUMNOS_['bSexo']; ?>"
+                                                    data-vnumerocontrol="<?php echo $ALUMNOS_['vNumeroControl']; ?>"
+                                                    data-vnombre="<?php echo $ALUMNOS_['vNombre']; ?>"
+                                                    data-vapellidopaterno="<?php echo $ALUMNOS_['vApellidoPaterno']; ?>"
+                                                    data-vapellidomaterno="<?php echo $ALUMNOS_['vApellidoMaterno']; ?>"
+                                                    data-vsemestre="<?php echo $ALUMNOS_['vSemestre']; ?>"
+                                                    data-vplanestudios="<?php echo $ALUMNOS_['vPlanEstudios']; ?>"
+                                                    data-dfechaingreso="<?php echo $ALUMNOS_['dFechaIngreso']; ?>"
+                                                    data-dfechatermino="<?php echo $ALUMNOS_['dFechaTermino']; ?>"
+                                                    data-icreditostotales="<?php echo $ALUMNOS_['iCreditosTotales']; ?>"
+                                                    data-icreditosacumulados="<?php echo $ALUMNOS_['iCreditosAcumulados']; ?>"
+                                                    data-fporcentaje="<?php echo $ALUMNOS_['fPorcentaje']; ?>"
+                                                    data-iperiodo="<?php echo $ALUMNOS_['iPeriodo']; ?>"
+                                                    data-fpromedio="<?php echo $ALUMNOS_['fPromedio']; ?>"
+                                                    data-vsituacion="<?php echo $ALUMNOS_['vSituacion']; ?>"
+                                                    data-bserviciosocial="<?php echo $ALUMNOS_['bServicioSocial']; ?>"
+                                                    data-bactividadescomplementarias="<?php echo $ALUMNOS_['bActividadesComplementarias']; ?>"
+                                                    data-bmateriaespecial="<?php echo $ALUMNOS_['bMateriasEspecial']; ?>"
+                                                    data-vcorreoinstitucional="<?php echo $ALUMNOS_['vCorreoInstitucional']; ?>"
+                                                    data-dfechaNacimiento="<?php echo $ALUMNOS_['dFechaNacimiento']; ?>"
+                                                    class="editarAlumno btn btn-primary btn-sm"
+                                                    title="Editar Alumno">
+                                                       <i class="fa fa-pencil"></i>
+                                                </button>
+                                            </center>
+                                        </td>
                                      </tr>
                                     <?php } ?>
                                  </table>
@@ -214,7 +357,7 @@
 </div>
 
     <!-- jQuery -->
-    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery.min.js"></script> 
     <!-- Bootstrap Core JavaScript -->
     <script src="../js/bootstrap.min.js"></script>
     <!-- Metis Menu Plugin JavaScript -->
@@ -222,5 +365,83 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
+     <script type="text/javascript">
+        $(document).ready(function(){
+          $("#panelRegistroEdicion").hide();
+
+          $("#btnNuevoAlumno").click(function() {
+            $("#panelRegistroEdicion").hide(200);
+            clearFields();
+            $("#panelRegistroEdicion").show(200);
+          });
+
+          $("#cancelarRegistro").click(function(){
+            $("#panelRegistroEdicion").hide(200);
+            clearFields();
+          });
+
+          $(".editarAlumno").click(function(){
+            $("#panelRegistroEdicion").hide(200);
+            clearFields();
+            $("#idAlumno").val($(this).data("idalumno"));
+            $("#vNombre").val($(this).data("vnombre"));
+            $("#vApellidoPaterno").val($(this).data("vapellidopaterno"));
+            $("#vApellidoMaterno").val($(this).data("vapellidomaterno"));
+            $("#vNumeroControl").val($(this).data("vnumerocontrol"));
+            $("#vSemestre").val($(this).data("vsemestre"));
+            $("#vPlanEstudios").val($(this).data("vplanestudios"));
+            $("#vSituacion").val($(this).data("vsituacion"));
+            $("#iCreditosTotales").val($(this).data("icreditostotales"));
+            $("#iCreditosAcumulados").val($(this).data("icreditosacumulados"));
+            $("#fPorcentaje").val($(this).data("fporcentaje"));
+            $("#iPeriodo").val($(this).data("iperiodo"));
+            $("#fpromedio").val($(this).data("fpromedio"));
+            $("#vCorreoInstitucional").val($(this).data("vcorreoinstitucional"));
+            $("#dFechaIngreso").val($(this).data("dfechaingreso"));
+            $("#dFechaTermino").val($(this).data("dfechatermino"));
+            $("#dFechaNacimiento").val($(this).data("dfechanacimiento"));
+            if($(this).data("bserviciosocial") == '0'){                
+                $("#bServicioSocial").prop('checked', false);
+            } else {
+                $("#bServicioSocial").prop('checked', true);
+            }
+            if($(this).data("bactividadescomplementarias") == '0'){                
+                $("#bActividadesComplementarias").prop('checked', false);
+            } else {
+                $("#bActividadesComplementarias").prop('checked', true);
+            }
+            if($(this).data("bmateriaespecial") == '0'){                
+                $("#bMateriasEspecial").prop('checked', false);
+            } else {
+                $("#bMateriasEspecial").prop('checked', true);
+            }
+            console.log($(this).data());
+            $("#panelRegistroEdicion").show(200);
+          });
+        });
+
+        function clearFields(){
+            $("#idAlumno").val("0");
+            $("#vNombre").val("");
+            $("#vApellidoPaterno").val("");
+            $("#vApellidoMaterno").val("");
+            $("#vNumeroControl").val("");
+            $("#vSemestre").val("");
+            $("#vPlanEstudios").val("");
+            $("#vSituacion").val("");
+            $("#iCreditosTotales").val("");
+            $("#iCreditosAcumulados").val("");
+            $("#fPorcentaje").val("");
+            $("#iPeriodo").val("");
+            $("#fpromedio").val("");
+            $("#vCorreoInstitucional").val("");
+            $("#dFechaIngreso").val("");
+            $("#dFechaTermino").val("");
+            $("#dFechaNacimiento").val("");
+            $("#bServicioSocial").prop('checked', false);
+            $("#bActividadesComplementarias").prop('checked', false);
+            $("#bMateriasEspecial").prop('checked', false);
+        }
+    </script>
 </body>
 </html>
