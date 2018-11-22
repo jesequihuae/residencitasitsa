@@ -104,14 +104,27 @@
 												<!--FIN DEL FORMULARIO DE MENSAJES-->
                       </div>
                       <div class="tab-pane fade" id="settings">
-												<div class="col-md-3 col-md-offset-9">
-													<div class="form-group">
-														<label>Activo</label>
-														<select id="activo" class="form-control" onchange="changeItem(this)">
-															<option value="-1">Todos</option>
-															<option value="1">Si</option>
-															<option value="0">No</option>
-														</select>
+												<div class="col-md-6 col-md-offset-6">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label>Alumno</label>
+															<select class="form-control" id="idAlumnoFilter" onchange="changeAlumno(this)">
+																<option value="0">Selecciona...</option>
+																<?php foreach ($helper->obtenerAlumnos() as $k) { ?>
+																	<option value="<?php echo $k["id"];?>"><?php echo $k["descripcion"]; ?></option>
+																<?php } ?>
+															</select>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label>Activo</label>
+															<select id="activo" class="form-control" onchange="changeItem(this)">
+																<option value="-1">Todos</option>
+																<option value="1">Si</option>
+																<option value="0">No</option>
+															</select>
+														</div>
 													</div>
 												</div>
                         <table class="table table-hover" id="tablaMensajes">
@@ -145,12 +158,15 @@
 </section>
 
 <script type="text/javascript">
-	cargarAlumnos(0,7,-1);
+	cargarAlumnos(0,7,-1,0);
 
 	function changeItem(e){
-		cargarAlumnos(0,7,e.value);
+		var idAlumno = $("#idAlumnoFilter").val();
+		cargarAlumnos(0,7,e.value,idAlumno);
 	}
-
+	function changeAlumno(e){
+		cargarAlumnos(0,7,e.value,e.value);
+	}
 	function editar(id){
 		alertify.confirm('ITSA', 'Estas seguro que deseas editar?',
 											function(){
@@ -206,7 +222,8 @@
 
 													 if(e == 1){
 														 	var itemSelected = $("#activo").val();
-													 		cargarAlumnos(0,7,itemSelected);
+															var idAlumno = $("#idAlumnoFilter").val();
+													 		cargarAlumnos(0,7,itemSelected,idAlumno);
 															if(bit == 1){
 																alertify.success('Activado con exito');
 															}else{
@@ -228,10 +245,7 @@
 
 	}
 
-	function cargarAlumnos(inicio,fin,filtroActivo){
-		if(filtroActivo == -2){
-			filtroActivo = $("#activo").val();
-		}
+	function cargarAlumnos(inicio,fin,filtroActivo,filtroIdAlumno){
 		$.ajax({
 			type:"POST",
 			url:"../php/helper.class.php",
@@ -239,7 +253,8 @@
 				"operacion":3,
 				"inicio":inicio,
 				"fin":fin,
-				"activo":filtroActivo
+				"activo":filtroActivo,
+				"idAlumno":filtroIdAlumno
 			},
 			beforeSend: function(){
 
@@ -315,7 +330,8 @@
 						if(e == 1){
 							alertify.notify("Guardado con exito", "success",5);
 								var itemSelected = $("#activo").val();
-							 cargarAlumnos(0,7,itemSelected);
+								var idAlumno = $("#idAlumnoFilter").val();
+							 cargarAlumnos(0,7,itemSelected,idAlumno);
 						}else{
 							 alertify.error(e, "", 0);
 						}
