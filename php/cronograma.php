@@ -87,11 +87,35 @@
 				echo $db->errorCode();
 			}
 		}
+
+		public function obtenerCronogramaCargado($idAlumno,$idDocumento){
+			$sql =
+			"
+					SELECT
+						idCronograma,
+						vNombre,
+						iMes,
+						iSemana,
+						bValor,
+						idDocumento,
+						idAlumno
+					FROM cronograma
+					WHERE idAlumno = $idAlumno AND idDocumento = $idDocumento
+			";
+			$prepare = $this->handler->prepare($sql);
+
+			$prepare->execute();
+
+			$result = $prepare->fetchAll();
+
+			return $result;
+		}
+
 	}
 
 
 
-	$operacion = $_POST["operacion"];
+	$operacion = @$_POST["operacion"];
 	$cronograma = new cronograma();
 	switch ($operacion) {
 		case 1:
@@ -114,6 +138,15 @@
 				$select .= "<option value='".$r["idTipoDocumento"]."'>".$r["vNombre"]."</option>";
 			}
 			echo $select;
+		break;
+		case 3:
+		$cronograma->abrirConexion();
+		$idAlumno 		= @$_SESSION["idUsuario"];
+		$idDocumento	= $_POST["idDocumento"];
+
+		$resultado = $cronograma->obtenerCronogramaCargado($idAlumno,$idDocumento);
+
+		echo json_encode($resultado);
 		break;
 	}
 ?>

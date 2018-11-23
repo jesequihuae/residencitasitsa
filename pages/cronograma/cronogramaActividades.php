@@ -26,11 +26,12 @@
 
 </head>
 <body>
+
 	<div class="row">
 		<div class="col-md-2">
 			<div class="form-group">
 				<label>Selecciona un documento</label>
-				<select class="form-control" id="SDocumento" name="documentos">
+				<select class="form-control" id="SDocumento" onchange="precargarCronograma(this)" name="documentos">
 
 				</select>
 			</div>
@@ -66,6 +67,29 @@
 <script type="text/javascript">
 	var contador = 0;
 	cargarSelect();
+
+	function precargarCronograma(e){
+	
+		$.ajax({
+			url:'../php/cronograma.php',
+			type:'POST',
+			data:
+						{
+							"operacion":"3",
+							"idDocumento":e.value
+						},
+			beforeSend: function(e){
+
+			},
+			success: function(e){
+				console.log(e);
+			},
+			error: function(e){
+				console.log(e);
+			}
+		});
+	}
+
 	function cargarSelect(){
 		$.ajax({
 			url:'../php/cronograma.php',
