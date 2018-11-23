@@ -87,6 +87,34 @@
                                 );
                             } else {
 
+                                $SC = (isset($_POST['bServicioSocial']) ? '1' : '0');
+                                $ME = (isset($_POST['bMateriasEspecial']) ? '1' : '0');
+                                $AC = (isset($_POST['bActividadesComplementarias']) ? '1' : '0');
+
+                                $ObjectITSA->actualizarAlumno(
+                                    $_POST['idAlumno'],
+                                    $_POST['idCarrera'],
+                                    $_POST['idSexo'],
+                                    $_POST['vNumeroControl'],
+                                    $_POST['vNombre'],
+                                    $_POST['vApellidoPaterno'],
+                                    $_POST['vApellidoMaterno'],
+                                    $_POST['vSemestre'],
+                                    $_POST['vPlanEstudios'],
+                                    $_POST['dFechaIngreso'],
+                                    $_POST['dFechaTermino'],
+                                    $_POST['iCreditosTotales'],
+                                    $_POST['iCreditosAcumulados'],
+                                    $_POST['fPorcentaje'],
+                                    $_POST['iPeriodo'],
+                                    $_POST['fPromedio'],
+                                    $_POST['vSituacion'],
+                                    $SC,
+                                    $AC,
+                                    $ME,
+                                    $_POST['vCorreoInstitucional'],
+                                    $_POST['dFechaNacimiento']
+                                );
                             }
                         }
                     ?>
@@ -415,7 +443,6 @@
             } else {
                 $("#bMateriasEspecial").prop('checked', true);
             }
-            console.log($(this).data());
             $("#panelRegistroEdicion").show(200);
           });
         });

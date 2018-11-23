@@ -576,6 +576,18 @@
 			}
 		}
 
+		public function getAllCarreras() {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idCarrera, vCarrera, vClave, bActivo FROM carreras");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
 		// public function getAlumnoById($idAlumno){
 		// 	try {
 		// 		$SQL = $this->CONNECTION->PREPARE("
@@ -616,7 +628,29 @@
 		// 	}
 		// }
 
-		public function registrarAlumno($idCarrera, $Sexo, $NumeroControl, $Nombre, $ApellidoPaterno, $ApellidoMaterno, $Semestre, $PlanEstudios, $FechaIngreso, $FechaTermino, $CreditosTotales, $CreditosAcumulados, $Porcentaje, $Periodo, $Promedio, $Situacion, $ServicioSocial, $ActividadesComplementarias, $MateriasEspecial, $CorreoInstitucional, $FechaNacimiento) {
+		public function registrarAlumno(
+				$idCarrera, 
+				$Sexo, 
+				$NumeroControl, 
+				$Nombre, 
+				$ApellidoPaterno, 
+				$ApellidoMaterno, 
+				$Semestre, 
+				$PlanEstudios, 
+				$FechaIngreso, 
+				$FechaTermino, 
+				$CreditosTotales, 
+				$CreditosAcumulados, 
+				$Porcentaje, 
+				$Periodo, 
+				$Promedio, 
+				$Situacion, 
+				$ServicioSocial, 
+				$ActividadesComplementarias, 
+				$MateriasEspecial, 
+				$CorreoInstitucional, 
+				$FechaNacimiento
+			) {
 			try {
 				$SQLEXISTE = $this->CONNECTION->PREPARE("SELECT COUNT(idUsuario) AS Total FROM alumnos WHERE vNumeroControl = :NumeroControl");
 				$SQLEXISTE->bindParam(":NumeroControl", $NumeroControl);
@@ -729,7 +763,168 @@
 			}
 		}
 
+		public function actualizarAlumno(
+				$idAlumno,
+				$idCarrera, 
+				$Sexo, 
+				$NumeroControl, 
+				$Nombre, 
+				$ApellidoPaterno, 
+				$ApellidoMaterno, 
+				$Semestre, 
+				$PlanEstudios, 
+				$FechaIngreso, 
+				$FechaTermino, 
+				$CreditosTotales, 
+				$CreditosAcumulados, 
+				$Porcentaje, 
+				$Periodo, 
+				$Promedio, 
+				$Situacion, 
+				$ServicioSocial, 
+				$ActividadesComplementarias, 
+				$MateriasEspecial, 
+				$CorreoInstitucional, 
+				$FechaNacimiento
+		){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						UPDATE 
+							alumnos
+							SET
+								idCarrera = :idCarrera,
+								bSexo	  = :bSexo,
+								vNumeroControl = :vNumeroControl,
+								vNombre = :vNombre,
+								vApellidoPaterno = :vApellidoPaterno,
+								vApellidoMaterno = :vApellidoMaterno,
+								vSemestre = :vSemestre,
+								vPlanEstudios = :vPlanEstudios,
+								dFechaIngreso = :dFechaIngreso,
+								dFechaTermino = :dFechaTermino,
+								iCreditosTotales = :iCreditosTotales,
+								iCreditosAcumulados = :iCreditosAcumulados,
+								fPorcentaje = :fPorcentaje,
+								iPeriodo = :iPeriodo,
+								fPromedio = :fPromedio,
+								vSituacion = :vSituacion,
+								bServicioSocial = :bServicioSocial,
+								bActividadesComplementarias = :bActividadesComplementarias,
+								bMateriasEspecial = :bMateriasEspecial,
+								vCorreoInstitucional = :vCorreoInstitucional,
+								dFechaNacimiento = :dFechaNacimiento
+						WHERE idAlumno = :idAlumno
+					");
+				$SQL->bindParam(":idAlumno", $idAlumno);
+				$SQL->bindParam(":idCarrera",$idCarrera);
+				$SQL->bindParam(":bSexo", $Sexo);
+				$SQL->bindParam(":vNumeroControl", $NumeroControl);
+				$SQL->bindParam(":vNombre", $Nombre);
+				$SQL->bindParam(":vApellidoPaterno", $ApellidoPaterno);
+				$SQL->bindParam(":vApellidoMaterno", $ApellidoMaterno);
+				$SQL->bindParam(":vSemestre", $Semestre);
+				$SQL->bindParam(":vPlanEstudios", $PlanEstudios);
+				$SQL->bindParam(":dFechaIngreso", $FechaIngreso);
+				$SQL->bindParam(":dFechaTermino", $FechaTermino);
+				$SQL->bindParam(":iCreditosTotales", $CreditosTotales);
+				$SQL->bindParam(":iCreditosAcumulados", $CreditosAcumulados);
+				$SQL->bindParam(":fPorcentaje", $Porcentaje);
+				$SQL->bindParam(":iPeriodo", $Periodo);
+				$SQL->bindParam(":fPromedio", $Promedio);
+				$SQL->bindParam(":vSituacion", $Situacion);
+				$SQL->bindParam(":bServicioSocial", $ServicioSocial);
+				$SQL->bindParam(":bActividadesComplementarias", $ActividadesComplementarias);
+				$SQL->bindParam(":bMateriasEspecial", $MateriasEspecial);
+				$SQL->bindParam(":vCorreoInstitucional", $CorreoInstitucional);
+				$SQL->bindParam(":dFechaNacimiento", $FechaNacimiento);
 
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡Alumno con número de Control: '.$NumeroControl.'  actualizado exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function registrarCarrera($Clave, $Carrera){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("INSERT INTO carreras (vClave,vCarrera) VALUES (:Clave, :Carrera);");
+				$SQL->bindParam(":Clave",$Clave);
+				$SQL->bindParam(":Carrera",$Carrera);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡Carrera con Clave: '.$Clave.' ha sido registrada exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+					<button type="button" class="close" data-dismiss="alert">x</button>
+				  </div>';
+			}
+		}
+
+		public function actualizarCarrera($idCarrera, $Clave, $Carrera){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						UPDATE
+							carreras
+							SET
+								vClave = :vClave,
+								vCarrera = :vCarrera
+						WHERE idCarrera = :idCarrera
+					");
+				$SQL->bindParam(":idCarrera",$idCarrera);
+				$SQL->bindParam(":vClave",$Clave);
+				$SQL->bindParam(":vCarrera",$Carrera);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡Carrera con Clave: '.$Clave.' ha sido actualizada exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+					<button type="button" class="close" data-dismiss="alert">x</button>
+				  </div>';
+			}
+		}
+
+
+		public function changeStatusCarrera($idCarrera, $status) {
+			try {
+				$STATUSNEW = "";
+				switch ($status) {
+					case '1':
+						$STATUSNEW = 0;
+						break;
+					
+					case '0':
+						$STATUSNEW = 1;
+						break;
+				}
+				$SQL = $this->CONNECTION->PREPARE("UPDATE carreras SET bActivo = :status WHERE idCarrera = :idCarrera");
+				$SQL->bindParam(":status",$STATUSNEW);
+				$SQL->bindParam(":idCarrera",$idCarrera);
+				$SQL->execute();
+
+				if($STATUSNEW == 0) {
+					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				} else {				
+					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				}
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
 
 	}
 ?>
