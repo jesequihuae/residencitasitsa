@@ -588,6 +588,18 @@
 			}
 		}
 
+		public function getAllPeriodos(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idPeriodo, vPeriodo, bActivo FROM periodos");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
 		// public function getAlumnoById($idAlumno){
 		// 	try {
 		// 		$SQL = $this->CONNECTION->PREPARE("
@@ -919,6 +931,55 @@
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
 				}
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function changeStatusPeriodo($idPeriodo, $status) {
+			try {
+				$STATUSNEW = "";
+				switch ($status) {
+					case '1':
+						$STATUSNEW = 0;
+						break;
+					
+					case '0':
+						$STATUSNEW = 1;
+						break;
+				}
+				$SQL = $this->CONNECTION->PREPARE("UPDATE periodos SET bActivo = :status WHERE idPeriodo = :idPeriodo");
+				$SQL->bindParam(":status",$STATUSNEW);
+				$SQL->bindParam(":idPeriodo",$idPeriodo);
+				$SQL->execute();
+
+				if($STATUSNEW == 0) {
+					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				} else {				
+					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				}
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function registrarPeriodo($Periodo){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("INSERT INTO periodos (vPeriodo) VALUES (:Periodo);");
+				$SQL->bindParam(":Periodo",$Periodo);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡El periodo ha sido registrado exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
 			} catch (PDOException $e) {
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
