@@ -987,5 +987,22 @@
 			}
 		}
 
+		public function actualizarPeriodo($idPeriodo, $Periodo){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE periodos SET vPeriodo = :Periodo WHERE idPeriodo = :idPeriodo");
+				$SQL->bindParam(":Periodo",$Periodo);
+				$SQL->bindParam(":idPeriodo",$idPeriodo);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡El periodo ha sido actualizado exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
 	}
 ?>

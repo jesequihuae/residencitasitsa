@@ -62,7 +62,10 @@
                                     $_POST['vPeriodo']
                                 );
                             } else {
-
+                                $ObjectITSA->actualizarPeriodo(
+                                    $_POST['idPeriodo'],
+                                    $_POST['vPeriodo']
+                                );
                             }
                         }
                         else if(isset($_POST['activarDesactivar'])) {
@@ -218,7 +221,7 @@
           $(".editarPeriodo").click(function(){
             $("#panelRegistroEdicion").hide(150);
             clearFields();
-            $("#idPeriodo").val($(this).data("idPeriodo"));
+            $("#idPeriodo").val($(this).data("idperiodo"));
             $("#vPeriodo").val($(this).data("vperiodo"));
             $("#panelRegistroEdicion").show(150);
           });
