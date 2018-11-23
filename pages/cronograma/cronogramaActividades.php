@@ -35,7 +35,7 @@
 				</select>
 			</div>
 		</div>
-	</div>	
+	</div>
 	<table id="Cronograma">
 		<tr class="color-head">
 			<th rowspan="2">Actividades</th>
@@ -52,10 +52,10 @@
 					echo "<td id=\"semana$i\">".($i+1)."</td>";
 				}
 			?>
-			
-		
+
+
 		</tr>
-	
+
 	</table>
 	<button id="agregar" class="btn btn-primary top"> Agregar</button>
 	<button id="guardar" class="btn btn-primary top" onclick="return guardar()"> Agregar</button>
@@ -85,7 +85,7 @@
 
 	$("#agregar").click(function(e){
 		var semanas;
-		for($j = 0;$j<24;$j++){ 	
+		for($j = 0;$j<24;$j++){
 			semanas += '<td><input type="checkbox" name="checkbox1" id="'+contador+''+$j+'" /></td>';
 		}
 		$("#Cronograma").append(
@@ -98,30 +98,32 @@
 	function guardar(){
 		var cronograma = "[";
 		var idTipoDeDocumento = $("#SDocumento").val();
+		var rowCount = 0;
 		for(i = 0;i < contador;i++){
 			cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",";
 			for(j = 0; j<24;j++){
-				if(j<23){
 					cronograma += "\"valor"+i+""+j+"\":\""+$("#"+i+""+j).is(":checked")+"\",\"iSemana"+i+""+j+"\":\""+$("#semana"+j).text().trim()+"\",";
-				}else{
-					cronograma += "\"valor"+i+""+j+"\":\""+$("#"+i+""+j).is(":checked")+"\",\"iSemana"+i+""+j+"\":\""+$("#semana"+j).text().trim()+"\"";
-				}
-				
 			}
-			if(i<(contador-1)){
-				cronograma += "},";
-			}else{
-				cronograma += "}";
-			}
+			//QUITAMOS LA ULTIMA COMA PARA QUE NO TRUENE AL ENVIAR AL SERVIDOR
+			cronograma = cronograma.slice(0,-1);
+			cronograma += "},";
 		}
+		//QUITAMOS LA ULTIMA COMA PARA QUE NO TRUENE AL ENVIAR AL SERVIDOR
+		cronograma = cronograma.slice(0,-1);
 		cronograma+=']';
-		
-	
+
+		console.log(cronograma);
 
 		$.ajax({
 			url: '../php/cronograma.php',
 			type:'POST',
-			data:{"cronograma":cronograma,operacion:1,size:24},
+			data:
+					{
+						"cronograma":cronograma,
+						"operacion":1,
+						"size":24,
+						"idTipoDeDocumento":idTipoDeDocumento
+					},
 			beforeSend: function(e){
 
 			},
@@ -129,7 +131,7 @@
 				$("#salida").html(e);
 			},
 			error: function(e){
-				$("#salida").html(e);	
+				$("#salida").html(e);
 			}
 		});
 	}

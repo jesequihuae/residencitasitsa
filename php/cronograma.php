@@ -1,10 +1,10 @@
 <?php
 	class cronograma
-	{	
+	{
 		private $handler;
 		function __construct()
 		{
-			
+			@session_start();
 		}
 
 		public function abrirConexion(){
@@ -13,12 +13,12 @@
 				$this->handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			} catch(PDOException $e) {
 				echo $e->getMessage();
-			}	
+			}
 		}
-	
+
 		public function obtenerTiposDeDocumentos(){
 			$sql = "
-				SELECT 
+				SELECT
 					idTipoDocumento,
 					vNombre
 				FROM tiposdocumento
@@ -29,11 +29,11 @@
 
 			return $resultado;
 		}
-		public function guardarCronograma($cronograma,$size){
-	
+		public function guardarCronograma($cronograma,$size,$idAlumno,$idTipoDeDocumento){
+
 			$array = json_decode($cronograma,true);
 			echo "<pre>";
-			print_r($array);	
+			print_r($array);
 			echo "</pre>";
 
 			/*if(is_array($array)){
@@ -41,27 +41,38 @@
 			}else{
 				echo "no";
 			}*/
+			$sql = "
+						DELETE FROM cronograma
+						WHERE idAlumno = $idAlumno AND idDocumento = $idTipoDeDocumento
+			";
+			$db = $this->handler->prepare($sql);
+			$db->execute();
+
 
 			$sql = "
 					 	INSERT INTO cronograma(
 						 				vNombre,
 						 				bValor,
 						 				idDocumento,
-						 				iSemana
+						 				iSemana,
+										idAlumno
 					 				)
 					 			VALUES
-			";	
+			";
 			$i = 0;
 			foreach ($array as $k) {
 					for($j = 0 ; $j < $size; $j++){
-						$sql = $sql."
-							(
-								'".$k["actividad".$i]."',
-								".$k["valor$i$j"].",
-								".$k["idTipoDeDocumento"].",
-								".$k["iSemana$i$j"]."
-							),
-						";
+						if($k["valor$i$j"] == "true"){
+								$sql = $sql."
+									(
+										'".$k["actividad".$i]."',
+										".$k["valor$i$j"].",
+										".$k["idTipoDeDocumento"].",
+										".$k["iSemana$i$j"].",
+										".$idAlumno."
+									),
+								";
+							}
 					}
 					$i++;
 			}
@@ -69,6 +80,7 @@
 			$sql = trim($sql);
 			$sql = substr($sql,0,-1);
 			$db = $this->handler->prepare($sql);
+			echo $sql;
 			if($db->execute()){
 				echo "Save";
 			}else{
@@ -83,13 +95,15 @@
 	$cronograma = new cronograma();
 	switch ($operacion) {
 		case 1:
-			$info = $_POST["cronograma"];
-			$size = $_POST["size"];
-			
+			$info 				= $_POST["cronograma"];
+			$size 				= $_POST["size"];
+			$idAlumno 		= $_SESSION['idUsuario'];
+			$idDocumento 	= $_POST["idTipoDeDocumento"];
+
 			$cronograma->abrirConexion();
 
-			$cronograma->guardarCronograma($info,$size);
-			
+			$cronograma->guardarCronograma($info,$size,$idAlumno,$idDocumento);
+
 		break;
 		case 2:
 			$cronograma->abrirConexion();
@@ -97,7 +111,7 @@
 			$resultado = $cronograma->obtenerTiposDeDocumentos();
 			$select = "";
 			foreach ($resultado as $r) {
-				$select .= "<option value='".$r["idTipoDocumento"]."'>".$r["vNombre"]."</option>"; 
+				$select .= "<option value='".$r["idTipoDocumento"]."'>".$r["vNombre"]."</option>";
 			}
 			echo $select;
 		break;
