@@ -54,8 +54,10 @@
 						 				vNombre,
 						 				bValor,
 						 				idDocumento,
+										idAlumno,
 						 				iSemana,
-										idAlumno
+										i,
+										j
 					 				)
 					 			VALUES
 			";
@@ -68,8 +70,10 @@
 										'".$k["actividad".$i]."',
 										".$k["valor$i$j"].",
 										".$k["idTipoDeDocumento"].",
+										".$idAlumno.",
 										".$k["iSemana$i$j"].",
-										".$idAlumno."
+										".$k["i$i"].",
+										".$k["j$i$j"]."
 									),
 								";
 							}
@@ -98,7 +102,9 @@
 						iSemana,
 						bValor,
 						idDocumento,
-						idAlumno
+						idAlumno,
+						i,
+						j
 					FROM cronograma
 					WHERE idAlumno = $idAlumno AND idDocumento = $idDocumento
 			";
@@ -134,6 +140,7 @@
 
 			$resultado = $cronograma->obtenerTiposDeDocumentos();
 			$select = "";
+			$select .= "<option value='0'>Selecciona un documento</option>";
 			foreach ($resultado as $r) {
 				$select .= "<option value='".$r["idTipoDocumento"]."'>".$r["vNombre"]."</option>";
 			}

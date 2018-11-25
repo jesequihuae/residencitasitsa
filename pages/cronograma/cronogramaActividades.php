@@ -32,7 +32,7 @@
 			<div class="form-group">
 				<label>Selecciona un documento</label>
 				<select class="form-control" id="SDocumento" onchange="precargarCronograma(this)" name="documentos">
-
+					
 				</select>
 			</div>
 		</div>
@@ -53,9 +53,8 @@
 					echo "<td id=\"semana$i\">".($i+1)."</td>";
 				}
 			?>
-
-
 		</tr>
+
 
 	</table>
 	<button id="agregar" class="btn btn-primary top"> Agregar</button>
@@ -69,10 +68,10 @@
 	cargarSelect();
 
 	function precargarCronograma(e){
-	
 		$.ajax({
 			url:'../php/cronograma.php',
 			type:'POST',
+			dataType: "json",
 			data:
 						{
 							"operacion":"3",
@@ -81,8 +80,38 @@
 			beforeSend: function(e){
 
 			},
-			success: function(e){
-				console.log(e);
+			success: function(json){
+				$(".rowsAdded").remove();
+				var nombreActual = "",nombreAnterior;
+				contador = 0;
+				for(var i in json){
+					nombreActual = json[i]["vNombre"];
+					var semanas  = "";
+					if(nombreActual != nombreAnterior){
+							for(j = 0;j<24;j++){
+
+							//	if(json[i]["i"] == i && json[i]["j"] == j){
+								//	semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
+								//}else{
+									semanas += '<td><input type="checkbox" name="checkbox1" id="'+contador+''+j+'" /></td>';
+								//}
+							}
+							$("#Cronograma").append(
+													"<tr class='rowsAdded'>"+
+														"<td><input placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='actividad"+contador+"'  /></td>"+semanas+
+													"</tr>"
+												);
+							contador++;
+					}
+					nombreAnterior = nombreActual;
+				}
+
+
+				for(var i in json){
+						$("#"+json[i]["i"]+json[i]["j"]).prop("checked",true);
+				}
+
+				console.log(json);
 			},
 			error: function(e){
 				console.log(e);
@@ -124,9 +153,9 @@
 		var idTipoDeDocumento = $("#SDocumento").val();
 		var rowCount = 0;
 		for(i = 0;i < contador;i++){
-			cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",";
+			cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",\"i"+i+"\":"+i+",";
 			for(j = 0; j<24;j++){
-					cronograma += "\"valor"+i+""+j+"\":\""+$("#"+i+""+j).is(":checked")+"\",\"iSemana"+i+""+j+"\":\""+$("#semana"+j).text().trim()+"\",";
+					cronograma += "\"valor"+i+""+j+"\":\""+$("#"+i+""+j).is(":checked")+"\",\"iSemana"+i+""+j+"\":\""+$("#semana"+j).text().trim()+"\",\"j"+i+""+j+"\":"+j+",";
 			}
 			//QUITAMOS LA ULTIMA COMA PARA QUE NO TRUENE AL ENVIAR AL SERVIDOR
 			cronograma = cronograma.slice(0,-1);
