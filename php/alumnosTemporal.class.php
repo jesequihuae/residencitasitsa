@@ -36,6 +36,8 @@
         )
       ";
 
+      
+
 
       $prepare = $this->connection->prepare($sql);
       $prepare->bindParam(":idBancoProyecto",$post["idProyecto"]);
