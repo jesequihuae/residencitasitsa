@@ -600,45 +600,26 @@
 			}
 		}
 
-		// public function getAlumnoById($idAlumno){
-		// 	try {
-		// 		$SQL = $this->CONNECTION->PREPARE("
-		// 									SELECT 
-		// 										idAlumno,
-		// 										idCarrera,
-		// 										bSexo,
-		// 										vNumeroControl,
-		// 										vNombre,
-		// 										vApellidoPaterno,
-		// 										vApellidoMaterno,
-		// 										vSemestre,
-		// 										vPlanEstudios,
-		// 										dFechaIngreso,
-		// 										dFechaTermino,
-		// 										iCreditosTotales,
-		// 										iCreditosAcumulados,
-		// 										fPorcentaje,
-		// 										iPeriodo,
-		// 										fPromedio,
-		// 										vSituacion,
-		// 										bServicioSocial,
-		// 										bActividadesComplementarias,
-		// 										bMateriasEspecial,
-		// 										vCorreoInstitucional,
-		// 										dFechaNacimiento
-		// 									FROM alumnos
-		// 									WHERE idAlumno = :idAlumno 
-		// 							");
-		// 		$SQL->bindParam(":idAlumno", $idAlumno);
-		// 		$SQL->execute();
-		// 		$ALUMNO_ = $SQL->FETCH(PDO::FETCH_ASSOC);
-		// 		return $ALUMNO_['idAlumno'].'|'.$ALUMNO_['idCarrera'].'|'.$ALUMNO_['bSexo'].'|'.$ALUMNO_['vNumeroControl'].'|'.$ALUMNO_['vNombre'].'|'.$ALUMNO_['vApellidoPaterno'].'|'.$ALUMNO_['vApellidoMaterno'].'|'.$ALUMNO_['vSemestre'].'|'.$ALUMNO_['vPlanEstudios'].'|'.$ALUMNO_['dFechaIngreso'].'|'.$ALUMNO_['dFechaTermino'].'|'.$ALUMNO_['iCreditosTotales'].'|'.$ALUMNO_['iCreditosAcumulados'].'|'.$ALUMNO_['fPorcentaje'].'|'.$ALUMNO_['fPromedio'].'|'.$ALUMNO_['vSituacion'].'|'.$ALUMNO_['bServicioSocial'].'|'.$ALUMNO_['bActividadesComplementarias'].'|'.$ALUMNO_['bMateriasEspecial'].'|'.$ALUMNO_['vCorreoInstitucional'].'|'.$ALUMNO_['dFechaNacimiento'];
-		// 	} catch (PDOException $e) {
-		// 		echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-		// 				<button type="button" class="close" data-dismiss="alert">x</button>
-		// 			  </div>';
-		// 	}
-		// }
+		public function getAllFechasEntrega(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT 
+													FEP.idFechaEntregaPeriodo,
+													FEP.vDescripcion,
+													FEP.dFechaInicioEntrega,
+													FEP.dFechaFinalEntrega,
+													P.vPeriodo,
+													P.idPeriodo
+													FROM fechasentregaperiodo FEP 
+													INNER JOIN periodos P 
+													ON FEP.idPeriodo = P.idPeriodo");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
 
 		public function registrarAlumno(
 				$idCarrera, 
@@ -997,6 +978,65 @@
 				echo '<div class="alert alert-dismissable alert-success">¡El periodo ha sido actualizado exitosamente!
 							<button type="button" class="close" data-dismiss="alert">x</button>
 						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function registrarFechaPeriodo($idPeriodo, $Descripcion, $FechaInicio, $FechaFinal){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						INSERT INTO fechasentregaperiodo (
+							idPeriodo,
+							vDescripcion,
+							dFechaInicioEntrega,
+							dFechaFinalEntrega
+						) VALUES (
+							:idPeriodo,
+							:vDescripcion,
+							:dFechaInicioEntrega,
+							:dFechaFinalEntrega
+						);
+					");
+				$SQL->bindParam(":idPeriodo", $idPeriodo);
+				$SQL->bindParam(":vDescripcion", $Descripcion);
+				$SQL->bindParam(":dFechaInicioEntrega", $FechaInicio);
+				$SQL->bindParam(":dFechaFinalEntrega", $FechaFinal);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡La fecha ha sido registrada exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function actualizarFechaPeriodo($idFechaEntregaPeriodo, $idPeriodo, $Descripcion, $FechaInicio, $FechaFinal) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						UPDATE fechasentregaperiodo 
+							SET 
+								idPeriodo = :idPeriodo,
+								vDescripcion = :vDescripcion,
+								dFechaInicioEntrega = :dFechaInicioEntrega,
+								dFechaFinalEntrega = :dFechaFinalEntrega
+						WHERE idFechaEntregaPeriodo = :idFechaEntregaPeriodo
+					");
+				$SQL->bindParam(":idFechaEntregaPeriodo", $idFechaEntregaPeriodo);
+				$SQL->bindParam(":idPeriodo", $idPeriodo);
+				$SQL->bindParam(":vDescripcion", $Descripcion);
+				$SQL->bindParam(":dFechaInicioEntrega", $FechaInicio);
+				$SQL->bindParam(":dFechaFinalEntrega", $FechaFinal);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡La fecha ha sido actualizada exitosamente!
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
 			} catch (PDOException $e) {
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
