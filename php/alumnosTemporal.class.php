@@ -50,14 +50,26 @@
       $prepare->execute();
       $IDProyectoSeleccionado = $this->connection->lastInsertId();
 
-      $SQLINTPROCESS = $this->connection->PREPARE("UPDATE alumnos SET iProceso = 2 WHERE idAlumno = :idAlumno");
+      $SQLINTPROCESS = $this->connection->PREPARE("
+                                                    UPDATE alumnos
+                                                    SET
+                                                        iProceso           = 1,
+                                                        domicilio          = '".$post["domicilioAlumno"]."',
+                                                        colonia            = '".$post["coloniaAlumno"]."',
+                                                        ciudadEstado       = '".$post["ciudadEstado"]."',
+                                                        cp                 = '".$post["cp"]."',
+                                                        telefono           = '".$post["telefono"]."',
+                                                        idSeguro           = '".$post["idSeguroSocial"]."',
+                                                        numeroSeguro       = '".$post["numeroSeguro"]."'
+                                                    WHERE idAlumno = :idAlumno
+                                                  ");
       $SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
       $SQLINTPROCESS->execute();
 
-        echo '<div class="alert alert-dismissable alert-success">Solicitud guardada exitosamente!'+$idAlumno+'
-            <button type="button" class="close" data-dismiss="alert">x</button>
-              </div>';
-    /*  }else{
+      echo '<div class="alert alert-dismissable alert-success">Solicitud guardada exitosamente!
+          <button type="button" class="close" data-dismiss="alert">x</button>
+            </div>';
+  /*  }else{
         echo '<div class="alert alert-dismissable alert-danger">Algo salio mal, intentalo de nuevo...
             <button type="button" class="close" data-dismiss="alert">x</button>
             </div>';

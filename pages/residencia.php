@@ -251,13 +251,13 @@
                               <div class="form-group row">
                                <label for="inputEmail3" class="col-lg-2 col-form-label" >Nombre:</label>
                                <div class="col-lg-8">
-                                 <input type="text" name="nombreAlumno" class="form-control" />
+                                 <input type="text" name="nombreAlumno" value="<?php echo $_SESSION['nombre']; ?>" class="form-control" />
                                </div>
                              </div>
                              <div class="form-group row">
                               <label for="inputEmail3" class="col-lg-2 col-form-label" >Numero de control:</label>
                               <div class="col-lg-8">
-                                <input type="text" name="numeroDeControl" class="form-control" />
+                                <input type="text" name="numeroDeControl" value="<?php echo $_SESSION['numeroControl']; ?>" class="form-control" />
                               </div>
                             </div>
                             <div class="form-group row">
@@ -299,14 +299,14 @@
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Seguro social:</label>
                              <div class="col-lg-4">
-                               <select id="seguroSocialAlumno" class="form-control">
+                               <select name="idSeguroSocial" class="form-control">
                                  <option value="1">IMSS</option>
                                  <option value="2">ISSTE</option>
                                  <option value="3">OTROS</option>
                                </select>
                              </div>
                              <div class="col-lg-4">
-                               <input type="text" name="numero" class="form-control" placeholder="numeroSeguro" />
+                               <input type="text" name="numeroSeguro" class="form-control"  placeholder="numeroSeguro" />
                              </div>
                             </div>
                                 <!--<div class="form-group row">
