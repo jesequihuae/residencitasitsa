@@ -1044,5 +1044,21 @@
 			}
 		}
 
+		public function eliminarFechaPeriodo($idFechaEntregaPeriodo){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("DELETE FROM fechasentregaperiodo WHERE idFechaEntregaPeriodo = :idFecha");
+				$SQL->bindParam(":idFecha", $idFechaEntregaPeriodo);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡La fecha ha sido eliminada exitosamente!
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
 	}
 ?>

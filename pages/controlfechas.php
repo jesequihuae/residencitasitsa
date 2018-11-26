@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
-    <title>Proyectos</title>
+    <title>Fechas</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -73,6 +73,9 @@
                                     $_POST['dFechaFinalEntrega'] 
                             );
                         }
+                    } 
+                    else if(isset($_POST) && isset($_POST['eliminarFecha'])){
+                       $ObjectITSA->eliminarFechaPeriodo($_POST['idFechaEliminar']);
                     }
                 ?>
                 </div>
@@ -153,7 +156,7 @@
                                     <th>Descripcion</th>
                                     <th>Fecha Inicio</th>
                                     <th>Fecha Final</th>
-                                    <th colspan="2">Operaciones</th>
+                                    <th colspan="2"><center>Operaciones</center></th>
                                   </thead>
                                   <?php 
                                     $FECHAS_QUERY = $ObjectITSA->getAllFechasEntrega();
@@ -180,6 +183,17 @@
                                                 </button>
                                             </center>
                                       </td>
+                                      <td>
+                                        <center>
+                                          <button
+                                            type="button"
+                                            data-idfecha="<?php echo $FECHAS_['idFechaEntregaPeriodo']; ?>"
+                                            class="eliminarFecha btn btn-danger btn-sm"
+                                            >
+                                            <i class="fa fa-trash"></i>
+                                          </button>
+                                        </center>
+                                      </td>
                                   </tr>
                                   <?php } ?>
                               </table>
@@ -191,6 +205,30 @@
         </div>
     </div>
 
+    <!-- MODAL ELIMINAR-->
+    <div class="modal" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Atención!</h4>
+          </div>
+          <div class="modal-body" align="center">
+            <input type="hidden" id="idFechaEliminar" name="idFechaEliminar">
+            <center><h2>¿Está seguro de eliminar?</h2></center>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-warning pull-right" data-dismiss="modal">No</button>
+            <button type="submit" class="btn btn-success" name="eliminarFecha" id="btnEliminarFecha">Sí</button>&nbsp;&nbsp;&nbsp;
+          </div>
+          </form>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
 </div>
 
     <!-- jQuery -->
@@ -226,6 +264,11 @@
             $("#dFechaInicioEntrega").val($(this).data("dfechainicioentrega"));
             $("#dFechaFinalEntrega").val($(this).data("dfechafinalentrega"));
             $("#panelRegistroEdicion").show(150);
+          });
+
+          $(".eliminarFecha").click(function(){
+            $("#idFechaEliminar").val($(this).data("idfecha"))
+            $("#modalEliminar").modal('show');
           });
         });
 
