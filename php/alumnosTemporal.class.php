@@ -63,10 +63,10 @@
                                                   ");
       $SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
       $SQLINTPROCESS->execute();
-
       echo '<div class="alert alert-dismissable alert-success">Solicitud guardada exitosamente!
           <button type="button" class="close" data-dismiss="alert">x</button>
             </div>';
+
   /*  }else{
         echo '<div class="alert alert-dismissable alert-danger">Algo salio mal, intentalo de nuevo...
             <button type="button" class="close" data-dismiss="alert">x</button>
