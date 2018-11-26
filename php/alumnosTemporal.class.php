@@ -35,10 +35,6 @@
           :personasQueFirmaran
         )
       ";
-
-      
-
-
       $prepare = $this->connection->prepare($sql);
       $prepare->bindParam(":idBancoProyecto",$post["idProyecto"]);
       $prepare->bindParam(":idAlumno",$idAlumno);
