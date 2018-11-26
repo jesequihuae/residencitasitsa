@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	class ITSA {
 
@@ -13,22 +13,22 @@
 				$SQL = $this->CONNECTION->prepare("SELECT idTipoUsuario, idUsuario FROM usuarios WHERE vUsuario = :usuario AND vContrasena = :contrasena AND bActivo = 1");
 				$SQL->bindParam(":usuario", $Datos['usuario']);
 				$SQL->bindParam(":contrasena", $Datos['contrasena']);
-				$SQL->execute(); 
+				$SQL->execute();
 
-				if($SQL->rowCount() > 0) { 
+				if($SQL->rowCount() > 0) {
 					$Usuario = $SQL->fetch(PDO::FETCH_ASSOC);
 					if($Usuario['idTipoUsuario'] == 1) { #ALUMNOS
 						$SQLALUMNO = $this->CONNECTION->prepare("SELECT * FROM alumnos WHERE idUsuario = :idUsuario");
 						$SQLALUMNO->bindParam(":idUsuario", $Usuario['idUsuario']);
-						$SQLALUMNO->execute();	
-						$Alumno = $SQLALUMNO->fetch(PDO::FETCH_ASSOC);			
-						@session_start();					
+						$SQLALUMNO->execute();
+						$Alumno = $SQLALUMNO->fetch(PDO::FETCH_ASSOC);
+						@session_start();
 				    	$_SESSION['nombre'] = $Alumno['vNombre'].' '.$Alumno['vApellidoPaterno'];
 				    	$_SESSION['idUsuario'] = $Alumno['idAlumno'];
 				    	$_SESSION['numeroControl'] = $Alumno['vNumeroControl'];
 					} else if ($Usuario['idTipoUsuario'] == 2) { #ADMINISTRADOR
 						// $SQLADMINISTRADOR = $this->CONNECTION->prepare("SELECT * FROM ")
-						@session_start();	
+						@session_start();
 						$_SESSION['nombre'] = "Administrador";
 						$_SESSION['idUsuario'] = $Usuario['idUsuario'];
 						$_SESSION['numeroControl'] = "";
@@ -36,8 +36,8 @@
 						$SQLJEFE = $this->CONNECTION->prepare("SELECT * FROM jefescarrera WHERE idUsuario = :idUsuario");
 						$SQLJEFE->bindParam(":idUsuario", $Usuario['idUsuario']);
 						$SQLJEFE->execute();
-						$JEFE = $SQLJEFE->fetch(PDO::FETCH_ASSOC);			
-						@session_start();					
+						$JEFE = $SQLJEFE->fetch(PDO::FETCH_ASSOC);
+						@session_start();
 				    	$_SESSION['nombre'] = $Alumno['vNombre'];
 				    	$_SESSION['idUsuario'] = $Alumno['idJefeCarrera'];
 				    	$_SESSION['numeroControl'] = "";
@@ -56,7 +56,7 @@
 						$arraySubmodulos = array(
 							':idTipoUsuario'=>$Usuario['idTipoUsuario'],
 							':idModulo'=>$Modulos['idModulo']
-						);	
+						);
 						$SQLSUBMODULOS->execute($arraySubmodulos);
 						// <i class="fa fa-wrench fa-fw"></i>
 						$NAVBAR_ .= '<li><a href="#">'.$Modulos['vModulo'].'<span class="fa arrow"></span></a>';
@@ -147,12 +147,12 @@
 					$SQLConstancia->bindParam(":vNombre",$UNA);
 					$SQLConstancia->bindParam(":vRuta",$RutaConstancia);
 					$SQLConstancia->bindParam(":idAlumno",$idAlumno);
-					$SQLConstancia->execute();						
+					$SQLConstancia->execute();
 
 					$this->CONNECTION->commit();
 					echo '<div class="alert alert-dismissable alert-success">Proyecto Registrado correctamente!
 							<button type="button" class="close" data-dismiss="alert">x</button>
-					  	  </div>';	
+					  	  </div>';
 				} else {
 					$this->CONNECTION->rollback();
 					unlink($RutaConstancia);
@@ -271,7 +271,7 @@
 					 	  </div>';
 				}
 
-			} catch (PDOException $e) {				
+			} catch (PDOException $e) {
 				$this->CONNECTION->rollback();
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
@@ -318,7 +318,7 @@
 					 	  </div>';
 				}
 
-			} catch (PDOException $e) {				
+			} catch (PDOException $e) {
 				$this->CONNECTION->rollback();
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
@@ -365,7 +365,7 @@
 					 	  </div>';
 				}
 
-			} catch (PDOException $e) {				
+			} catch (PDOException $e) {
 				$this->CONNECTION->rollback();
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
@@ -418,7 +418,7 @@
 					case 5 :
 						$tipo = '-success';
 						break;
-					
+
 					case 6 :
 						$tipo = '-danger';
 						break;
@@ -443,7 +443,7 @@
 				$SQL->bindParam(":idAlumno", $idAlumno);
 				$SQL->execute();
 
-				$TextEstado = $SQL->fetch(PDO::FETCH_ASSOC);				
+				$TextEstado = $SQL->fetch(PDO::FETCH_ASSOC);
 
 				return $TextEstado['idEstado'];
 			} catch (PDOException $e) {
@@ -461,13 +461,13 @@
 				$SQL->execute();
 
 				$STATUSBEFORE_ = $SQL->fetch(PDO::FETCH_ASSOC);
-				$STATUSNOW_ = ($STATUSBEFORE_['iProceso'] + 1); 
+				$STATUSNOW_ = ($STATUSBEFORE_['iProceso'] + 1);
 
 				$SQLNUEVO = $this->CONNECTION->PREPARE("UPDATE alumnos SET iProceso = :iProceso WHERE idAlumno = :idAlumno");
 				$SQLNUEVO->bindParam(":iProceso", $STATUSNOW_);
 				$SQLNUEVO->bindParam(":idAlumno", $idAlumno);
 				$SQLNUEVO->execute();
-				
+
 				echo '';
 			} catch (PDOException $e) {
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
@@ -477,7 +477,7 @@
 		}
 
 		public function getRejectionTEXT($idAlumno) {
-			try {	
+			try {
 				$SQL = $this->CONNECTION->PREPARE("SELECT vMotivoNoAceptacion FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
 				$SQL->bindParam(":idAlumno", $idAlumno);
 				$SQL->execute();
@@ -518,7 +518,7 @@
 			@session_start();
 			if(in_array($Pagina, $_SESSION['permisos'])) {
 				return true;
-			} else {				
+			} else {
 				return false;
 			}
 		}
@@ -602,15 +602,15 @@
 
 		public function getAllFechasEntrega(){
 			try {
-				$SQL = $this->CONNECTION->PREPARE("SELECT 
+				$SQL = $this->CONNECTION->PREPARE("SELECT
 													FEP.idFechaEntregaPeriodo,
 													FEP.vDescripcion,
 													FEP.dFechaInicioEntrega,
 													FEP.dFechaFinalEntrega,
 													P.vPeriodo,
 													P.idPeriodo
-													FROM fechasentregaperiodo FEP 
-													INNER JOIN periodos P 
+													FROM fechasentregaperiodo FEP
+													INNER JOIN periodos P
 													ON FEP.idPeriodo = P.idPeriodo");
 				$SQL->execute();
 				return $SQL;
@@ -622,26 +622,26 @@
 		}
 
 		public function registrarAlumno(
-				$idCarrera, 
-				$Sexo, 
-				$NumeroControl, 
-				$Nombre, 
-				$ApellidoPaterno, 
-				$ApellidoMaterno, 
-				$Semestre, 
-				$PlanEstudios, 
-				$FechaIngreso, 
-				$FechaTermino, 
-				$CreditosTotales, 
-				$CreditosAcumulados, 
-				$Porcentaje, 
-				$Periodo, 
-				$Promedio, 
-				$Situacion, 
-				$ServicioSocial, 
-				$ActividadesComplementarias, 
-				$MateriasEspecial, 
-				$CorreoInstitucional, 
+				$idCarrera,
+				$Sexo,
+				$NumeroControl,
+				$Nombre,
+				$ApellidoPaterno,
+				$ApellidoMaterno,
+				$Semestre,
+				$PlanEstudios,
+				$FechaIngreso,
+				$FechaTermino,
+				$CreditosTotales,
+				$CreditosAcumulados,
+				$Porcentaje,
+				$Periodo,
+				$Promedio,
+				$Situacion,
+				$ServicioSocial,
+				$ActividadesComplementarias,
+				$MateriasEspecial,
+				$CorreoInstitucional,
 				$FechaNacimiento
 			) {
 			try {
@@ -739,7 +739,7 @@
 					$SQL->bindParam(":dFechaNacimiento",$FechaNacimiento);
 
 					$SQL->execute();
-					$this->CONNECTION->commit();	
+					$this->CONNECTION->commit();
 					echo '<div class="alert alert-dismissable alert-success">¡Alumno con número de Control: '.$NumeroControl.'  registrado exitosamente!
 							<button type="button" class="close" data-dismiss="alert">x</button>
 						  </div>';
@@ -758,31 +758,31 @@
 
 		public function actualizarAlumno(
 				$idAlumno,
-				$idCarrera, 
-				$Sexo, 
-				$NumeroControl, 
-				$Nombre, 
-				$ApellidoPaterno, 
-				$ApellidoMaterno, 
-				$Semestre, 
-				$PlanEstudios, 
-				$FechaIngreso, 
-				$FechaTermino, 
-				$CreditosTotales, 
-				$CreditosAcumulados, 
-				$Porcentaje, 
-				$Periodo, 
-				$Promedio, 
-				$Situacion, 
-				$ServicioSocial, 
-				$ActividadesComplementarias, 
-				$MateriasEspecial, 
-				$CorreoInstitucional, 
+				$idCarrera,
+				$Sexo,
+				$NumeroControl,
+				$Nombre,
+				$ApellidoPaterno,
+				$ApellidoMaterno,
+				$Semestre,
+				$PlanEstudios,
+				$FechaIngreso,
+				$FechaTermino,
+				$CreditosTotales,
+				$CreditosAcumulados,
+				$Porcentaje,
+				$Periodo,
+				$Promedio,
+				$Situacion,
+				$ServicioSocial,
+				$ActividadesComplementarias,
+				$MateriasEspecial,
+				$CorreoInstitucional,
 				$FechaNacimiento
 		){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("
-						UPDATE 
+						UPDATE
 							alumnos
 							SET
 								idCarrera = :idCarrera,
@@ -893,7 +893,7 @@
 					case '1':
 						$STATUSNEW = 0;
 						break;
-					
+
 					case '0':
 						$STATUSNEW = 1;
 						break;
@@ -907,7 +907,7 @@
 					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
-				} else {				
+				} else {
 					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
@@ -926,7 +926,7 @@
 					case '1':
 						$STATUSNEW = 0;
 						break;
-					
+
 					case '0':
 						$STATUSNEW = 1;
 						break;
@@ -940,7 +940,7 @@
 					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
-				} else {				
+				} else {
 					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
@@ -1019,8 +1019,8 @@
 		public function actualizarFechaPeriodo($idFechaEntregaPeriodo, $idPeriodo, $Descripcion, $FechaInicio, $FechaFinal) {
 			try {
 				$SQL = $this->CONNECTION->PREPARE("
-						UPDATE fechasentregaperiodo 
-							SET 
+						UPDATE fechasentregaperiodo
+							SET
 								idPeriodo = :idPeriodo,
 								vDescripcion = :vDescripcion,
 								dFechaInicioEntrega = :dFechaInicioEntrega,

@@ -42,9 +42,9 @@
         <div class="container-fluid">
             <!-- <input type="hidden" id="idUsuario" value="<?php @session_start(); echo $_SESSION['idUsuario']; ?>"> -->
             <div class="row">
-            <?php 
+            <?php
               include '../php/connection.php';
-              if($ObjectITSA->checkSession()){  
+              if($ObjectITSA->checkSession()){
                   if(!$ObjectITSA->checkPermission("residencia")) {
                       echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                       exit;
@@ -57,20 +57,26 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">
                     </h1>
-                    <?php 
+                    <?php
                         if(isset($_POST['registrarProyecto'])) {
-                          $ObjectITSA->registerProject(
+                          /*$ObjectITSA->registerProject(
                             $_SESSION['idUsuario'],
-                            $_SESSION['numeroControl'], 
-                            $_POST['idProyecto'], 
-                            $_POST['idPeriodo'], 
-                            $_POST['idOpcion'], 
-                            $_POST['idGiro'], 
+                            $_SESSION['numeroControl'],
+                            $_POST['idProyecto'],
+                            $_POST['idPeriodo'],
+                            $_POST['idOpcion'],
+                            $_POST['idGiro'],
                             $_POST['idSector'],
-                            $_FILES['Solicitud'], 
-                            $_FILES['Anteproyecto'], 
+                            $_FILES['Solicitud'],
+                            $_FILES['Anteproyecto'],
                             $_FILES['Constancia']
-                          );
+                          );*/
+                          $ObjectITSA1->saveSolicitud(
+                                                            $_POST,
+                                                            $_FILES['Constancia'],
+                                                            $_SESSION['idUsuario'],
+                                                            $_SESSION['numeroControl']
+                                                      );
                         } else if (isset($_POST['ContinuarTab'])) {
                           $ObjectITSA->changeIntProcesss($_SESSION['idUsuario']);
                         } else if (isset($_POST['aceptacionPresentacion'])) {
@@ -103,18 +109,18 @@
                 </div>
             </div>
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <div class="row">
               <div class="col-lg-12">
                 <div class="alert alert-warning" align="center">
                   <strong>Atención!</strong> Antes de subir cualquier documento se recomienda pasar con su asesor para revisión previa.
                 </div>
-              </div>    
+              </div>
             </div>
             <div class="row">
                 <section class="design-process-section" id="process-tab" align="center">
-                      <div class="col-lg-12"> 
-                        <!-- design process steps--> 
+                      <div class="col-lg-12">
+                        <!-- design process steps-->
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs process-model more-icon-preocess" role="tablist">
                           <li role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 1 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 1 ? 'visited' : '') ?>"">
@@ -134,7 +140,7 @@
                           <li role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 3 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 3 ? 'visited' : '') ?>">
                             <a href="#ctaAceptacion" class="opcionHdr" aria-controls="ctaAceptacion" role="tab" data-toggle="tab">
                               <i class="fa fa-folder-open"></i>
-                              <p>Cartas</p>  
+                              <p>Cartas</p>
                             </a>
                           </li>
 
@@ -144,21 +150,21 @@
                               <p>Primer</p>
                             </a>
                           </li>
-                          
+
                           <li role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 5 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 5 ? 'visited' : '') ?>">
                             <a href="#2seguimiento" class="opcionHdr" aria-controls="2seguimiento" role="tab" data-toggle="tab">
                               <i class="fa fa-folder-open"></i>
                               <p>Segundo</p>
                             </a>
                           </li>
-                          
+
                           <li role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 6 ? 'visited' : '') ?>">
                             <a href="#3seguimiento" class="opcionHdr" aria-controls="3seguimiento" role="tab" data-toggle="tab">
                              <i class="fa fa-folder-open"></i>
                               <p>Tercer</p>
                             </a>
                           </li>
-                          
+
                           <li role="presentation class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 7 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 7 ? 'visited' : '') ?>">
                             <a href="#final" class="opcionHdr" aria-controls="final" role="tab" data-toggle="tab">
                               <i class="fa fa-folder"></i>
@@ -166,7 +172,7 @@
                             </a>
                           </li>
                         </ul>
-                        <!-- end design process steps--> 
+                        <!-- end design process steps-->
                         <!-- Tab panes -->
                         <div class="tab-content">
                           <!-- REGISTRAR PROYECTO -->
@@ -177,7 +183,7 @@
                               <form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label">Proyecto:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <select class="form-control selectpicker" data-live-search="true" name="idProyecto" required>
                                       <option value="1">Proyecto Prueba</option>
                                       <option value="2">Proyecto Prueba2</option>
@@ -187,7 +193,7 @@
                                 </div>
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label">Periodo:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <select class="form-control"  name="idPeriodo" required>
                                       <option value="1">Agosto 2018 - Enero 2019</option>
                                     </select>
@@ -195,7 +201,7 @@
                                 </div>
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label" >Opción:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <select class="form-control" data-live-search="true" name="idOpcion" required>
                                       <option value="1">Propuesta alumno</option>
                                       <option value="2">Banco de proyectos</option>
@@ -205,7 +211,7 @@
                                 </div>
                                  <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label" >Giro:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <select class="form-control" name="idGiro" required>
                                       <option value="1">Industrial</option>
                                       <option value="2">Servicios</option>
@@ -215,7 +221,7 @@
                                 </div>
                                  <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label" >Sector:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <select class="form-control" name="idSector" required>
                                       <option value="1">Público</option>
                                       <option value="2">Privado</option>
@@ -223,20 +229,101 @@
                                   </div>
                                 </div>
                                 <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label">Solicitud:</label>
-                                  <div class="col-lg-10">                                    
-                                    <input type="file" name="Solicitud" required>
-                                  </div>                                  
+                                 <label for="asesorInterno" class="col-lg-2 col-form-label" >ASESOR(A) INTERNO(A):</label>
+                                 <div class="col-lg-8">
+                                   <input type="text" name="asesorInterno" class="form-control" />
+                                 </div>
+                               </div>
+                               <div class="form-group row">
+                                <label for="inputEmail3" class="col-lg-2 col-form-label" >ASESOR(A) EXTERNO(A):</label>
+                                <div class="col-lg-8">
+                                  <input type="text" name="asesorExterno" class="form-control" />
                                 </div>
-                                <div class="form-group row">
+                              </div>
+                               <div class="form-group row">
+                                <label for="inputEmail3" class="col-lg-2 col-form-label" >PERSONA QUE FIRMARÁ DOCUMENTOS OFICIALES DE LA RESIDENCIA:</label>
+                                <div class="col-lg-8">
+                                  <input type="text" name="personasQueFirmaran" class="form-control" />
+                                </div>
+                              </div>
+                              <hr>
+                              <h3 class="semi-bold">Información del alumno</h3>
+                              <div class="form-group row">
+                               <label for="inputEmail3" class="col-lg-2 col-form-label" >Nombre:</label>
+                               <div class="col-lg-8">
+                                 <input type="text" name="nombreAlumno" class="form-control" />
+                               </div>
+                             </div>
+                             <div class="form-group row">
+                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Numero de control:</label>
+                              <div class="col-lg-8">
+                                <input type="text" name="numeroDeControl" class="form-control" />
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Domicilio:</label>
+                             <div class="col-lg-8">
+                               <input type="text" name="domicilioAlumno" class="form-control" />
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Colonia:</label>
+                             <div class="col-lg-8">
+                               <input type="text" name="coloniaAlumno" class="form-control" />
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Ciudad y estado:</label>
+                             <div class="col-lg-8">
+                               <input type="text" name="ciudadEstado" class="form-control" />
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >CP:</label>
+                             <div class="col-lg-8">
+                               <input type="text" name="cp" class="form-control" />
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Telefono:</label>
+                             <div class="col-lg-8">
+                               <input type="text" name="telefono" class="form-control" />
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Email:</label>
+                             <div class="col-lg-8">
+                               <input type="text" name="correo" class="form-control" />
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Seguro social:</label>
+                             <div class="col-lg-4">
+                               <select id="seguroSocialAlumno" class="form-control">
+                                 <option value="1">IMSS</option>
+                                 <option value="2">ISSTE</option>
+                                 <option value="3">OTROS</option>
+                               </select>
+                             </div>
+                             <div class="col-lg-4">
+                               <input type="text" name="numero" class="form-control" placeholder="numeroSeguro" />
+                             </div>
+                            </div>
+                                <!--<div class="form-group row">
+                                  <label for="inputEmail3" class="col-lg-2 col-form-label">Solicitud:</label>
+                                  <div class="col-lg-10">
+                                    <input type="file" name="Solicitud" required>
+                                  </div>
+                                </div>-->
+                                <!--<div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label">Anteproyecto:</label>
-                                  <div class="col-lg-10">                                    
+                                  <div class="col-lg-10">
                                     <input type="file" name="Anteproyecto" required>
                                   </div>
-                                </div>
+                                </div>-->
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label">Constancia:</label>
-                                  <div class="col-lg-10">                                    
+                                  <div class="col-lg-10">
                                     <input type="file" name="Constancia" required>
                                   </div>
                                 </div>
@@ -269,21 +356,21 @@
                               <form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-4 col-form-label">Carta de presentación:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <input type="file" name="presentacion" required>
                                   </div>
                                 </div>
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-4 col-form-label">Carta de aceptación:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <input type="file" name="aceptacion" required>
-                                  </div>                                  
+                                  </div>
                                 </div>
                                 <div align="center">
                                   <button class="btn btn-success" type="submit" name="aceptacionPresentacion">Guardar</button>
                                   <button class="btn btn-warning">Limpiar</button>
                                 </div>
-                              </form>                                
+                              </form>
                               <!-- <a href="#1seguimiento" aria-controls="1seguimiento" role="tab" data-toggle="tab">Siguiente</a> -->
                             </div>
                           </div>
@@ -292,11 +379,11 @@
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4 ? 'active' : '') ?>" id="1seguimiento">
                             <div class="design-process-content">
                               <h3 class="semi-bold">Primer seguimiento</h3>
-                              <p>Primer seguimiento</p>  
+                              <p>Primer seguimiento</p>
                               <form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-4 col-form-label">Primer Reporte:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <input type="file" name="primerReporte" required>
                                   </div>
                                 </div>
@@ -304,7 +391,7 @@
                                   <button class="btn btn-success" type="submit" name="primerReporteForm">Guardar</button>
                                   <!-- <button class="btn btn-warning">Limpiar</button> -->
                                 </div><br>
-                              </form>            
+                              </form>
                             </div>
                             <a href="#2seguimiento" aria-controls="2seguimiento" role="tab" data-toggle="tab">Siguiente</a>
                           </div>
@@ -317,7 +404,7 @@
                               <form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-4 col-form-label">Segundo Reporte:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <input type="file" name="segundoReporte" required>
                                   </div>
                                 </div>
@@ -325,7 +412,7 @@
                                   <button class="btn btn-success" type="submit" name="segundoReporteForm">Guardar</button>
                                   <!-- <button class="btn btn-warning">Limpiar</button> -->
                                 </div><br>
-                              </form>  
+                              </form>
                             </div>
                             <a href="#3seguimiento" aria-controls="3seguimiento" role="tab" data-toggle="tab">Siguiente</a>
                           </div>
@@ -338,7 +425,7 @@
                               <form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-4 col-form-label">Tercer Reporte:</label>
-                                  <div class="col-lg-8">                                    
+                                  <div class="col-lg-8">
                                     <input type="file" name="tercerReporte" required>
                                   </div>
                                 </div>
@@ -346,7 +433,7 @@
                                   <button class="btn btn-success" type="submit" name="tercerReporteForm">Guardar</button>
                                   <!-- <button class="btn btn-warning">Limpiar</button> -->
                                 </div><br>
-                              </form> 
+                              </form>
                             </div>
                             <a href="#final" aria-controls="final" role="tab" data-toggle="tab">Siguiente</a>
                           </div>
@@ -366,7 +453,7 @@
     </div>
 
 </div>
-    
+
     <!-- jQuery -->
     <script src="../js/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
@@ -376,7 +463,7 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
-    <script src="../js/index.js"></script>     
+    <script src="../js/index.js"></script>
     <script src="../js/bootstrap-select.js"></script>
     <script type="text/javascript">
       $('#process-tab .opcionHdr').click(function(event){
