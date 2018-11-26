@@ -32,7 +32,7 @@
 			<div class="form-group">
 				<label>Selecciona un documento</label>
 				<select class="form-control" id="SDocumento" onchange="precargarCronograma(this)" name="documentos">
-					
+
 				</select>
 			</div>
 		</div>
@@ -57,8 +57,9 @@
 
 
 	</table>
-	<button id="agregar" class="btn btn-primary top"> Agregar</button>
-	<button id="guardar" class="btn btn-primary top" onclick="return guardar()"> Agregar</button>
+	<button id="agregar" class="btn btn-info top"> Agregar Actividad</button>
+	<button id="guardar" class="btn btn-primary top" onclick="return guardar()"> Guardar cronograma</button>
+	<button id="cancelar" class="btn btn-danger top" onclick="cancelar()"> Cancelar</button>
 	<div id="salida">
 
 	</div>
@@ -67,6 +68,20 @@
 	var contador = 0;
 	cargarSelect();
 
+	function mostrarMensaje(mensaje,tipoMensaje){
+		alertify.set('notifier','position', 'top-center');
+		if(tipoMensaje == 1){
+				alertify.notify(mensaje, 'success', 5, function(){  console.log('dismissed'); });
+		}else if(tipoMensaje == 2){
+			alertify.notify(mensaje, 'error', 5, function(){  console.log('dismissed'); });
+		}
+
+	}
+	function cancelar(){
+		contador = 0;
+		$(".rowsAdded").remove();
+		mostrarMensaje("Cancelador",1);
+	}
 	function precargarCronograma(e){
 		$.ajax({
 			url:'../php/cronograma.php',
@@ -142,7 +157,7 @@
 			semanas += '<td><input type="checkbox" name="checkbox1" id="'+contador+''+$j+'" /></td>';
 		}
 		$("#Cronograma").append(
-								"<tr>"+
+								"<tr class='rowsAdded'>"+
 									"<td><input placeholder='Actividad' id='actividad"+contador+"'  /></td>"+semanas+
 								"</tr>"
 							 );
@@ -166,27 +181,32 @@
 		cronograma+=']';
 
 		console.log(cronograma);
+		if(contador > 0){
+				$.ajax({
+					url: '../php/cronograma.php',
+					type:'POST',
+					data:
+							{
+								"cronograma":cronograma,
+								"operacion":1,
+								"size":24,
+								"idTipoDeDocumento":idTipoDeDocumento
+							},
+					beforeSend: function(e){
 
-		$.ajax({
-			url: '../php/cronograma.php',
-			type:'POST',
-			data:
-					{
-						"cronograma":cronograma,
-						"operacion":1,
-						"size":24,
-						"idTipoDeDocumento":idTipoDeDocumento
 					},
-			beforeSend: function(e){
-
-			},
-			success: function(e){
-				$("#salida").html(e);
-			},
-			error: function(e){
-				$("#salida").html(e);
+					success: function(e){
+						$("#salida").html(e);
+						mostrarMensaje("Guardado con exito",1);
+					},
+					error: function(e){
+						$("#salida").html(e);
+						mostrarMensaje("Algo salio mal...",2);
+					}
+				});
+			}else{
+				mostrarMensaje("No hay ninguna actividad por guardar...",2);
 			}
-		});
 	}
 </script>
 </html>
