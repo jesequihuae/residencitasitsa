@@ -185,9 +185,9 @@
                                   <label for="inputEmail3" class="col-lg-2 col-form-label">Proyecto:</label>
                                   <div class="col-lg-8">
                                     <select class="form-control selectpicker" data-live-search="true" name="idProyecto" required>
-                                      <option value="1">Proyecto Prueba</option>
-                                      <option value="2">Proyecto Prueba2</option>
-                                      <option value="3">Proyecto Prueba3</option>
+                                      <?php foreach ($ObjectITSA->getAllProyectos() as $r) { ?>
+                                          <option value="<?php echo $r["idBancoProyecto"]; ?>"><?php echo $r["vNombreProyecto"]; ?></option>
+                                      <?php  } ?>
                                     </select>
                                   </div>
                                 </div>
@@ -195,7 +195,9 @@
                                   <label for="inputEmail3" class="col-lg-2 col-form-label">Periodo:</label>
                                   <div class="col-lg-8">
                                     <select class="form-control"  name="idPeriodo" required>
-                                      <option value="1">Agosto 2018 - Enero 2019</option>
+                                      <?php foreach ($ObjectITSA->getAllPeriodos() as $r) { ?>
+                                          <option value="<?php echo $r["idPeriodo"]; ?>"><?php echo $r["vPeriodo"]; ?></option>
+                                      <?php  } ?>
                                     </select>
                                   </div>
                                 </div>
@@ -203,9 +205,9 @@
                                   <label for="inputEmail3" class="col-lg-2 col-form-label" >Opción:</label>
                                   <div class="col-lg-8">
                                     <select class="form-control" data-live-search="true" name="idOpcion" required>
-                                      <option value="1">Propuesta alumno</option>
-                                      <option value="2">Banco de proyectos</option>
-                                      <option value="3">Trabajador</option>
+                                      <?php foreach ($ObjectITSA->getAllOpciones() as $r) { ?>
+                                          <option value="<?php echo $r["idOpcion"]; ?>"><?php echo $r["vOpcion"]; ?></option>
+                                      <?php  } ?>
                                     </select>
                                   </div>
                                 </div>
@@ -213,9 +215,9 @@
                                   <label for="inputEmail3" class="col-lg-2 col-form-label" >Giro:</label>
                                   <div class="col-lg-8">
                                     <select class="form-control" name="idGiro" required>
-                                      <option value="1">Industrial</option>
-                                      <option value="2">Servicios</option>
-                                      <option value="3">Educativo</option>
+                                      <?php foreach ($ObjectITSA->getAllGiros() as $r) { ?>
+                                          <option value="<?php echo $r["idGiro"]; ?>"><?php echo $r["vGiro"]; ?></option>
+                                      <?php  } ?>
                                     </select>
                                   </div>
                                 </div>
@@ -223,8 +225,9 @@
                                   <label for="inputEmail3" class="col-lg-2 col-form-label" >Sector:</label>
                                   <div class="col-lg-8">
                                     <select class="form-control" name="idSector" required>
-                                      <option value="1">Público</option>
-                                      <option value="2">Privado</option>
+                                      <?php foreach ($ObjectITSA->getAllSectores() as $r) { ?>
+                                          <option value="<?php echo $r["idSector"]; ?>"><?php echo $r["vSector"]; ?></option>
+                                      <?php  } ?>
                                     </select>
                                   </div>
                                 </div>

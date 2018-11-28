@@ -632,6 +632,39 @@
 					  </div>';
 			}
 		}
+		public function getAllGiros(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idGiro, vGiro FROM giros WHERE bActivo = 1");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+		public function getAllOpciones(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion FROM opciones WHERE bActivo = 1");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						</div>';
+			}
+		}
+		public function getAllSectores(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idSector, vSector FROM sectores WHERE bActivo = 1");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						</div>';
+			}
+		}
 
 		public function getAllProyectos(){
 			try {
