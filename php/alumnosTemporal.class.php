@@ -63,6 +63,65 @@
                                                   ");
       $SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
       $SQLINTPROCESS->execute();
+
+      $url = "../documentos/";
+
+      $sql =
+            "
+            SELECT
+              vPeriodo
+            FROM periodos
+            WHERE idPeriodo = :idPeriodo
+            ";
+      $SQLINTPROCESS = $this->connection->PREPARE($sql);
+      $SQLINTPROCESS->bindParam(":idPeriodo",$post["idPeriodo"]);
+      $SQLINTPROCESS->execute();
+      $row = $SQLINTPROCESS->fetch();
+
+      $periodo = $row["vPeriodo"];
+
+
+
+      $sql =
+            "
+            SELECT
+              c.vClave
+            FROM alumnos a
+            INNER JOIN carreras c ON(c.idCarrera = a.idCarrera)
+            WHERE a.idAlumno = :idAlumno
+            ";
+      $SQLINTPROCESS = $this->connection->PREPARE($sql);
+      $SQLINTPROCESS->bindParam(":idAlumno",$idAlumno);
+      $SQLINTPROCESS->execute();
+      $row = $SQLINTPROCESS->fetch();
+      $carrera = $row["vClave"];
+
+
+
+      if(!file_exists($url)){
+        if(!mkdir($url)){
+          die("fallo al crear la carpeta");
+        }
+      }
+      $url .= $periodo."/";
+      if(!file_exists($url)){
+        if(!mkdir($url)){
+          die("fallo al crear la carpeta");
+        }
+      }
+      $url .= $carrera."/";
+      echo $url;
+
+      if(!file_exists($url)){
+        if(!mkdir($url)){
+          die("fallo al crear la carpeta");
+        }
+      }
+      $url .= $constanciaFile["name"];
+      if(!move_uploaded_file($constanciaFile['tmp_name'], $url)){
+        die("Fallo al guardar el archivo");
+      }
+
       echo '<div class="alert alert-dismissable alert-success">Solicitud guardada exitosamente!
           <button type="button" class="close" data-dismiss="alert">x</button>
             </div>';
