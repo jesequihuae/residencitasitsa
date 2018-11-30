@@ -117,10 +117,55 @@
           die("fallo al crear la carpeta");
         }
       }
-      $url .= $constanciaFile["name"];
-      if(!move_uploaded_file($constanciaFile['tmp_name'], $url)){
+      $name = uniqid();
+      $ext = pathinfo($constanciaFile['name'], PATHINFO_EXTENSION);
+
+
+      if(!move_uploaded_file($constanciaFile['tmp_name'], $url.$name)){
         die("Fallo al guardar el archivo");
       }
+
+
+
+      $sql =
+      "
+        INSERT INTO documentos
+        (
+          idProyectoSeleccionado,
+          idAlumno,
+          idTipoDocumento,
+          idEstado,
+          vNombre,
+          vRuta,
+          bAceptadoAI,
+          bAceptadoAE
+        )
+        VALUES
+        (
+          :idProyectoSeleccionado,
+          :idAlumno,
+          2,
+          3,
+          :vNombre,
+          :vRuta,
+          0,
+          0
+        )
+      ";
+      $name .= ".".$ext;
+      $SQLINTPROCESS = $this->connection->prepare($sql);
+      $SQLINTPROCESS->bindParam(":idProyectoSeleccionado",$post["idProyecto"]);
+      $SQLINTPROCESS->bindParam(":idAlumno",$idAlumno);
+      $SQLINTPROCESS->bindParam(":vNombre",$name);
+      $SQLINTPROCESS->bindParam(":vRuta",$url);
+      $SQLINTPROCESS->execute();
+
+
+      $SQLINTPROCESS = $this->connection->PREPARE("UPDATE alumnos SET iProceso = 2 WHERE idAlumno = :idAlumno");
+      $SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
+      $SQLINTPROCESS->execute();
+      //2 tipo documento
+      //3 en espera
 
       echo '<div class="alert alert-dismissable alert-success">Solicitud guardada exitosamente!
           <button type="button" class="close" data-dismiss="alert">x</button>
