@@ -126,7 +126,7 @@
                           <li role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 1 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 1 ? 'visited' : '') ?>"">
                             <a href="#registrarProyecto" class="opcionHdr" aria-controls="registrarProyecto" role="tab" data-toggle="tab">
                               <i class="fa fa-briefcase"></i>
-                              <p>Proyecto</p>
+                              <p>Solicitud</p>
                             </a>
                           </li>
 
@@ -310,6 +310,41 @@
                              </div>
                              <div class="col-lg-4">
                                <input type="text" name="numeroSeguro" class="form-control"  placeholder="numeroSeguro" />
+                             </div>
+                            </div>
+                            <hr>
+                            <h3 class="semi-bold">Estructura del anteproyecto</h3>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Título del anteproyecto:</label>
+                             <div class="col-lg-8">
+                              <input class="form-control" type="text" name="tituloAnteproyecto" placeholder="Título del anteproyecto"></input>
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Objectivos General y Específicos:</label>
+                             <div class="col-lg-4">
+                              <textarea class="form-control" type="text" name="objectivoGeneral" placeholder="Objectivo general"></textarea>
+                             </div>
+                             <div class="col-lg-4">
+                              <textarea class="form-control" type="text" name="objectivoEspecifico" placeholder="Objectivo especifico"></textarea>
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Objectivos General y Específicos:</label>
+                             <div class="col-lg-8">
+                              <textarea class="form-control" type="text" name="alcancesDelimitaciones" placeholder="Alcances o delimitaciónes"></textarea>
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Descripción de las actividades:</label>
+                             <div class="col-lg-8">
+                              <textarea class="form-control" type="text" name="alcancesDelimitaciones" placeholder="Descripcion de las actividades"></textarea>
+                             </div>
+                            </div>
+                            <div class="form-group row">
+                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Area o lugar de implementación:</label>
+                             <div class="col-lg-8">
+                              <textarea class="form-control" type="text" name="alcancesDelimitaciones" placeholder="Lugar de la implementación"></textarea>
                              </div>
                             </div>
                                 <!--<div class="form-group row">
