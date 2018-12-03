@@ -207,6 +207,7 @@
 			}else{
 				mostrarMensaje("No hay ninguna actividad por guardar...",2);
 			}
+			return false;
 	}
 </script>
 </html>

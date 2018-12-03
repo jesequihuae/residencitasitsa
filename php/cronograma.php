@@ -11,8 +11,8 @@
 			try{
 			/*	$this->handler = new PDO('mysql:host=127.0.0.1;dbname=residenciasitsa','root',''); //Localhost
 				$this->handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);*/
-				$handler = new PDO('mysql:host=185.201.11.65;dbname=u276604013_dbres','u276604013_itsa','jesus_321'); //Localhost
-				$handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$this->handler = new PDO('mysql:host=185.201.11.65;dbname=u276604013_dbres','u276604013_itsa','jesus_321'); //Localhost
+				$this->handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			} catch(PDOException $e) {
 				echo $e->getMessage();
 			}
@@ -24,7 +24,7 @@
 					idTipoDocumento,
 					vNombre
 				FROM tiposdocumento
-				WHERE bActivo = 1 AND idTipoDocumento IN(5,6,7)";
+				WHERE bActivo = 1 AND idTipoDocumento = 2";
 			$prepare = $this->handler->prepare($sql);
 			$prepare->execute();
 			$resultado = $prepare->fetchAll();
@@ -118,6 +118,21 @@
 
 			return $result;
 		}
+		public function buscarCronogramaByUsuario($idAlumno){
+			$sql =
+			"
+				SELECT
+					1
+				FROM cronograma
+				WHERE idAlumno = :idAlumno
+				LIMIT 1
+			";
+			$con = $this->handler->prepare($sql);
+			$con->bindParam(":idAlumno",$idAlumno);
+			$con->execute();
+
+			return $con->rowCount();
+		}
 
 	}
 
@@ -156,6 +171,14 @@
 		$resultado = $cronograma->obtenerCronogramaCargado($idAlumno,$idDocumento);
 
 		echo json_encode($resultado);
+		break;
+		case 4:
+		$cronograma->abrirConexion();
+		$idAlumno 		= @$_SESSION["idUsuario"];
+
+		$resultado = $cronograma->buscarCronogramaByUsuario($idAlumno);
+
+		echo ($resultado > 0 )? 1 : 0;
 		break;
 	}
 ?>

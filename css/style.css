@@ -148,3 +148,22 @@
         text-align: center;
     }
 }
+.red{
+  background: red;
+}
+.color-head{
+  background-color: #E4F1F8;
+}
+table th{
+  border:1px solid;
+  width: 50px;
+  text-align: center;
+}
+table td{
+  border:1px solid;
+  width: 50px;
+  text-align: center;
+}
+.top{
+  margin-top: 10px;
+}
