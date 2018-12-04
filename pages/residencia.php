@@ -86,7 +86,7 @@
                         } else if (isset($_POST['ContinuarTab'])) {
                           $ObjectITSA->changeIntProcesss($_SESSION['idUsuario']);
                         } else if (isset($_POST['aceptacionPresentacion'])) {
-                          $ObjectITSA->saveLetters(
+                          $ObjectITSA1->saveLetters(
                             $_SESSION['idUsuario'],
                             $_SESSION['numeroControl'],
                             $_FILES['presentacion'],
@@ -564,7 +564,7 @@
     $('#Continuar').attr('disabled',true);
     $('#FormContinuar').submit();
   });
-  
+
   var contador = 0;
   cargarSelect();
 

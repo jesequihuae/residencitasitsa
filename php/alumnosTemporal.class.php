@@ -160,7 +160,7 @@
                 }
               }
               $url .= $carrera."/";
-        
+
               if(!file_exists($url)){
                 if(!mkdir($url)){
                   die("fallo al crear la carpeta");
@@ -242,6 +242,113 @@
             </div>';
       }*/
     }
+    public function saveLetters($idAlumno, $NumeroControl ,$cartaPresentacion, $cartaAceptacion) {
+			try {
+
+        $url = "../documentos/";
+
+        $sql =
+              "
+              SELECT
+                  p.vPeriodo
+              FROM proyectoseleccionado ps
+              INNER JOIN periodos p ON(ps.idPeriodo = p.idPeriodo)
+              WHERE ps.idAlumno = :idAlumno
+              ";
+        $SQLINTPROCESS = $this->connection->PREPARE($sql);
+        $SQLINTPROCESS->bindParam(":idAlumno",$idAlumno);
+        $SQLINTPROCESS->execute();
+        $row = $SQLINTPROCESS->fetch();
+
+        $url .= $row["vPeriodo"]."/";
+
+
+
+        $sql =
+              "
+              SELECT
+                c.vClave
+              FROM alumnos a
+              INNER JOIN carreras c ON(c.idCarrera = a.idCarrera)
+              WHERE a.idAlumno = :idAlumno
+              ";
+        $SQLINTPROCESS = $this->connection->PREPARE($sql);
+        $SQLINTPROCESS->bindParam(":idAlumno",$idAlumno);
+        $SQLINTPROCESS->execute();
+        $row = $SQLINTPROCESS->fetch();
+        $carrera = $row["vClave"];
+
+        $url .= $carrera."/";
+
+
+				//$NombrePresentacion = $cartaPresentacion['name'].;//explode('.', $cartaPresentacion['name']);
+				//$NombreAceptacion = $cartaAceptacion['name'];
+
+        $namePress = uniqid();
+        $extPress = pathinfo($cartaPresentacion['name'], PATHINFO_EXTENSION);
+
+        $nameAccep = uniqid();
+        $extAccep = pathinfo($cartaAceptacion['name'], PATHINFO_EXTENSION);
+
+
+
+				$RutaPresentacion = $url.$namePress.".".$extPress;
+				$RutaAceptacion =   $url.$nameAccep.".".$extAccep;
+
+				$SuccessPresentacion = move_uploaded_file($cartaPresentacion['tmp_name'], $RutaPresentacion);
+				$SuccessAceptacion = move_uploaded_file($cartaAceptacion['tmp_name'], $RutaAceptacion);
+
+
+				$SQLIdProyecto = $this->connection->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
+				$this->connection->beginTransaction();
+
+				if($SuccessAceptacion && $RutaPresentacion) {
+					$SQLIdProyecto->bindParam(":idAlumno",$idAlumno);
+					$SQLIdProyecto->execute();
+					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
+
+					$UNA = "asdadsda";
+
+					$SQLPresentacion = $this->connection->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,4,4,:vNombre,:vRuta)");
+
+					$SQLPresentacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
+					$SQLPresentacion->bindParam(":vNombre",$UNA);
+					$SQLPresentacion->bindParam(":vRuta",$RutaPresentacion);
+					$SQLPresentacion->bindParam(":idAlumno",$idAlumno);
+					$SQLPresentacion->execute();
+
+					$SQLAceptacion = $this->connection->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,9,4,:vNombre,:vRuta)");
+
+					$SQLAceptacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
+					$SQLAceptacion->bindParam(":vNombre",$UNA);
+					$SQLAceptacion->bindParam(":vRuta",$RutaAceptacion);
+					$SQLAceptacion->bindParam(":idAlumno", $idAlumno);
+					$SQLAceptacion->execute();
+
+					$SQLINTPROCESS = $this->connection->PREPARE("UPDATE alumnos SET iProceso = 4 WHERE idAlumno = :idAlumno");
+					$SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
+					$SQLINTPROCESS->execute();
+
+					$this->connection->commit();
+					echo '<div class="alert alert-dismissable alert-success">Archivos registrados correctamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+				} else {
+					$this->connection->rollback();
+					unlink($RutaPresentacion);
+					unlink($RutaAceptacion);
+					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: al subir los documentos. Intentalo nuevamente
+							<button type="button" class="close" data-dismiss="alert">x</button>
+					 	  </div>';
+				}
+			} catch (PDOException $e) {
+				$this->CONNECTION->rollback();
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+				 	  </div>';
+			}
+		}
+
   }
 
 
