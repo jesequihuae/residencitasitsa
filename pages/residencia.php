@@ -392,29 +392,14 @@
                                     </div>
                                   </div>
                                 </div>
-                                <table id="Cronograma">
-                                  <tr class="color-head">
-                                    <th rowspan="2">Actividades</th>
-                                    <th colspan="4">1</th>
-                                    <th colspan="4">2</th>
-                                    <th colspan="4">3</th>
-                                    <th colspan="4">4</th>
-                                    <th colspan="4">5</th>
-                                    <th colspan="4">6</th>
-                                  </tr>
-                                  <tr class="color-head">
-                                    <?php
-                                      for($i = 0;$i<24;$i++){
-                                        echo "<td id=\"semana$i\">".($i+1)."</td>";
-                                      }
-                                    ?>
-                                  </tr>
+                                <?php
+                                  if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 1)
+                                  {
+                                      $_SESSION["idTipoDocumento"] = 2;
+                                      require "cronograma/cronogramaSeg.php";
+                                  }
+                                 ?>
 
-
-                                </table>
-                                <button id="agregar" class="btn btn-info top"> Agregar Actividad</button>
-                                <button id="guardar" class="btn btn-primary top" onclick="return guardar()"> Guardar cronograma</button>
-                                <button id="cancelar" class="btn btn-danger top" onclick="cancelar()"> Cancelar</button>
                                 <div id="salida">
 
                                 </div>
@@ -479,6 +464,13 @@
                                   <!-- <button class="btn btn-warning">Limpiar</button> -->
                                 </div><br>
                               </form>
+                              <?php
+                                if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4)
+                                {
+                                  $_SESSION["idTipoDocumento"] = 5;
+                                    require "cronograma/cronogramaSeg.php";
+                                }
+                              ?>
                             </div>
                             <a href="#2seguimiento" aria-controls="2seguimiento" role="tab" data-toggle="tab">Siguiente</a>
                           </div>
@@ -500,6 +492,13 @@
                                   <!-- <button class="btn btn-warning">Limpiar</button> -->
                                 </div><br>
                               </form>
+                              <?php
+                                if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 5)
+                                {
+                                  $_SESSION["idTipoDocumento"] = 6;
+                                    require "cronograma/cronogramaSeg.php";
+                                }
+                              ?>
                             </div>
                             <a href="#3seguimiento" aria-controls="3seguimiento" role="tab" data-toggle="tab">Siguiente</a>
                           </div>
@@ -522,6 +521,13 @@
                                 </div><br>
                               </form>
                             </div>
+                            <?php
+                              if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6)
+                              {
+                                $_SESSION["idTipoDocumento"] = 7;
+                                  require "cronograma/cronogramaSeg.php";
+                              }
+                            ?>
                             <a href="#final" aria-controls="final" role="tab" data-toggle="tab">Siguiente</a>
                           </div>
 
@@ -590,7 +596,7 @@
       data:
             {
               "operacion":"3",
-              "idDocumento":e.value
+              "idDocumento":<?php echo $_SESSION["idTipoDocumento"]; ?>
             },
       beforeSend: function(e){
 
@@ -666,7 +672,7 @@
   function guardar(){
 
     var cronograma = "[";
-    var idTipoDeDocumento = $("#SDocumento").val();
+    var idTipoDeDocumento = <?php echo $_SESSION["idTipoDocumento"]; ?>;
     var rowCount = 0;
     for(i = 0;i < contador;i++){
       cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",\"i"+i+"\":"+i+",";
@@ -699,6 +705,7 @@
           success: function(e){
             $("#salida").html(e);
             mostrarMensaje("Guardado con exito",1);
+            location.reload();
           },
           error: function(e){
             $("#salida").html(e);

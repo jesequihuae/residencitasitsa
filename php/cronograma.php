@@ -88,7 +88,27 @@
 			$db = $this->handler->prepare($sql);
 			echo $sql;
 			if($db->execute()){
-				echo "Save";
+
+				$proceso = 0;
+				if($_SESSION["idTipoDocumento"] == 5){
+					$proceso = 5;
+				}else if($_SESSION["idTipoDocumento"] == 6){
+					$proceso = 6;
+				}else if($_SESSION["idTipoDocumento"] == 7){
+					$proceso = 7;
+				}
+
+				$sql = "
+									UPDATE alumnos
+									SET iProceso = $proceso
+									WHERE idAlumno = $idAlumno;
+							";
+				 $db = $this->handler->prepare($sql);
+				 if($db->execute()){
+					 echo "Save";
+				 }else{
+					 echo $db->errorCode();
+				 }
 			}else{
 				echo $db->errorCode();
 			}
@@ -150,6 +170,7 @@
 			$cronograma->abrirConexion();
 
 			$cronograma->guardarCronograma($info,$size,$idAlumno,$idDocumento);
+
 
 		break;
 		case 2:
