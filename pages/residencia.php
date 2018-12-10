@@ -395,7 +395,7 @@
                                 <?php
                                   if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 1)
                                   {
-                                      $_SESSION["idTipoDocumento"] = 2;
+                                      $_SESSION["idTipoDocumento"] = 3;
                                       require "cronograma/cronogramaSeg.php";
                                   }
                                  ?>
@@ -672,7 +672,9 @@
   function guardar(){
 
     var cronograma = "[";
-    var idTipoDeDocumento = <?php echo $_SESSION["idTipoDocumento"]; ?>;
+
+    var idTipoDeDocumento = <?php echo (isset($_SESSION["idTipoDocumento"])?$_SESSION["idTipoDocumento"]:0); ?>;
+
     var rowCount = 0;
     for(i = 0;i < contador;i++){
       cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",\"i"+i+"\":"+i+",";
@@ -704,8 +706,11 @@
           },
           success: function(e){
             $("#salida").html(e);
-            mostrarMensaje("Guardado con exito",1);
-            location.reload();
+            mostrarMensaje("Guardado con exito "+idTipoDeDocumento+" "+e,1);
+            console.log(e);
+            if(idTipoDeDocumento != 3){
+              location.href = "residencia.php";
+            }
           },
           error: function(e){
             $("#salida").html(e);

@@ -24,7 +24,7 @@
 					idTipoDocumento,
 					vNombre
 				FROM tiposdocumento
-				WHERE bActivo = 1 AND idTipoDocumento = 2";
+				WHERE bActivo = 1 AND idTipoDocumento = 3";
 			$prepare = $this->handler->prepare($sql);
 			$prepare->execute();
 			$resultado = $prepare->fetchAll();
@@ -34,10 +34,7 @@
 		public function guardarCronograma($cronograma,$size,$idAlumno,$idTipoDeDocumento){
 
 			$array = json_decode($cronograma,true);
-			echo "<pre>";
-			print_r($array);
-			echo "</pre>";
-
+			echo $idTipoDeDocumento;
 			/*if(is_array($array)){
 				echo "si";
 			}else{
@@ -86,15 +83,15 @@
 			$sql = trim($sql);
 			$sql = substr($sql,0,-1);
 			$db = $this->handler->prepare($sql);
-			echo $sql;
+			//echo $sql;
 			if($db->execute()){
 
 				$proceso = 0;
-				if($_SESSION["idTipoDocumento"] == 5){
+				if($idTipoDeDocumento == 5){
 					$proceso = 5;
-				}else if($_SESSION["idTipoDocumento"] == 6){
+				}else if($idTipoDeDocumento == 6){
 					$proceso = 6;
-				}else if($_SESSION["idTipoDocumento"] == 7){
+				}else if($idTipoDeDocumento == 7){
 					$proceso = 7;
 				}
 
@@ -103,12 +100,16 @@
 									SET iProceso = $proceso
 									WHERE idAlumno = $idAlumno;
 							";
-				 $db = $this->handler->prepare($sql);
-				 if($db->execute()){
-					 echo "Save";
-				 }else{
-					 echo $db->errorCode();
-				 }
+				echo $sql;
+
+				if($proceso != 0){
+					$db = $this->handler->prepare($sql);
+ 				 if($db->execute()){
+ 					 echo "Save";
+ 				 }else{
+ 					 echo $db->errorCode();
+ 				 }
+				}
 			}else{
 				echo $db->errorCode();
 			}
