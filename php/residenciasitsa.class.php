@@ -260,8 +260,6 @@
 					$SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
 					$SQLINTPROCESS->execute();
 
-					
-
 					$this->CONNECTION->commit();
 					echo '<div class="alert alert-dismissable alert-success">Archivos registrados correctamente!
 							<button type="button" class="close" data-dismiss="alert">x</button>
