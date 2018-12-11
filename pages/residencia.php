@@ -190,7 +190,7 @@
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label">Proyecto:</label>
                                   <div class="col-lg-8">
-                                    <select class="form-control selectpicker" data-live-search="true" name="idProyecto" required>
+                                    <select class="form-control selectpicker" data-live-search="true" name="idProyecto" id="idProyecto" required>
                                       <?php foreach ($ObjectITSA->getAllProyectos() as $r) { ?>
                                           <option value="<?php echo $r["idBancoProyecto"]; ?>"><?php echo $r["vNombreProyecto"]; ?></option>
                                       <?php  } ?>
@@ -200,7 +200,7 @@
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label">Periodo:</label>
                                   <div class="col-lg-8">
-                                    <select class="form-control"  name="idPeriodo" required>
+                                    <select class="form-control"  name="idPeriodo" id="idPeriodo" required>
                                       <?php foreach ($ObjectITSA->getAllPeriodos() as $r) { ?>
                                           <option value="<?php echo $r["idPeriodo"]; ?>"><?php echo $r["vPeriodo"]; ?></option>
                                       <?php  } ?>
@@ -210,7 +210,7 @@
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-2 col-form-label" >Opción:</label>
                                   <div class="col-lg-8">
-                                    <select class="form-control" data-live-search="true" name="idOpcion" required>
+                                    <select class="form-control" data-live-search="true"  id="idOpcion" name="idOpcion" required>
                                       <?php foreach ($ObjectITSA->getAllOpciones() as $r) { ?>
                                           <option value="<?php echo $r["idOpcion"]; ?>"><?php echo $r["vOpcion"]; ?></option>
                                       <?php  } ?>
@@ -218,9 +218,9 @@
                                   </div>
                                 </div>
                                  <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label" >Giro:</label>
+                                  <label for="inputEmail3" class="col-lg-2 col-form-label"   >Giro:</label>
                                   <div class="col-lg-8">
-                                    <select class="form-control" name="idGiro" required>
+                                    <select class="form-control" name="idGiro" id="idGiro" required>
                                       <?php foreach ($ObjectITSA->getAllGiros() as $r) { ?>
                                           <option value="<?php echo $r["idGiro"]; ?>"><?php echo $r["vGiro"]; ?></option>
                                       <?php  } ?>
@@ -228,9 +228,9 @@
                                   </div>
                                 </div>
                                  <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label" >Sector:</label>
+                                  <label for="inputEmail3" class="col-lg-2 col-form-label"  >Sector:</label>
                                   <div class="col-lg-8">
-                                    <select class="form-control" name="idSector" required>
+                                    <select class="form-control" name="idSector" id="idSector" required>
                                       <?php foreach ($ObjectITSA->getAllSectores() as $r) { ?>
                                           <option value="<?php echo $r["idSector"]; ?>"><?php echo $r["vSector"]; ?></option>
                                       <?php  } ?>
@@ -240,19 +240,19 @@
                                 <div class="form-group row">
                                  <label for="asesorInterno" class="col-lg-2 col-form-label" >ASESOR(A) INTERNO(A):</label>
                                  <div class="col-lg-8">
-                                   <input type="text" name="asesorInterno" class="form-control" />
+                                   <input type="text" name="asesorInterno" id="asesorInterno" class="form-control" />
                                  </div>
                                </div>
                                <div class="form-group row">
                                 <label for="inputEmail3" class="col-lg-2 col-form-label" >ASESOR(A) EXTERNO(A):</label>
                                 <div class="col-lg-8">
-                                  <input type="text" name="asesorExterno" class="form-control" />
+                                  <input type="text" name="asesorExterno" id="asesorExterno" class="form-control" />
                                 </div>
                               </div>
                                <div class="form-group row">
                                 <label for="inputEmail3" class="col-lg-2 col-form-label" >PERSONA QUE FIRMARÁ DOCUMENTOS OFICIALES DE LA RESIDENCIA:</label>
                                 <div class="col-lg-8">
-                                  <input type="text" name="personasQueFirmaran" class="form-control" />
+                                  <input type="text" name="personasQueFirmaran" id="personasQueFirmaran" class="form-control" />
                                 </div>
                               </div>
                               <hr>
@@ -260,62 +260,62 @@
                               <div class="form-group row">
                                <label for="inputEmail3" class="col-lg-2 col-form-label" >Nombre:</label>
                                <div class="col-lg-8">
-                                 <input type="text" name="nombreAlumno" value="<?php echo $_SESSION['nombre']; ?>" class="form-control" />
+                                 <input type="text" name="nombreAlumno" id="nombreAlumno" value="<?php echo $_SESSION['nombre']; ?>" class="form-control" />
                                </div>
                              </div>
                              <div class="form-group row">
                               <label for="inputEmail3" class="col-lg-2 col-form-label" >Numero de control:</label>
                               <div class="col-lg-8">
-                                <input type="text" name="numeroDeControl" value="<?php echo $_SESSION['numeroControl']; ?>" class="form-control" />
+                                <input type="text" name="numeroDeControl" id="numeroDeControl" value="<?php echo $_SESSION['numeroControl']; ?>" class="form-control" />
                               </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Domicilio:</label>
                              <div class="col-lg-8">
-                               <input type="text" name="domicilioAlumno" class="form-control" />
+                               <input type="text" name="domicilioAlumno" id="domicilioAlumno" class="form-control" />
                              </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Colonia:</label>
                              <div class="col-lg-8">
-                               <input type="text" name="coloniaAlumno" class="form-control" />
+                               <input type="text" name="coloniaAlumno" id="coloniaAlumno" class="form-control" />
                              </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Ciudad y estado:</label>
                              <div class="col-lg-8">
-                               <input type="text" name="ciudadEstado" class="form-control" />
+                               <input type="text" name="ciudadEstado" id="ciudadEstado" class="form-control" />
                              </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >CP:</label>
                              <div class="col-lg-8">
-                               <input type="text" name="cp" class="form-control" />
+                               <input type="text" name="cp" id="cp" class="form-control" />
                              </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Telefono:</label>
                              <div class="col-lg-8">
-                               <input type="text" name="telefono" class="form-control" />
+                               <input type="text" name="telefono" id="telefono" class="form-control" />
                              </div>
                             </div>
                             <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Email:</label>
+                             <label for="inputEmail3"  class="col-lg-2 col-form-label" >Email:</label>
                              <div class="col-lg-8">
-                               <input type="text" name="correo" class="form-control" />
+                               <input type="email" id="correo" name="correo" class="form-control" />
                              </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Seguro social:</label>
                              <div class="col-lg-4">
-                               <select name="idSeguroSocial" class="form-control">
+                               <select name="idSeguroSocial" id="idSeguroSocial" class="form-control">
                                  <option value="1">IMSS</option>
                                  <option value="2">ISSTE</option>
                                  <option value="3">OTROS</option>
                                </select>
                              </div>
                              <div class="col-lg-4">
-                               <input type="text" name="numeroSeguro" class="form-control"  placeholder="numeroSeguro" />
+                               <input type="text" name="numeroSeguro" id="numeroSeguro" class="form-control"  placeholder="numeroSeguro" />
                              </div>
                             </div>
                             <hr>
@@ -323,34 +323,34 @@
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Título del anteproyecto:</label>
                              <div class="col-lg-8">
-                              <input class="form-control" type="text" name="tituloAnteproyecto" placeholder="Título del anteproyecto"></input>
+                              <input class="form-control" type="text" id="tituloAnteproyecto" name="tituloAnteproyecto" placeholder="Título del anteproyecto"></input>
                              </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Objectivos General y Específicos:</label>
                              <div class="col-lg-4">
-                              <textarea class="form-control" type="text" name="objectivoGeneral" placeholder="Objectivo general"></textarea>
+                              <textarea class="form-control" type="text" id="objectivoGeneral" name="objectivoGeneral" placeholder="Objectivo general"></textarea>
                              </div>
                              <div class="col-lg-4">
-                              <textarea class="form-control" type="text" name="objectivoEspecifico" placeholder="Objectivo especifico"></textarea>
+                              <textarea class="form-control" type="text" id="objectivoEspecifico" name="objectivoEspecifico" placeholder="Objectivo especifico"></textarea>
                              </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Alcances y delimitaciónes:</label>
                              <div class="col-lg-8">
-                              <textarea class="form-control" type="text" name="alcancesDelimitaciones" placeholder="Alcances o delimitaciónes"></textarea>
+                              <textarea class="form-control" type="text" id="alcancesDelimitaciones" name="alcancesDelimitaciones" placeholder="Alcances o delimitaciónes"></textarea>
                              </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Descripción de las actividades:</label>
                              <div class="col-lg-8">
-                              <textarea class="form-control" type="text" name="descripcionActividades" placeholder="Descripcion de las actividades"></textarea>
+                              <textarea class="form-control" type="text" id="descripcionActividades" name="descripcionActividades" placeholder="Descripcion de las actividades"></textarea>
                              </div>
                             </div>
                             <div class="form-group row">
                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Area o lugar de implementación:</label>
                              <div class="col-lg-8">
-                              <textarea class="form-control" type="text" name="areaOLugarImplementacion" placeholder="Lugar de la implementación"></textarea>
+                              <textarea class="form-control" type="text" id="areaOLugarImplementacion" name="areaOLugarImplementacion" placeholder="Lugar de la implementación"></textarea>
                              </div>
                             </div>
                                 <!--<div class="form-group row">
@@ -375,7 +375,7 @@
                                 <h3 class="semi-bold">Cronograma</h3>
 
                                 <div>
-                                  <button type="submit" name="registrarProyecto" id="guardarSolicitud" class="btn btn-lg btn-success">Guardar</button>
+                                  <button type="submit" name="registrarProyecto" id="guardarSolicitud" class="btn btn-lg btn-success" onclick="return validacionGuardar()">Guardar</button>
                                   <button class="btn btn-lg btn-warning">Limpiar</button>
                                   <br><br>
                                 </div>
@@ -720,6 +720,145 @@
       }else{
         mostrarMensaje("No hay ninguna actividad por guardar...",2);
       }
+  }
+
+  function validacionGuardar(){
+    var idProyecto = 0,idPeriodo = 0;
+
+    idProyecto              = $("#idProyecto").val();
+    idPeriodo               = $("#idPeriodo").val();
+    idOpcion                = $("#idOpcion").val();
+    idGiro                  = $("#idGiro").val();
+    idSector                = $("#idSector").val();
+    asesorInterno           = $("#asesorInterno").val();
+    asesorExterno           = $("#asesorExterno").val();
+    personasQueFirmaran     = $("#personasQueFirmaran").val();
+
+
+    nombreAlumno            = $("#nombreAlumno").val();
+    numeroDeControl         = $("#numeroDeControl").val();
+    domicilioAlumno         = $("#domicilioAlumno").val();
+    coloniaAlumno           = $("#coloniaAlumno").val();
+    ciudadEstado            = $("#ciudadEstado").val();
+    correo                  = $("#correo").val();
+    cp                      = $("#cp").val();
+    telefono                = $("#telefono").val();
+    correo                  = $("#correo").val();
+    idSeguroSocial          = $("#idSeguroSocial").val();
+    numeroSeguro            = $("#numeroSeguro").val();
+
+
+    tituloAnteproyecto        = $("#tituloAnteproyecto").val();
+    objectivoGeneral          = $("#objectivoGeneral").val();
+    objectivoEspecifico       = $("#objectivoEspecifico").val();
+    alcancesDelimitaciones    = $("#alcancesDelimitaciones").val();
+    descripcionActividades    = $("#descripcionActividades").val();
+    areaOLugarImplementacion  = $("#areaOLugarImplementacion").val();
+    
+    alertify.set('notifier','position', 'top-center');
+    if(idProyecto == 0){
+      alertify.notify('Proyecto obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idPeriodo == 0){
+      alertify.notify('Periodo obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idOpcion == 0){
+      alertify.notify('Opcion obligatoria', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idGiro == 0){
+      alertify.notify('Giro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idSector == 0){
+      alertify.notify('Sector obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(asesorInterno == ""){
+      alertify.notify('Asesor interno obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(asesorExterno == ""){
+      alertify.notify('Asesor externo obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(personasQueFirmaran == ""){
+      alertify.notify('Personas que firmaran obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    
+
+
+    if(nombreAlumno == ""){
+      alertify.notify('Nombre del alumno obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(numeroDeControl == ""){
+      alertify.notify('Numero de control obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(domicilioAlumno == ""){
+      alertify.notify('Domicilio obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(coloniaAlumno == ""){
+      alertify.notify('Colonia obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(ciudadEstado == ""){
+      alertify.notify('Ciudad y Estado obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(cp == ""){
+      alertify.notify('Codigo postal obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(telefono == ""){
+      alertify.notify('telefono obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(correo == ""){
+      alertify.notify('Correo obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idSeguroSocial == 0){
+      alertify.notify('Seguro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    } 
+    if(numeroSeguro == 0){
+      alertify.notify('Numero de seguro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }    
+    
+    if(tituloAnteproyecto == ""){
+      alertify.notify('Titulo del anteproyecto obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }   
+    if(objectivoGeneral == ""){
+      alertify.notify('Objectivo general obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }   
+    if(objectivoEspecifico == ""){
+      alertify.notify('Objectivo especifico obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }   
+    if(alcancesDelimitaciones == ""){
+      alertify.notify('Alcances y delimitaciónes obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }   
+    if(descripcionActividades == ""){
+      alertify.notify('Descripcion de las actividades obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }   
+    if(areaOLugarImplementacion == ""){
+      alertify.notify('Lugar de la implementacion obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    } 
+    
+
+    
   }
 </script>
 </html>
