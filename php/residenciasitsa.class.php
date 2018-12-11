@@ -38,8 +38,8 @@
 						$SQLJEFE->execute();
 						$JEFE = $SQLJEFE->fetch(PDO::FETCH_ASSOC);
 						@session_start();
-				    	$_SESSION['nombre'] = $Alumno['vNombre'];
-				    	$_SESSION['idUsuario'] = $Alumno['idJefeCarrera'];
+				    	$_SESSION['nombre'] = $JEFE['vNombre'];
+				    	$_SESSION['idUsuario'] = $JEFE['idJefeCarrera'];
 				    	$_SESSION['numeroControl'] = "";
 					}
 					# PERMISOS DE BARRA DE NAVEGACION
@@ -1336,6 +1336,98 @@
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
 				}
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+
+		# JEFES DE CARRERA
+		public function getSolicitudesResidenciasByJefeCarrera($idJefeCarrera){
+			try {
+				$SQLJEFE = $this->CONNECTION->PREPARE("SELECT idCarrera FROM jefescarrera WHERE idJefeCarrera = :idJefeCarrera");
+				$SQLJEFE->bindParam(":idJefeCarrera",$idJefeCarrera);
+				$SQLJEFE->execute();
+
+				$IDCARRERA = $SQLJEFE->FETCH(PDO::FETCH_ASSOC);
+
+				$SQL = $this->CONNECTION->PREPARE("	
+									SELECT
+										PS.idProyectoSeleccionado,
+										PS.idBancoProyecto,
+										PS.idAlumno,
+										PS.idPeriodo,
+										PS.idOpcion,
+										PS.idGiro,
+										PS.idEstado,
+										PS.idSector,
+										PS.vMotivoNoAceptacion,
+										BP.vNombreProyecto,
+										A.vNumeroControl,
+										A.vNombre,
+										A.vApellidoPaterno,
+										A.vApellidoMaterno,
+										P.vPeriodo,
+										O.vOpcion,
+										G.vGiro,
+										E.vEstado,
+										S.vSector
+									FROM proyectoseleccionado AS PS 
+									INNER JOIN bancoproyectos AS BP
+									ON BP.idBancoProyecto = PS.idBancoProyecto
+									INNER JOIN alumnos AS A
+									ON A.idAlumno = PS.idAlumno
+									INNER JOIN periodos AS P 
+									ON P.idPeriodo = PS.idPeriodo
+									INNER JOIN opciones AS O
+									ON O.idOpcion = PS.idOpcion
+									INNER JOIN giros AS G 
+									ON G.idGiro = PS.idGiro
+									INNER JOIN estados AS E
+									ON E.idEstado = PS.idEstado
+									INNER JOIN sectores AS S 
+									ON S.idSector = PS.idSector
+									WHERE A.idCarrera = :idCarrera
+									ORDER BY PS.idProyectoSeleccionado DESC
+				");
+				$SQL->bindParam(":idCarrera", $IDCARRERA['idCarrera']);
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function aceptarSolicitud($idProyecto){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE proyectoseleccionado SET idEstado = 5 WHERE idProyectoSeleccionado = :idProyecto");
+				$SQL->bindParam(":idProyecto", $idProyecto);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Se ha aceptado correctamente la solicitud.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function rechazarSolicitud($idProyecto, $MotivoRechazo) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE proyectoseleccionado SET idEstado = 6, vMotivoNoAceptacion = :MotivoRechazo WHERE idProyectoSeleccionado = :idProyecto");
+				$SQL->bindParam(":idProyecto", $idProyecto);
+				$SQL->bindParam(":MotivoRechazo", $MotivoRechazo);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Se ha rechazado correctamente la solicitud.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
 			} catch (PDOException $e) {
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>

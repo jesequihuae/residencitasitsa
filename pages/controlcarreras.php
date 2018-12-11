@@ -149,17 +149,17 @@
                                           ?>
                                       </td>
                                       <td>
-                                          <center>
-                                                <button 
-                                                    type="button"
-                                                    data-idcarrera="<?php echo $CARRERAS_['idCarrera']; ?>"
-                                                    data-vclave="<?php echo $CARRERAS_['vClave']; ?>"
-                                                    data-vcarrera="<?php echo $CARRERAS_['vCarrera']; ?>"
-                                                    class="editarCarrera btn btn-primary btn-sm"
-                                                    title="Editar Carrera">
-                                                       <i class="fa fa-pencil"></i>
-                                                </button>
-                                            </center>
+                                            <center>
+                                                  <button 
+                                                      type="button"
+                                                      data-idcarrera="<?php echo $CARRERAS_['idCarrera']; ?>"
+                                                      data-vclave="<?php echo $CARRERAS_['vClave']; ?>"
+                                                      data-vcarrera="<?php echo $CARRERAS_['vCarrera']; ?>"
+                                                      class="editarCarrera btn btn-primary btn-sm"
+                                                      title="Editar Carrera">
+                                                         <i class="fa fa-pencil"></i>
+                                                  </button>
+                                              </center>
                                       </td>
                                       <td>  
                                           <center>
