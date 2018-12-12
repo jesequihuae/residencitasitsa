@@ -372,26 +372,8 @@
                                   </div>
                                 </div>
                                 <hr>
-                                <h3 class="semi-bold">Cronograma</h3>
-
-                                <div>
-                                  <button type="submit" name="registrarProyecto" id="guardarSolicitud" class="btn btn-lg btn-success" onclick="return validacionGuardar()">Guardar</button>
-                                  <button class="btn btn-lg btn-warning">Limpiar</button>
-                                  <br><br>
-                                </div>
-                              </form>
-                              <div class="form-group" style="padding:10px;">
                                 <!--CRONOGRAMA-->
-                                <div class="row">
-                                  <div class="col-md-2">
-                                    <div class="form-group">
-                                      <label>Selecciona un documento</label>
-                                      <select class="form-control" id="SDocumento" onchange="precargarCronograma(this)" name="documentos">
-
-                                      </select>
-                                    </div>
-                                  </div>
-                                </div>
+                                <h3 class="semi-bold">Cronograma</h3>
                                 <?php
                                   if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 1)
                                   {
@@ -399,11 +381,22 @@
                                       require "cronograma/cronogramaSeg.php";
                                   }
                                  ?>
-
+                                 <br>
+                                <div>
+                                   <!--FIN CRONOGRAMA-->
+                                  <button type="submit" name="registrarProyecto" id="guardarSolicitud" class="btn btn-lg btn-success" onclick="return validacionGuardar()">Guardar</button>
+                                  <button class="btn btn-lg btn-warning">Limpiar</button>
+                                  <br><br>
+                                </div>
+                              </form>
+                              <div class="form-group" style="padding:10px;">
+                              
+                           
+                                
                                 <div id="salida">
 
                                 </div>
-                                <!--FIN CRONOGRAMA-->
+                               
                               </div>
                              </div>
                           </div>
@@ -583,10 +576,11 @@
     }
 
   }
-  function cancelar(){
+  function cancelarActividades(){
     contador = 0;
     $(".rowsAdded").remove();
     mostrarMensaje("Cancelado",1);
+    return false;
   }
   function precargarCronograma(e){
     $.ajax({
@@ -657,8 +651,8 @@
     });
   }
 
-  $("#agregar").click(function(e){
-    var semanas;
+  function agregarActividad(){
+     var semanas;
     for($j = 0;$j<24;$j++){
       semanas += '<td><input type="checkbox" name="checkbox1" id="'+contador+''+$j+'" /></td>';
     }
@@ -668,9 +662,11 @@
                 "</tr>"
                );
     contador++;
-  });
-  function guardar(){
+    return false;
+  }
 
+  function guardar(){
+    var response = 1;
     var cronograma = "[";
 
     var idTipoDeDocumento = <?php echo (isset($_SESSION["idTipoDocumento"])?$_SESSION["idTipoDocumento"]:0); ?>;
@@ -706,23 +702,30 @@
           },
           success: function(e){
             $("#salida").html(e);
-            mostrarMensaje("Guardado con exito "+idTipoDeDocumento+" "+e,1);
+            mostrarMensaje("Cronograma guardado con exito ",1);
             console.log(e);
             if(idTipoDeDocumento != 3){
               location.href = "residencia.php";
+            }else{
+              response = 1;
             }
+
           },
           error: function(e){
             $("#salida").html(e);
-            mostrarMensaje("Algo salio mal...",2);
+            //mostrarMensaje("Algo salio mal...",2);
+            response = -1;
           }
         });
       }else{
-        mostrarMensaje("No hay ninguna actividad por guardar...",2);
+        //mostrarMensaje("No hay ninguna actividad por guardar...",2);
+        response = 0;
       }
+      return response; 
   }
 
   function validacionGuardar(){
+
     var idProyecto = 0,idPeriodo = 0;
 
     idProyecto              = $("#idProyecto").val();
@@ -856,8 +859,14 @@
       alertify.notify('Lugar de la implementacion obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
     } 
-    
+    var guardarCron = guardar();
+    if(guardarCron == 0){
+      alertify.alert('ITSA', 'Debes de seleccionar por lo menos una actividad en el cronograma', function(){ alertify.success('Ok'); });
+    }else if(guardarCron == -1){
+      alertify.alert('ITSA', 'Algo salio mal al guardar el cronograma', function(){ alertify.success('Ok'); });
+    }
 
+    
     
   }
 </script>

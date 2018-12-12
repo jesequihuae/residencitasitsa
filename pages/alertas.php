@@ -63,7 +63,7 @@
             <div class="row">
 
                 <div class="col-lg-12">
-                    <h1 class="page-header"><i class="fa fa-briefcase"></i> Cursos </h1>
+                    <h1 class="page-header"><i class="fa fa-briefcase"></i> Alertas </h1>
                     
                 </div>
             </div>

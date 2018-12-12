@@ -18,6 +18,11 @@
 
 
 </table>
-<button id="agregar" class="btn btn-info top"> Agregar Actividad</button>
-<button id="guardar" class="btn btn-primary top" onclick="return guardar()"> Guardar cronograma</button>
-<button id="cancelar" class="btn btn-danger top" onclick="cancelar()"> Cancelar</button>
+
+<button id="agregar" onclick="return agregarActividad()" class="btn btn-info top"> Agregar Actividad</button>
+<?php if($_SESSION["idTipoDocumento"] != 3){ ?>
+  <button id="guardar" class="btn btn-primary top" onclick="return guardar()"> Guardar cronograma</button>
+<?php } ?>
+<button id="cancelar" onclick="return cancelarActividades()" class="btn btn-danger top"> Cancelar</button>
+</br></br>
+
