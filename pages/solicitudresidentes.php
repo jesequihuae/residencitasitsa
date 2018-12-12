@@ -78,8 +78,31 @@
                           </h2>
                       </div>
                       <div class="panel-body">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Buscar" id="busqueda" name="busqueda">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" type="button" id="buscarCoincidencias" name="buscarCoincidencias">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
                            <div class="table-responsive">
-                              <table class="table table-hover">
+                              <table class="table table-hover" id="tableSolicitudesFiltro">
+                                  <thead>
+                                    <th>ID</th>
+                                    <th>Proyecto</th>
+                                    <th>Número Control</th>
+                                    <th>Alumno</th>
+                                    <th>Periodo</th>                                    
+                                    <th>Opcion</th>
+                                    <th>Giro</th>
+                                    <th>Estado</th>
+                                    <th>Sector</th>
+                                    <th colspan="2"><center>Operaciones</center></th>
+                                </thead>
+                              </table>
+                              <table class="table table-hover" id="tableSolicitudes">
                                 <thead>
                                     <th>ID</th>
                                     <th>Proyecto</th>
@@ -200,6 +223,8 @@
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){ 
+            $("#tableSolicitudesFiltro").hide();
+
             $(".aceptarSolicitud").click(function(){
                 $("#aceptarRechazar").val("1");
                 $("#idProyectoAceptarRechazar").val($(this).data("idproyecto"));
@@ -218,6 +243,18 @@
                 document.getElementById("grupoRechazo").style.display = "";
                 $('#taMotivoRechazo').prop('required',true);
                 $("#modalAceptarRechazar").modal('show');
+            });
+
+            $("#buscarCoincidencias").click(function(){
+                if($("#busqueda").val() != "") {
+                    $("#tableSolicitudes").hide();
+                    // $.ajax({
+
+                    // });
+                } else {
+                    $("#tableSolicitudesFiltro").hide();
+                    $("#tableSolicitudes").show();
+                }
             });
         });
     </script>
