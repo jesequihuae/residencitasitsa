@@ -1,4 +1,4 @@
-<table id="Cronograma">
+<table id="Cronograma" class="col-md-12">
   <tr class="color-head">
     <th rowspan="2">Actividades</th>
     <th colspan="4">1</th>

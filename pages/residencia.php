@@ -93,23 +93,23 @@
                             $_FILES['aceptacion']
                           );
                         } else if (isset($_POST['primerReporteForm'])) {
-                          $ObjectITSA->saveFirstReport(
+                          /*$ObjectITSA->saveFirstReport(
                             $_SESSION['idUsuario'],
                             $_SESSION['numeroControl'],
                             $_FILES['primerReporte']
-                          );
+                          );*/
                         } else if (isset($_POST['segundoReporteForm'])) {
-                          $ObjectITSA->saveSecondReport(
+                          /*$ObjectITSA->saveSecondReport(
                             $_SESSION['idUsuario'],
                             $_SESSION['numeroControl'],
                             $_FILES['segundoReporte']
-                          );
+                          );*/
                         } else if (isset($_POST['tercerReporteForm'])) {
-                          $ObjectITSA->saveThirdReport(
+                          /*$ObjectITSA->saveThirdReport(
                             $_SESSION['idUsuario'],
                             $_SESSION['numeroControl'],
                             $_FILES['tercerReporte']
-                          );
+                          );*/
                         }
                       ?>
                 </div>
@@ -443,27 +443,34 @@
                           <!-- PRIMER SEGUIMIENTO -->
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4 ? 'active' : '') ?>" id="1seguimiento">
                             <div class="design-process-content">
-                              <h3 class="semi-bold">Primer seguimiento</h3>
-                              <p>Primer seguimiento</p>
-                              <form method="post" enctype="multipart/form-data">
-                                <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-4 col-form-label">Primer Reporte:</label>
-                                  <div class="col-lg-8">
-                                    <input type="file" name="primerReporte" required>
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <h3 class="semi-bold">Lo pronosticado</h3>
+                                  </div>
+                                  <div class="col-md-12">
+                                      <h3 class="semi-bold">Primer seguimiento Lo Real</h3>
+                                      <p>Primer seguimiento</p>
+                                      <!--<form method="post" enctype="multipart/form-data">
+                                        <div class="form-group row">
+                                          <label for="inputEmail3" class="col-lg-4 col-form-label">Primer Reporte:</label>
+                                          <div class="col-lg-8">
+                                            <input type="file" name="primerReporte" required>
+                                          </div>
+                                        </div>
+                                        <div align="center">
+                                          <button class="btn btn-success" type="submit" name="primerReporteForm">Guardar</button>
+                                          -- <button class="btn btn-warning">Limpiar</button> --
+                                        </div><br>
+                                      </form>-->
+                                      <?php
+                                        if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4)
+                                        {
+                                          $_SESSION["idTipoDocumento"] = 5;
+                                            require "cronograma/cronogramaSeg.php";
+                                        }
+                                      ?>
                                   </div>
                                 </div>
-                                <div align="center">
-                                  <button class="btn btn-success" type="submit" name="primerReporteForm">Guardar</button>
-                                  <!-- <button class="btn btn-warning">Limpiar</button> -->
-                                </div><br>
-                              </form>
-                              <?php
-                                if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4)
-                                {
-                                  $_SESSION["idTipoDocumento"] = 5;
-                                    require "cronograma/cronogramaSeg.php";
-                                }
-                              ?>
                             </div>
                             <a href="#2seguimiento" aria-controls="2seguimiento" role="tab" data-toggle="tab">Siguiente</a>
                           </div>
@@ -471,37 +478,44 @@
                           <!-- SEGUNDO SEGUIMIENTO -->
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 5 ? 'active' : '') ?>" id="2seguimiento">
                             <div class="design-process-content">
-                              <h3>Segundo seguimiento</h3>
-                              <p>Segundo seguimiento</p>
-                              <form method="post" enctype="multipart/form-data">
-                                <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-4 col-form-label">Segundo Reporte:</label>
-                                  <div class="col-lg-8">
-                                    <input type="file" name="segundoReporte" required>
-                                  </div>
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <h3 class="semi-bold">Segundo seguimiento Lo Pronosticado</h3>
                                 </div>
-                                <div align="center">
-                                  <button class="btn btn-success" type="submit"  name="segundoReporteForm">Guardar</button>
-                                  <!-- <button class="btn btn-warning">Limpiar</button> -->
-                                </div><br>
-                              </form>
-                              <?php
-                                if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 5)
-                                {
-                                  $_SESSION["idTipoDocumento"] = 6;
-                                    require "cronograma/cronogramaSeg.php";
-                                }
-                              ?>
-                            </div>
-                            <a href="#3seguimiento" aria-controls="3seguimiento" role="tab" data-toggle="tab">Siguiente</a>
+                                <div class="col-md-12">
+                                  <h3 class="semi-bold">Segundo seguimiento Lo Real</h3>
+                                    <p>Segundo seguimiento</p>
+                                    <!--<form method="post" enctype="multipart/form-data">
+                                      <div class="form-group row">
+                                        <label for="inputEmail3" class="col-lg-4 col-form-label">Segundo Reporte:</label>
+                                        <div class="col-lg-8">
+                                          <input type="file" name="segundoReporte" required>
+                                        </div>
+                                      </div>
+                                      <div align="center">
+                                        <button class="btn btn-success" type="submit"  name="segundoReporteForm">Guardar</button>
+                                        -- <button class="btn btn-warning">Limpiar</button> --
+                                      </div><br>
+                                    </form>-->
+                                    <?php
+                                      if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 5)
+                                      {
+                                        $_SESSION["idTipoDocumento"] = 6;
+                                          require "cronograma/cronogramaSeg.php";
+                                      }
+                                    ?>
+                             </div>
+                            <!--<a href="#3seguimiento" aria-controls="3seguimiento" role="tab" data-toggle="tab">Siguiente</a>-->
+                                </div>
+                              </div>
                           </div>
 
                           <!-- TERCER SEGUIMIENTO -->
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : '') ?>" id="3seguimiento">
                             <div class="design-process-content">
-                              <h3>Tercer seguimiento</h3>
+                              <h3 class="semi-bold">Tercer seguimiento Lo Real</h3>
                               <p>Tercer seguimiento</p>
-                              <form method="post" enctype="multipart/form-data">
+                              <!--<form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                   <label for="inputEmail3" class="col-lg-4 col-form-label">Tercer Reporte:</label>
                                   <div class="col-lg-8">
@@ -510,9 +524,9 @@
                                 </div>
                                 <div align="center">
                                   <button class="btn btn-success" type="submit" name="tercerReporteForm">Guardar</button>
-                                  <!-- <button class="btn btn-warning">Limpiar</button> -->
+                                  -- <button class="btn btn-warning">Limpiar</button> --
                                 </div><br>
-                              </form>
+                              </form>-->
                             </div>
                             <?php
                               if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6)
@@ -658,7 +672,7 @@
     }
     $("#Cronograma").append(
                 "<tr class='rowsAdded'>"+
-                  "<td><input placeholder='Actividad' id='actividad"+contador+"'  /></td>"+semanas+
+                  "<td><input class='form-control' placeholder='Actividad' id='actividad"+contador+"'  /></td>"+semanas+
                 "</tr>"
                );
     contador++;
