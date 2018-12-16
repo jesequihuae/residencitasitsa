@@ -442,12 +442,21 @@
 
                           <!-- PRIMER SEGUIMIENTO -->
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4 ? 'active' : '') ?>" id="1seguimiento">
+                             <?php $numSeg = $ObjectITSA->getIntProcess($_SESSION['idUsuario']); ?>
                             <div class="design-process-content">
                                 <div class="row">
                                   <div class="col-md-12">
-                                    <h3 class="semi-bold">Lo pronosticado</h3>
+                                    <h3 class="semi-bold">Primer seguimiento, Lo pronosticado</h3>
+                                     <?php
+                                        if($numSeg == 4)
+                                        {
+                                          //$_SESSION["idTipoDocumento"] = 5;
+                                          require "cronograma/CronogramaPronosticado.php";
+                                        }
+                                      ?>
                                   </div>
                                   <div class="col-md-12">
+                                     
                                       <h3 class="semi-bold">Primer seguimiento Lo Real</h3>
                                       <p>Primer seguimiento</p>
                                       <!--<form method="post" enctype="multipart/form-data">
@@ -463,10 +472,10 @@
                                         </div><br>
                                       </form>-->
                                       <?php
-                                        if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4)
+                                        if($numSeg == 4)
                                         {
                                           $_SESSION["idTipoDocumento"] = 5;
-                                            require "cronograma/cronogramaSeg.php";
+                                          require "cronograma/cronogramaSeg.php";
                                         }
                                       ?>
                                   </div>
@@ -477,13 +486,21 @@
 
                           <!-- SEGUNDO SEGUIMIENTO -->
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 5 ? 'active' : '') ?>" id="2seguimiento">
+                            <?php $numSeg = $ObjectITSA->getIntProcess($_SESSION['idUsuario']); ?>
                             <div class="design-process-content">
                               <div class="row">
                                 <div class="col-md-12">
                                   <h3 class="semi-bold">Segundo seguimiento Lo Pronosticado</h3>
+                                   <?php
+                                        if($numSeg == 5)
+                                        {
+                                          //$_SESSION["idTipoDocumento"] = 6;
+                                          require "cronograma/CronogramaPronosticado.php";
+                                        }
+                                    ?>
                                 </div>
                                 <div class="col-md-12">
-                                  <h3 class="semi-bold">Segundo seguimiento Lo Real</h3>
+                                  <h3 class="semi-bold">Segundo seguimiento Lo Pronosticado</h3>
                                     <p>Segundo seguimiento</p>
                                     <!--<form method="post" enctype="multipart/form-data">
                                       <div class="form-group row">
@@ -498,7 +515,7 @@
                                       </div><br>
                                     </form>-->
                                     <?php
-                                      if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 5)
+                                      if($numSeg == 5)
                                       {
                                         $_SESSION["idTipoDocumento"] = 6;
                                           require "cronograma/cronogramaSeg.php";
@@ -512,8 +529,16 @@
 
                           <!-- TERCER SEGUIMIENTO -->
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : '') ?>" id="3seguimiento">
+                            <?php $numSeg = $ObjectITSA->getIntProcess($_SESSION['idUsuario']); ?>
                             <div class="design-process-content">
-                              <h3 class="semi-bold">Tercer seguimiento Lo Real</h3>
+                              <h3 class="semi-bold">Tercer seguimiento Lo Pronosticado</h3>
+                               <?php
+                                        if($numSeg == 6)
+                                        {
+                                          //$_SESSION["idTipoDocumento"] = 7;
+                                          require "cronograma/CronogramaPronosticado.php";
+                                        }
+                                    ?>
                               <p>Tercer seguimiento</p>
                               <!--<form method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
@@ -529,7 +554,7 @@
                               </form>-->
                             </div>
                             <?php
-                              if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6)
+                              if($numSeg == 6)
                               {
                                 $_SESSION["idTipoDocumento"] = 7;
                                   require "cronograma/cronogramaSeg.php";
@@ -580,6 +605,7 @@
 
   var contador = 0;
   cargarSelect();
+  precargarCronograma(false);
 
   function mostrarMensaje(mensaje,tipoMensaje){
     alertify.set('notifier','position', 'top-center');
@@ -596,7 +622,10 @@
     mostrarMensaje("Cancelado",1);
     return false;
   }
-  function precargarCronograma(e){
+
+  function precargarCronograma(isReal){
+
+
     $.ajax({
       url:'../php/cronograma.php',
       type:'POST',
@@ -604,7 +633,7 @@
       data:
             {
               "operacion":"3",
-              "idDocumento":<?php echo $_SESSION["idTipoDocumento"]; ?>
+              "idDocumento":3
             },
       beforeSend: function(e){
 
@@ -617,19 +646,38 @@
           nombreActual = json[i]["vNombre"];
           var semanas  = "";
           if(nombreActual != nombreAnterior){
-              for(j = 0;j<24;j++){
 
-              //	if(json[i]["i"] == i && json[i]["j"] == j){
-                //	semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
-                //}else{
-                  semanas += '<td><input type="checkbox" name="checkbox1" id="'+contador+''+j+'" /></td>';
-                //}
-              }
-              $("#Cronograma").append(
+              if(isReal){
+                 for(j = 0;j<24;j++){
+
+                //  if(json[i]["i"] == i && json[i]["j"] == j){
+                  //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
+                  //}else{
+                    semanas += '<td><input disabled type="checkbox" name="checkbox1" id="'+contador+''+j+'" /></td>';
+                  //}
+                }
+                $("#CronogramaPronosticado").append(
                           "<tr class='rowsAdded'>"+
-                            "<td><input placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='actividad"+contador+"'  /></td>"+semanas+
+                            "<td><input placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='actividad"+contador+"'>"+json[i]["vNombre"]+"</input></td>"+semanas+
                           "</tr>"
                         );
+              }else{
+                for(j = 0;j<24;j++){
+
+                //  if(json[i]["i"] == i && json[i]["j"] == j){
+                  //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
+                  //}else{
+                    semanas += '<td><input disabled type="checkbox" name="checkbox1" id="pro'+contador+''+j+'" /></td>';
+                  //}
+                }
+                $("#CronogramaPronosticado").append(
+                          "<tr class='rowsAdded'>"+
+                            "<td><label placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='proactividad"+contador+"'>"+json[i]["vNombre"]+"</label></td>"+semanas+
+                          "</tr>"
+                        );
+              }
+
+              
               contador++;
           }
           nombreAnterior = nombreActual;
@@ -637,7 +685,11 @@
 
 
         for(var i in json){
+          if(isReal){
             $("#"+json[i]["i"]+json[i]["j"]).prop("checked",true);
+          }else{
+            $("#pro"+json[i]["i"]+json[i]["j"]).prop("checked",true);
+          }
         }
 
         console.log(json);
