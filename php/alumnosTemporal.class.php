@@ -5,6 +5,29 @@
       $this->connection = $handler;
     }
 
+    public function getInfoSolicitud(){
+      $idAlumno = $_SESSION["idUsuario"];
+      $sql = 
+      "
+        SELECT 
+          CONCAT(a.vNombre,' ',a.vApellidoPaterno,' ',a.vApellidoMaterno) AS nombreAlumno,
+          a.vNumeroControl,
+          a.domicilio,
+          a.colonia,
+          a.ciudadEstado,
+          a.cp,
+          a.telefono,
+          a.vCorreoInstitucional,
+          bSexo,
+          idSeguro,
+          numeroSeguro
+        FROM alumnos a
+        WHERE a.idAlumno = $idAlumno 
+      ";
+      $con = $this->connection->prepare($sql);
+      $con->execute();
+      return $con->fetch();
+    }
     public function saveSolicitud($post,$constanciaFile,$idAlumno,$numeroControl){
       try {
         $sql =
