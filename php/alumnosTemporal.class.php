@@ -9,7 +9,7 @@
       $idAlumno = $_SESSION["idUsuario"];
       $sql = 
       "
-        SELECT 
+       SELECT 
           CONCAT(a.vNombre,' ',a.vApellidoPaterno,' ',a.vApellidoMaterno) AS nombreAlumno,
           a.vNumeroControl,
           a.domicilio,
@@ -18,11 +18,25 @@
           a.cp,
           a.telefono,
           a.vCorreoInstitucional,
-          bSexo,
-          idSeguro,
-          numeroSeguro
+          a.bSexo,
+          a.idSeguro,
+          a.numeroSeguro,
+          jc.vNombre AS vNombreJefeCarrera,
+          c.vCarrera AS vNombreCarrera,
+          ps.idOpcion,
+          p.vPeriodo,
+          bp.iTotalResidentes,
+          ap.vTitulo AS vTituloAnteProyecto
         FROM alumnos a
-        WHERE a.idAlumno = $idAlumno 
+        INNER JOIN proyectoseleccionado ps ON(ps.idAlumno = $idAlumno)
+        INNER JOIN bancoproyectos bp ON(ps.idbancoProyecto = bp.idBancoProyecto)
+        INNER JOIN empresas e ON(e.idEmpresa = bp.idEmpresa)
+        INNER JOIN jefescarrera jc ON(jc.idCarrera = a.idCarrera)
+        INNER JOIN carreras c ON(c.idCarrera = a.idCarrera)
+        INNER JOIN periodos p ON(p.idPeriodo = ps.idPeriodo AND p.bActivo = 1)
+        INNER JOIN anteproyecto ap ON(ap.idAnteproyecto = ps.idAnteProyecto)
+        WHERE a.idAlumno = $idAlumno
+
       ";
       $con = $this->connection->prepare($sql);
       $con->execute();

@@ -78,6 +78,45 @@ $telefono               = $infoAlumno["telefono"];
 $vCorreoInstitucional   = $infoAlumno["vCorreoInstitucional"];
 $bSexo                  = $infoAlumno["bSexo"];
 $numeroSeguro           = $infoAlumno["numeroSeguro"];
+$vNombreJefeCarrera     = $infoAlumno["vNombreJefeCarrera"];
+$vNombreCarrera         = $infoAlumno["vNombreCarrera"];
+$vTituloAnteProyecto    = $infoAlumno["vTituloAnteProyecto"];
+$idOpcion               = $infoAlumno["idOpcion"];
+
+$TBS->VarRef['nombreAlumno']            = "".$nombreAlumno;
+$TBS->VarRef['vNumeroControl']          = "".$vNumeroControl;
+$TBS->VarRef['domicilio']               = "".$domicilio;
+$TBS->VarRef['colonia']                 = "".$colonia;
+$TBS->VarRef['ciudadEstado']            = "".$ciudadEstado;
+$TBS->VarRef['cp']                      = "".$cp;
+$TBS->VarRef['telefono']                = "".$telefono;
+$TBS->VarRef['vCorreoInstitucional']    = "".$vCorreoInstitucional;
+$TBS->VarRef['bSexo']                   = "".$bSexo;
+$TBS->VarRef['numeroSeguro']            = "".$numeroSeguro;
+$TBS->VarRef['vNombreJefeCarrera']      = "".$vNombreJefeCarrera;
+$TBS->VarRef['vNombreCarrera']          = "".$vNombreCarrera;
+$TBS->VarRef['vTituloAnteProyecto']     = "".$vTituloAnteProyecto;
+
+if($idOpcion == 1){
+    $TBS->VarRef['vB']         = "X";
+}else{
+    $TBS->VarRef['vB']         = "";
+}
+if($idOpcion == 2){
+    $TBS->VarRef['vP']        = "X";
+}else{
+    $TBS->VarRef['vP']        = "";
+}
+if($idOpcion == 3){
+    $TBS->VarRef['vT']             = "X";
+}else{
+    $TBS->VarRef['vT']             = "";
+}
+
+
+
+
+
 //$tel = "123";
 
 // -------------------------------------------- 
