@@ -12,6 +12,9 @@ $objAl = new alumnosTemporal($handler);
 
 $infoAlumno = $objAl->getInfoSolicitud();
 
+$fecha = $objAl->obtenerFechaEnLetra();
+
+
 //print_r($infoAlumno);
 
 
@@ -69,33 +72,61 @@ if (isset($_POST['debug']) && ($_POST['debug']=='current')) $TBS->Plugin(OPENTBS
 if (isset($_POST['debug']) && ($_POST['debug']=='info'))    $TBS->Plugin(OPENTBS_DEBUG_INFO, true); // Display information about the document, and exit. 
 if (isset($_POST['debug']) && ($_POST['debug']=='show'))    $TBS->Plugin(OPENTBS_DEBUG_XML_SHOW); // Tells TBS to display information when the document is merged. No exit. 
 $nombreAlumno           = $infoAlumno["nombreAlumno"];
-$vNumeroControl         = $infoAlumno["vNumeroControl"];
-$domicilio              = $infoAlumno["domicilio"];
-$colonia                = $infoAlumno["colonia"];
-$ciudadEstado           = $infoAlumno["ciudadEstado"];
-$cp                     = $infoAlumno["cp"];
-$telefono               = $infoAlumno["telefono"];
-$vCorreoInstitucional   = $infoAlumno["vCorreoInstitucional"];
-$bSexo                  = $infoAlumno["bSexo"];
-$numeroSeguro           = $infoAlumno["numeroSeguro"];
-$vNombreJefeCarrera     = $infoAlumno["vNombreJefeCarrera"];
-$vNombreCarrera         = $infoAlumno["vNombreCarrera"];
-$vTituloAnteProyecto    = $infoAlumno["vTituloAnteProyecto"];
-$idOpcion               = $infoAlumno["idOpcion"];
+$vNumeroControl                 = $infoAlumno["vNumeroControl"];
+$domicilio                      = $infoAlumno["domicilio"];
+$colonia                        = $infoAlumno["colonia"];
+$ciudadEstado                   = $infoAlumno["ciudadEstado"];
+$cp                             = $infoAlumno["cp"];
+$telefono                       = $infoAlumno["telefono"];
+$vCorreoInstitucional           = $infoAlumno["vCorreoInstitucional"];
+$bSexo                          = $infoAlumno["bSexo"];
+$numeroSeguro                   = $infoAlumno["numeroSeguro"];
+$vNombreJefeCarrera             = $infoAlumno["vNombreJefeCarrera"];
+$vNombreCarrera                 = $infoAlumno["vNombreCarrera"];
+$vTituloAnteProyecto            = $infoAlumno["vTituloAnteProyecto"];
+$idOpcion                       = $infoAlumno["idOpcion"];
 
-$TBS->VarRef['nombreAlumno']            = "".$nombreAlumno;
-$TBS->VarRef['vNumeroControl']          = "".$vNumeroControl;
-$TBS->VarRef['domicilio']               = "".$domicilio;
-$TBS->VarRef['colonia']                 = "".$colonia;
-$TBS->VarRef['ciudadEstado']            = "".$ciudadEstado;
-$TBS->VarRef['cp']                      = "".$cp;
-$TBS->VarRef['telefono']                = "".$telefono;
-$TBS->VarRef['vCorreoInstitucional']    = "".$vCorreoInstitucional;
-$TBS->VarRef['bSexo']                   = "".$bSexo;
-$TBS->VarRef['numeroSeguro']            = "".$numeroSeguro;
-$TBS->VarRef['vNombreJefeCarrera']      = "".$vNombreJefeCarrera;
-$TBS->VarRef['vNombreCarrera']          = "".$vNombreCarrera;
-$TBS->VarRef['vTituloAnteProyecto']     = "".$vTituloAnteProyecto;
+$vNombreEmpresa                 = $infoAlumno["vNombreEmpresa"];
+$vCorreoElectronicoEmpresa      = $infoAlumno["vCorreoElectronicoEmpresa"];
+$vDireccionEmpresa              = $infoAlumno["vDireccionEmpresa"];
+$vTitularEmpresa                = $infoAlumno["vTitularEmpresa"];
+$vContactoEmpresa               = $infoAlumno["vContactoEmpresa"];
+$vRfcEmpresa                    = $infoAlumno["vRfcEmpresa"];
+$idGiroEmpresa                  = $infoAlumno["idGiroEmpresa"];
+$idSectorEmpresa                = $infoAlumno["idSectorEmpresa"];
+$vCiudadEstadoEmpresa           = $infoAlumno["vCiudadEstadoEmpresa"];
+$cpEmpresa                      = $infoAlumno["cpEmpresa"];
+$vTelefonoEmpresa               = $infoAlumno["vTelefonoEmpresa"];
+$vColoniaEmpresa                = $infoAlumno["vColoniaEmpresa"];
+
+
+$TBS->VarRef['nombreAlumno']                = "".$nombreAlumno;
+$TBS->VarRef['vNumeroControl']              = "".$vNumeroControl;
+$TBS->VarRef['domicilio']                   = "".$domicilio;
+$TBS->VarRef['colonia']                     = "".$colonia;
+$TBS->VarRef['ciudadEstado']                = "".$ciudadEstado;
+$TBS->VarRef['cp']                          = "".$cp;
+$TBS->VarRef['telefono']                    = "".$telefono;
+$TBS->VarRef['vCorreoInstitucional']        = "".$vCorreoInstitucional;
+$TBS->VarRef['bSexo']                       = "".$bSexo;
+$TBS->VarRef['numeroSeguro']                = "".$numeroSeguro;
+$TBS->VarRef['vNombreJefeCarrera']          = "".$vNombreJefeCarrera;
+$TBS->VarRef['vNombreCarrera']              = "".$vNombreCarrera;
+$TBS->VarRef['vTituloAnteProyecto']         = "".$vTituloAnteProyecto;
+$TBS->VarRef['fecha']                       = "".$fecha;
+
+$TBS->VarRef["vNombreEmpresa"]              = "".$vNombreEmpresa;
+$TBS->VarRef["vCorreoElectronicoEmpresa"]   = "".$vCorreoElectronicoEmpresa;
+$TBS->VarRef["vDireccionEmpresa"]           = "".$vDireccionEmpresa;
+$TBS->VarRef["vTitularEmpresa"]             = "".$vTitularEmpresa;
+$TBS->VarRef["vContactoEmpresa"]            = "".$vContactoEmpresa;
+$TBS->VarRef["vRfcEmpresa"]                 = "".$vRfcEmpresa;
+
+
+$TBS->VarRef["vCiudadEstadoEmpresa"]        = "".$vCiudadEstadoEmpresa;
+$TBS->VarRef["cpEmpresa"]                   = "".$cpEmpresa;
+$TBS->VarRef["vTelefonoEmpresa"]            = "".$vTelefonoEmpresa;
+$TBS->VarRef["vColoniaEmpresa"]             = "".$vColoniaEmpresa;
 
 if($idOpcion == 1){
     $TBS->VarRef['vB']         = "X";
@@ -113,6 +144,34 @@ if($idOpcion == 3){
     $TBS->VarRef['vT']             = "";
 }
 
+if($idGiroEmpresa == 1){
+   $TBS->VarRef["vGI"] = "X"; 
+}else{
+    $TBS->VarRef["vGI"] = ""; 
+}
+if($idGiroEmpresa == 2){
+   $TBS->VarRef["vGS"] = "X"; 
+}else{
+    $TBS->VarRef["vGS"] = ""; 
+}
+if($idGiroEmpresa == 3){
+   $TBS->VarRef["vGE"] = "X"; 
+}else{
+    $TBS->VarRef["vGE"] = ""; 
+}
+
+if($idSectorEmpresa == 1){
+    $TBS->VarRef["SP"]  = "X";
+}else{
+    $TBS->VarRef["SP"]  = "";
+}
+
+
+if($idSectorEmpresa == 2){
+    $TBS->VarRef["SPU"]  = "X";
+}else{
+    $TBS->VarRef["SPU"]  = "";
+}
 
 
 

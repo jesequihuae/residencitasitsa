@@ -26,7 +26,19 @@
           ps.idOpcion,
           p.vPeriodo,
           bp.iTotalResidentes,
-          ap.vTitulo AS vTituloAnteProyecto
+          ap.vTitulo AS vTituloAnteProyecto,
+          e.vNombreEmpresa,
+          e.vCorreoElectronico AS vCorreoElectronicoEmpresa,
+          e.vDireccion AS vDireccionEmpresa,
+          e.vTitular AS vTitularEmpresa,
+          e.vContacto AS vContactoEmpresa,
+          e.vRfc AS vRfcEmpresa,
+          e.idGiro AS idGiroEmpresa,
+          e.idSector AS idSectorEmpresa,
+          e.vCiudadEstado AS vCiudadEstadoEmpresa,
+          e.cp AS cpEmpresa,
+          e.vTelefono AS vTelefonoEmpresa,
+          e.vColonia AS vColoniaEmpresa
         FROM alumnos a
         INNER JOIN proyectoseleccionado ps ON(ps.idAlumno = $idAlumno)
         INNER JOIN bancoproyectos bp ON(ps.idbancoProyecto = bp.idBancoProyecto)
@@ -41,6 +53,17 @@
       $con = $this->connection->prepare($sql);
       $con->execute();
       return $con->fetch();
+    }
+    function obtenerFechaEnLetra(){
+      //$dia= conocerDiaSemanaFecha($fecha);
+      //$num = date("j", strtotime($fecha));
+      $YY = date("Y");
+      $MM = date("m");
+      $DD = date("d");
+      
+      $mes = array('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre');
+      $res = $DD." de ".$mes[$MM-1]." del ".$YY;
+      return $res;
     }
     public function saveSolicitud($post,$constanciaFile,$idAlumno,$numeroControl){
       try {
