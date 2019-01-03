@@ -22,9 +22,9 @@ if ($yourname=='') $yourname = "(no name)";
 
 // A recordset for merging tables
 $data = array();
-$data[] = array('rank'=> 'A', 'firstname'=>'Sandra' , 'name'=>'Hill'      ,'number'=>array('number'=>'1523d','number2'=>'12'), 'score'=>200, 'email_1'=>'sh@tbs.com','email_2'=>'sandra@tbs.com',  'email_3'=>'s.hill@tbs.com');
-$data[] = array('rank'=> 'A', 'firstname'=>'Roger'  , 'name'=>'Smith'     , 'number'=>array('number'=>'1523d','number2'=>'12'), 'score'=>800, 'email_1'=>'rs@tbs.com',  'email_2'=>'robert@tbs.com',  'email_3'=>'r.smith@tbs.com' );
-$data[] = array('rank'=> 'B', 'firstname'=>'William', 'name'=>'Mac Dowell', 'number'=>array('number'=>'1523d','number2'=>'12'), 'score'=>130, 'email_1'=>'wmc@tbs.com', 'email_2'=>'william@tbs.com', 'email_3'=>'w.m.dowell@tbs.com' );
+$data[] = array('rank'=> 'A', 'activity'=>'Base de datos' , 'type'=>'R'      ,'number'=>1234, 'score'=>200, 'email_1'=>'sh@tbs.com','email_2'=>'sandra@tbs.com',  'email_3'=>'s.hill@tbs.com');
+$data[] = array('rank'=> 'A', 'activity'=>'Diagramas'  , 'type'=>'R'     , 'number'=>1234, 'score'=>800, 'email_1'=>'rs@tbs.com',  'email_2'=>'robert@tbs.com',  'email_3'=>'r.smith@tbs.com' );
+$data[] = array('rank'=> 'B', 'activity'=>'Servicio web', 'type'=>'R', 'number'=>1234, 'score'=>130, 'email_1'=>'wmc@tbs.com', 'email_2'=>'william@tbs.com', 'email_3'=>'w.m.dowell@tbs.com' );
 
 // Other single data items
 $x_num = 3152.456;
