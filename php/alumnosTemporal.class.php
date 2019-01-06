@@ -7,9 +7,9 @@
 
     public function getInfoSolicitud(){
       $idAlumno = $_SESSION["idUsuario"];
-      $sql = 
+      $sql =
       "
-       SELECT 
+       SELECT
           CONCAT(a.vNombre,' ',a.vApellidoPaterno,' ',a.vApellidoMaterno) AS nombreAlumno,
           a.vNumeroControl,
           a.domicilio,
@@ -54,13 +54,49 @@
       $con->execute();
       return $con->fetch();
     }
+    function getInfoParaSeguimiento(){
+      $idAlumno = $_SESSION["idUsuario"];
+      $sql = "
+      SELECT
+        CONCAT(al.vNombre,' ',al.vApellidoPaterno,' ',al.vApellidoMaterno) AS nombreAlumno,
+        al.vNumeroControl,
+        ps.asesorInterno,
+        ps.asesorExterno,
+        bp.vNombreProyecto,
+        p.vPeriodo,
+        e.vNombreEmpresa
+        FROM alumnos AS al
+        INNER JOIN proyectoseleccionado ps        ON(al.idAlumno = ps.idAlumno)
+        INNER JOIN bancoproyectos bp              ON(bp.idbancoProyecto = ps.idbancoProyecto)
+        INNER JOIN periodos p                     ON(p.idPeriodo = ps.idPeriodo)
+        INNER JOIN empresas e                     ON(e.idEmpresa = bp.idEmpresa)
+        WHERE al.idAlumno = $idAlumno
+      ";
+      $con = $this->connection->prepare($sql);
+      $con->execute();
+      return $con->fetch();
+    }
+    function obtenerCronograma($idTipoDocumento){
+      $idAlumno = $_SESSION["idUsuario"];
+      $sql =
+        "
+          SELECT
+          	vNombre,
+            iSemana
+          FROM cronograma
+          WHERE idAlumno = $idAlumno AND idDocumento = $idTipoDocumento
+        ";
+        $con = $this->connection->prepare($sql);
+        $con->execute();
+        return $con->fetchAll();
+    }
     function obtenerFechaEnLetra(){
       //$dia= conocerDiaSemanaFecha($fecha);
       //$num = date("j", strtotime($fecha));
       $YY = date("Y");
       $MM = date("m");
       $DD = date("d");
-      
+
       $mes = array('enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre');
       $res = $DD." de ".$mes[$MM-1]." del ".$YY;
       return $res;

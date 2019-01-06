@@ -10,23 +10,83 @@ include_once('../../php/alumnosTemporal.class.php');
 // Initialize the TBS instance
 $TBS = new clsTinyButStrong; // new instance of TBS
 $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load the OpenTBS plugin
+$objAl = new alumnosTemporal($handler);
 
-// ------------------------------
-// Prepare some data for the demo
-// ------------------------------
+$infoAlumno = $objAl->getInfoParaSeguimiento();
+$cron       = $objAl->obtenerCronograma(5);
 
-// Retrieve the user name to display
-$yourname = (isset($_POST['yourname'])) ? $_POST['yourname'] : '';
-$yourname = trim(''.$yourname);
-if ($yourname=='') $yourname = "(no name)";
 
-// A recordset for merging tables
+
+$i = 0;
+$actual = "";
+$anterior = "";
+foreach ($cron as $r) {
+  $actual = $r["iSemana"];
+  switch ($i) {
+    case 0: $TBS->VarRef['a1']    = $r["iSemana"]; break;
+    case 1: $TBS->VarRef['a2']    = $r["iSemana"]; break;
+    case 2: $TBS->VarRef['a3']    = $r["iSemana"]; break;
+    case 3: $TBS->VarRef['a4']    = $r["iSemana"]; break;
+    case 4: $TBS->VarRef['a5']    = $r["iSemana"]; break;
+    case 5: $TBS->VarRef['a6']    = $r["iSemana"]; break;
+  }
+  $i++;
+}
+
+
+
+//print_r($cron);
+//exit();
 $data = array();
-$data[] = array('rank'=> 'A', 'activity'=>'Base de datos' , 'type'=>'R'      ,'number'=>1234, 'score'=>200, 'email_1'=>'sh@tbs.com','email_2'=>'sandra@tbs.com',  'email_3'=>'s.hill@tbs.com');
-$data[] = array('rank'=> 'A', 'activity'=>'Diagramas'  , 'type'=>'R'     , 'number'=>1234, 'score'=>800, 'email_1'=>'rs@tbs.com',  'email_2'=>'robert@tbs.com',  'email_3'=>'r.smith@tbs.com' );
-$data[] = array('rank'=> 'B', 'activity'=>'Servicio web', 'type'=>'R', 'number'=>1234, 'score'=>130, 'email_1'=>'wmc@tbs.com', 'email_2'=>'william@tbs.com', 'email_3'=>'w.m.dowell@tbs.com' );
+$actual = "";
+$anterior = "";
+$index = 0;
 
-// Other single data items
+//print_r($cron);
+//exit();
+
+for($i = 0;$i < count($cron); $i++) {
+  $actual = $cron[$i]["vNombre"];
+
+  if($actual != $anterior){
+    $array = array(
+                   'rank'=> 'A',
+                   'activity'=>$actual,
+                   'type'=>'R',
+                   's1'=>"",
+                   's2'=>"",
+                   's3'=>"",
+                   's4'=>"",
+                   's5'=>"",
+                   "s6"=>"");
+  }
+
+  switch ($index) {
+    case "0": $array['s1']            = "x"; break;
+    case "1": $array['s2']            = "x"; break;
+    case "2": $array['s3']            = "x"; break;
+    case "3": $array['s4']            = "x"; break;
+    case "4": $array['s5']            = "x"; break;
+    case "5": $array['s6']            = "x"; break;
+  }
+
+  if($cron[$i]["vNombre"] != $cron[$i+1]["vNombre"]){
+      $array["activity"] = $actual;
+      $data[] = $array;
+  }
+  $anterior = $actual;
+
+  if($cron[$i]["iSemana"] != $cron[$i+1]["iSemana"]){
+      $index++;
+  }
+
+}
+
+
+
+
+
+
 $x_num = 3152.456;
 $x_pc = 0.2567;
 $x_dt = mktime(13,0,0,2,15,2010);
@@ -38,49 +98,43 @@ $x_delete = 1;
 // Load the template
 // -----------------
 
-$template = 'seguimientoRes2018.odt';
+$template = 'filesOdt/seguimientoRes2018.odt';
 $TBS->LoadTemplate($template, OPENTBS_ALREADY_UTF8); // Also merge some [onload] automatic fields (depends of the type of document).
 
-// ----------------------
-// Debug mode of the demo
-// ----------------------
+
+
 if (isset($_POST['debug']) && ($_POST['debug']=='current')) $TBS->Plugin(OPENTBS_DEBUG_XML_CURRENT, true); // Display the intented XML of the current sub-file, and exit.
 if (isset($_POST['debug']) && ($_POST['debug']=='info'))    $TBS->Plugin(OPENTBS_DEBUG_INFO, true); // Display information about the document, and exit.
 if (isset($_POST['debug']) && ($_POST['debug']=='show'))    $TBS->Plugin(OPENTBS_DEBUG_XML_SHOW); // Tells TBS to display information when the document is merged. No exit.
 
-// --------------------------------------------
-// Merging and other operations on the template
-// --------------------------------------------
+$vNombreAlumno                = $infoAlumno["nombreAlumno"];
+$proyecto                     = $infoAlumno["vNombreProyecto"];
+$ai                           = $infoAlumno["asesorInterno"];
+$ae                           = $infoAlumno["asesorExterno"];
+$p                            = $infoAlumno["vPeriodo"];
+$nc                           = $infoAlumno["vNumeroControl"];
+$e                            = $infoAlumno["vNombreEmpresa"];
 
-// Merge data in the body of the document
+$TBS->VarRef['nombre']              = "".$vNombreAlumno;
+$TBS->VarRef['proyecto']            = "".$proyecto;
+$TBS->VarRef['ai']                  = "".$ai;
+$TBS->VarRef['ae']                  = "".$ae;
+$TBS->VarRef['p']                   = "".$p;
+$TBS->VarRef['nc']                  = "".$nc;
+$TBS->VarRef['e']                   = "".$e;
+
+
 $TBS->MergeBlock('a,b', $data);
 
-// Change chart series
-//$ChartNameOrNum = 'a nice chart'; // Title of the shape that embeds the chart
-//$SeriesNameOrNum = 'Series 2';
-//$NewValues = array( array('Category A','Category B','Category C','Category D'), array(3, 1.1, 4.0, 3.3) );
-//$NewLegend = "Updated series 2";/
-//$TBS->PlugIn(OPENTBS_CHART, $ChartNameOrNum, $SeriesNameOrNum, $NewValues, $NewLegend);
-
-// Delete comments
-//$TBS->PlugIn(OPENTBS_DELETE_COMMENTS);
-
-// -----------------
-// Output the result
-// -----------------
 
 // Define the name of the output file
 $save_as = (isset($_POST['save_as']) && (trim($_POST['save_as'])!=='') && ($_SERVER['SERVER_NAME']=='localhost')) ? trim($_POST['save_as']) : '';
 $output_file_name = str_replace('.', '_'.date('Y-m-d').$save_as.'.', $template);
 if ($save_as==='') {
-    // Output the result as a downloadable file (only streaming, no data saved in the server)
     $TBS->Show(OPENTBS_DOWNLOAD, $output_file_name); // Also merges all [onshow] automatic fields.
-    // Be sure that no more output is done, otherwise the download file is corrupted with extra data.
     exit();
 } else {
-    // Output the result as a file on the server.
     $TBS->Show(OPENTBS_FILE, $output_file_name); // Also merges all [onshow] automatic fields.
-    // The script can continue.
     exit("File [$output_file_name] has been created.");
 }
 

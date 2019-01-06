@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // Include classes
 @session_start();
