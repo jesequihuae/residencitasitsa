@@ -150,22 +150,22 @@
                             </a>
                           </li>
 
-                          <li role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 4 ? 'visited' : '') ?>">
-                            <a href="#1seguimiento" class="opcionHdr" aria-controls="1seguimiento" role="tab" data-toggle="tab">
+                          <li title="Reporte 1" role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 4 ? 'visited' : '') ?>">
+                            <a href="#1seguimiento" onclick="descagarSeguimiento(5,<?php echo $ObjectITSA->getIntProcess($_SESSION['idUsuario']) ?>)" class="opcionHdr" aria-controls="1seguimiento" role="tab" data-toggle="tab">
                               <i class="fa fa-folder-open"></i>
                               <p>Primer</p>
                             </a>
                           </li>
 
-                          <li role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 5 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 5 ? 'visited' : '') ?>">
-                            <a href="#2seguimiento" class="opcionHdr" aria-controls="2seguimiento" role="tab" data-toggle="tab">
+                          <li title="Reporte 2" role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 5 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 5 ? 'visited' : '') ?>">
+                            <a href="#2seguimiento" class="opcionHdr" onclick="descagarSeguimiento(6,<?php echo $ObjectITSA->getIntProcess($_SESSION['idUsuario']) ?>)" aria-controls="2seguimiento" role="tab" data-toggle="tab">
                               <i class="fa fa-folder-open"></i>
                               <p>Segundo</p>
                             </a>
                           </li>
 
-                          <li role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 6 ? 'visited' : '') ?>">
-                            <a href="#3seguimiento" class="opcionHdr" aria-controls="3seguimiento" role="tab" data-toggle="tab">
+                          <li title="Reporte 3" role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 6 ? 'visited' : '') ?>">
+                            <a href="#3seguimiento" class="opcionHdr" onclick="descagarSeguimiento(7,<?php echo $ObjectITSA->getIntProcess($_SESSION['idUsuario']) ?>)" aria-controls="3seguimiento" role="tab" data-toggle="tab">
                              <i class="fa fa-folder-open"></i>
                               <p>Tercer</p>
                             </a>
@@ -390,13 +390,13 @@
                                 </div>
                               </form>
                               <div class="form-group" style="padding:10px;">
-                              
-                           
-                                
+
+
+
                                 <div id="salida">
 
                                 </div>
-                               
+
                               </div>
                              </div>
                           </div>
@@ -456,7 +456,7 @@
                                       ?>
                                   </div>
                                   <div class="col-md-12">
-                                     
+
                                       <h3 class="semi-bold">Primer seguimiento Lo Real</h3>
                                       <p>Primer seguimiento</p>
                                       <!--<form method="post" enctype="multipart/form-data">
@@ -603,8 +603,17 @@
     $('#FormContinuar').submit();
   });
 
+  function descagarSeguimiento(idSeg,vaSeg){
+    if(idSeg <= vaSeg){
+        window.open('http://localhost:8080/residencitasitsa/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
+    }else{
+      alertify.alert('ITSA', 'No disponible aun!', function(){ alertify.success('Ok'); });
+
+    }
+  }
+
   var contador = 0;
-  cargarSelect();
+  cargarSelect();3
   precargarCronograma(false);
 
   function mostrarMensaje(mensaje,tipoMensaje){
@@ -677,7 +686,7 @@
                         );
               }
 
-              
+
               contador++;
           }
           nombreAnterior = nombreActual;
@@ -787,7 +796,7 @@
         //mostrarMensaje("No hay ninguna actividad por guardar...",2);
         response = 0;
       }
-      return response; 
+      return response;
   }
 
   function validacionGuardar(){
@@ -823,7 +832,7 @@
     alcancesDelimitaciones    = $("#alcancesDelimitaciones").val();
     descripcionActividades    = $("#descripcionActividades").val();
     areaOLugarImplementacion  = $("#areaOLugarImplementacion").val();
-    
+
     alertify.set('notifier','position', 'top-center');
     if(idProyecto == 0){
       alertify.notify('Proyecto obligatorio', 'error', 5, function(){  console.log('dismissed'); });
@@ -857,7 +866,7 @@
       alertify.notify('Personas que firmaran obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
     }
-    
+
 
 
     if(nombreAlumno == ""){
@@ -895,36 +904,36 @@
     if(idSeguroSocial == 0){
       alertify.notify('Seguro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
-    } 
+    }
     if(numeroSeguro == 0){
       alertify.notify('Numero de seguro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
-    }    
-    
+    }
+
     if(tituloAnteproyecto == ""){
       alertify.notify('Titulo del anteproyecto obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
-    }   
+    }
     if(objectivoGeneral == ""){
       alertify.notify('Objectivo general obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
-    }   
+    }
     if(objectivoEspecifico == ""){
       alertify.notify('Objectivo especifico obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
-    }   
+    }
     if(alcancesDelimitaciones == ""){
       alertify.notify('Alcances y delimitaciónes obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
-    }   
+    }
     if(descripcionActividades == ""){
       alertify.notify('Descripcion de las actividades obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
-    }   
+    }
     if(areaOLugarImplementacion == ""){
       alertify.notify('Lugar de la implementacion obligatorio', 'error', 5, function(){  console.log('dismissed'); });
       return false;
-    } 
+    }
     var guardarCron = guardar();
     if(guardarCron == 0){
       alertify.alert('ITSA', 'Debes de seleccionar por lo menos una actividad en el cronograma', function(){ alertify.success('Ok'); });
@@ -932,8 +941,8 @@
       alertify.alert('ITSA', 'Algo salio mal al guardar el cronograma', function(){ alertify.success('Ok'); });
     }
 
-    
-    
+
+
   }
 </script>
 </html>

@@ -1353,7 +1353,7 @@
 
 				$IDCARRERA = $SQLJEFE->FETCH(PDO::FETCH_ASSOC);
 
-				$SQL = $this->CONNECTION->PREPARE("	
+				$SQL = $this->CONNECTION->PREPARE("
 									SELECT
 										PS.idProyectoSeleccionado,
 										PS.idBancoProyecto,
@@ -1374,20 +1374,20 @@
 										G.vGiro,
 										E.vEstado,
 										S.vSector
-									FROM proyectoseleccionado AS PS 
+									FROM proyectoseleccionado AS PS
 									INNER JOIN bancoproyectos AS BP
 									ON BP.idBancoProyecto = PS.idBancoProyecto
 									INNER JOIN alumnos AS A
 									ON A.idAlumno = PS.idAlumno
-									INNER JOIN periodos AS P 
+									INNER JOIN periodos AS P
 									ON P.idPeriodo = PS.idPeriodo
 									INNER JOIN opciones AS O
 									ON O.idOpcion = PS.idOpcion
-									INNER JOIN giros AS G 
+									INNER JOIN giros AS G
 									ON G.idGiro = PS.idGiro
 									INNER JOIN estados AS E
 									ON E.idEstado = PS.idEstado
-									INNER JOIN sectores AS S 
+									INNER JOIN sectores AS S
 									ON S.idSector = PS.idSector
 									WHERE A.idCarrera = :idCarrera
 									ORDER BY PS.idProyectoSeleccionado DESC
@@ -1410,7 +1410,7 @@
 
 				$IDCARRERA = $SQLJEFE->FETCH(PDO::FETCH_ASSOC);
 
-				$SQL = $this->CONNECTION->PREPARE("	
+				$SQL = $this->CONNECTION->PREPARE("
 									SELECT
 										PS.idProyectoSeleccionado,
 										PS.idBancoProyecto,
@@ -1431,20 +1431,20 @@
 										G.vGiro,
 										E.vEstado,
 										S.vSector
-									FROM proyectoseleccionado AS PS 
+									FROM proyectoseleccionado AS PS
 									INNER JOIN bancoproyectos AS BP
 									ON BP.idBancoProyecto = PS.idBancoProyecto
 									INNER JOIN alumnos AS A
 									ON A.idAlumno = PS.idAlumno
-									INNER JOIN periodos AS P 
+									INNER JOIN periodos AS P
 									ON P.idPeriodo = PS.idPeriodo
 									INNER JOIN opciones AS O
 									ON O.idOpcion = PS.idOpcion
-									INNER JOIN giros AS G 
+									INNER JOIN giros AS G
 									ON G.idGiro = PS.idGiro
 									INNER JOIN estados AS E
 									ON E.idEstado = PS.idEstado
-									INNER JOIN sectores AS S 
+									INNER JOIN sectores AS S
 									ON S.idSector = PS.idSector
 									WHERE A.idCarrera = :idCarrera
 									AND A.NumeroControl LIKE %:NumeroControl%

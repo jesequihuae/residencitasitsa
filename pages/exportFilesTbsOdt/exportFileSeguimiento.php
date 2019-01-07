@@ -13,7 +13,7 @@ $TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN); // load the OpenTBS plugin
 $objAl = new alumnosTemporal($handler);
 
 $infoAlumno = $objAl->getInfoParaSeguimiento();
-$cron       = $objAl->obtenerCronograma(5);
+$cron       = $objAl->obtenerCronograma($_GET["idSeg"]);
 
 
 
