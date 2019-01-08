@@ -2,6 +2,7 @@
 
     require 'vendor/autoload.php';
     require 'conection.php';
+    use Slim\Container;
     use \Psr\Http\Message\ServerRequestInterface as Request;
     use \Psr\Http\Message\ResponseInterface as Response;
 
@@ -16,20 +17,84 @@
     };
 
     $app = new \Slim\App($c);
-
     require 'utils.php';
+    $container = $app->getContainer();
+    $container['pdo'] = function (Container $container) {
+            global $bd,$servidor,$usuariobd,$clavebd;
+            $charset = 'utf8';
+            $collate = 'utf8_unicode_ci';
+            $dsn = "mysql:host=185.201.11.65;dbname=u276604013_dbres;charset=$charset";
+            $options = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_PERSISTENT => false,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES $charset COLLATE $collate"
+            ];
+            return new PDO($dsn, 'u276604013_itsa', 'jesus_321', $options);
+    };
 
     $app->get('/',function(Request $request, Response $response, $args){
-       /* $alumnos                = Alumnos::get();
-        $solicitud              = Solicitudderesidencias::get();
-        $Cartaaceptacion        = Cartaaceptacion::get();
-        $cartapresentacion      = Cartapresentacion::get();
-        $expedienteFinal        = Expedientefinal::get();
-        $Reportesderesidencias  = Reportesderesidencias::get();
-        $Carreras               = Carreras::get();
-        $Mensajes               = Mensajes::get();*/
-     /*   return sendOkResponse(('[{"alumnos":'.$alumnos.',"solicitudes":'.$solicitud.',"cartaaceptacion":'.$Cartaaceptacion.',"cartapresentacion":'.$cartapresentacion.',"expedienteFinal":'.$expedienteFinal.',"Reportesderesidencias":'.$Reportesderesidencias.',"Carreras":'.$Carreras.',"mensajes":'.$Mensajes.'}]'),$response);*/
-     return sendOkResponse("si",$response);
+       $sql =
+        "
+        SELECT
+        	td.idTipoDocumento,
+        	td.vNombre,
+        	td.iOrden
+        FROM cronograma c
+        INNER JOIN tiposdocumento td ON(td.idTipoDocumento = c.idDocumento)
+        WHERE idAlumno = 42
+        GROUP BY td.idTipoDocumento,
+        	td.vNombre
+        UNION
+        SELECT
+        	td.idTipoDocumento,
+        	td.vNombre,
+        	td.iOrden
+        FROM documentos d
+        INNER JOIN tiposdocumento td ON(td.idTipoDocumento = d.idTipoDocumento)
+        WHERE d.idAlumno = 42
+        ORDER BY
+        	idTipoDocumento,
+        	vNombre,
+        	iOrden
+        ";
+        $pdo = $this->get('pdo');
+
+        $userRows = $pdo->query($sql)->fetchAll();
+        return sendOkResponse(json_encode($userRows),$response);
+    });
+    $app->post("/getSeguimiento",function(Request $req, Response $res, $args){
+      $data = $req->getParsedBody();
+      $idAlumno = $data["idAlumno"];
+      $sql =
+       "
+       SELECT
+         td.idTipoDocumento,
+         td.vNombre,
+         td.iOrden
+       FROM cronograma c
+       INNER JOIN tiposdocumento td ON(td.idTipoDocumento = c.idDocumento)
+       WHERE idAlumno = $idAlumno
+       GROUP BY td.idTipoDocumento,
+         td.vNombre
+       UNION
+       SELECT
+         td.idTipoDocumento,
+         td.vNombre,
+         td.iOrden
+       FROM documentos d
+       INNER JOIN tiposdocumento td ON(td.idTipoDocumento = d.idTipoDocumento)
+       WHERE d.idAlumno = $idAlumno
+       ORDER BY
+         idTipoDocumento,
+         vNombre,
+         iOrden
+       ";
+       $pdo = $this->get('pdo');
+
+       $seg = $pdo->query($sql)->fetchAll();
+       return sendOkResponse(json_encode($seg),$res);
     });
 
     $app->post('/uploadFile',function(Request $req,Response $res){

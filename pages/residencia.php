@@ -164,7 +164,7 @@
                             </a>
                           </li>
 
-                          <li title="Reporte 3" role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 6 ? 'visited' : '') ?>">
+                          <li title="reporte 3" role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 6 ? 'visited' : '') ?>">
                             <a href="#3seguimiento" class="opcionHdr" onclick="descagarSeguimiento(7,<?php echo $ObjectITSA->getIntProcess($_SESSION['idUsuario']) ?>)" aria-controls="3seguimiento" role="tab" data-toggle="tab">
                              <i class="fa fa-folder-open"></i>
                               <p>Tercer</p>
