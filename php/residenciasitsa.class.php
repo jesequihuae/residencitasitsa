@@ -38,8 +38,8 @@
 						$SQLJEFE->execute();
 						$JEFE = $SQLJEFE->fetch(PDO::FETCH_ASSOC);
 						@session_start();
-				    	$_SESSION['nombre'] = $Alumno['vNombre'];
-				    	$_SESSION['idUsuario'] = $Alumno['idJefeCarrera'];
+				    	$_SESSION['nombre'] = $JEFE['vNombre'];
+				    	$_SESSION['idUsuario'] = $JEFE['idJefeCarrera'];
 				    	$_SESSION['numeroControl'] = "";
 					}
 					# PERMISOS DE BARRA DE NAVEGACION
@@ -621,6 +621,101 @@
 			}
 		}
 
+		public function getAllEmpresas(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idEmpresa, vNombreEmpresa, vCorreoElectronico, vDireccion, vTitular, vContacto FROM empresas");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+		public function getAllGiros(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idGiro, vGiro FROM giros WHERE bActivo = 1");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+		public function getAllOpciones(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion FROM opciones WHERE bActivo = 1");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						</div>';
+			}
+		}
+		public function getAllSectores(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idSector, vSector FROM sectores WHERE bActivo = 1");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						</div>';
+			}
+		}
+
+		public function getAllProyectos(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						SELECT
+							BP.idBancoProyecto,
+							BP.idEmpresa,
+							BP.idCarrera,
+							BP.idEstado,
+							BP.idPeriodo,
+							BP.vNombreProyecto,
+							BP.vDescripcion,
+							BP.vArea,
+							BP.vPropuestaDe,
+							BP.iTotalResidentes,
+							BP.bActive,
+							E.vNombreEmpresa,
+							C.vCarrera,
+							ES.vEstado,
+						    PE.vPeriodo
+						FROM bancoproyectos BP
+						INNER JOIN empresas E
+						ON E.idEmpresa = BP.idEmpresa
+						INNER JOIN carreras C
+						ON BP.idCarrera = C.idCarrera
+						INNER JOIN estados ES
+						ON BP.idEstado = ES.idEstado
+						INNER JOIN periodos PE
+						ON PE.idPeriodo = BP.idPeriodo
+					");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function getAllEstados() {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idEstado, vEstado, bActivo FROM estados");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
 		public function registrarAlumno(
 				$idCarrera,
 				$Sexo,
@@ -1060,5 +1155,342 @@
 			}
 		}
 
+		public function registrarEmpresa($Nombre, $Correo, $Direccion, $Titular, $Contacto){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						INSERT INTO empresas (
+							vNombreEmpresa,
+							vCorreoElectronico,
+							vDireccion,
+							vTitular,
+							vContacto
+						) VALUES (
+							:Nombre,
+							:Correo,
+							:Direccion,
+							:Titular,
+							:Contacto
+						)
+					");
+				$SQL->bindParam(":Nombre",$Nombre);
+				$SQL->bindParam(":Correo", $Correo);
+				$SQL->bindParam(":Direccion", $Direccion);
+				$SQL->bindParam(":Titular", $Titular);
+				$SQL->bindParam(":Contacto", $Contacto);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡La empresa '.$Nombre.' ha sido registrada exitosamente!
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function actualizarEmpresa($idEmpresa, $Nombre, $Correo, $Direccion, $Titular, $Contacto){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						UPDATE
+							empresas
+							SET
+								vNombreEmpresa = :Nombre,
+								vCorreoElectronico = :Correo,
+								vDireccion = :Direccion,
+								vTitular = :Titular,
+								vContacto = :Contacto
+						WHERE idEmpresa = :idEmpresa
+					");
+				$SQL->bindParam(":idEmpresa", $idEmpresa);
+				$SQL->bindParam(":Nombre",$Nombre);
+				$SQL->bindParam(":Correo", $Correo);
+				$SQL->bindParam(":Direccion", $Direccion);
+				$SQL->bindParam(":Titular", $Titular);
+				$SQL->bindParam(":Contacto", $Contacto);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡La empresa ha sido actualizada exitosamente!
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function registrarProyecto($idEmpresa, $idCarrera, $idEstado, $idPeriodo, $Proyecto, $Descripcion, $Area, $PropuestaDe, $TotalResidentes) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						INSERT INTO bancoproyectos (
+							idEmpresa,
+							idCarrera,
+							idEstado,
+							idPeriodo,
+							vNombreProyecto,
+							vDescripcion,
+							vArea,
+							vPropuestaDe,
+							iTotalResidentes,
+							bActive
+						) VALUES (
+							:idEmpresa,
+							:idCarrera,
+							:idEstado,
+							:idPeriodo,
+							:vNombreProyecto,
+							:vDescripcion,
+							:vArea,
+							:vPropuestaDe,
+							:iTotalResidentes,
+							1
+						);
+					");
+				$SQL->bindParam(":idEmpresa", $idEmpresa);
+				$SQL->bindParam(":idCarrera", $idCarrera);
+				$SQL->bindParam(":idEstado", $idEstado);
+				$SQL->bindParam(":idPeriodo", $idPeriodo);
+				$SQL->bindParam(":vNombreProyecto", $Proyecto);
+				$SQL->bindParam(":vDescripcion", $Descripcion);
+				$SQL->bindParam(":vArea", $Area);
+				$SQL->bindParam(":vPropuestaDe", $PropuestaDe);
+				$SQL->bindParam(":iTotalResidentes", $TotalResidentes);
+
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡El proyecto ha sido registrado exitosamente!
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function actualizarProyecto($idBancoProyecto, $idEmpresa, $idCarrera, $idEstado, $idPeriodo, $Proyecto, $Descripcion, $Area, $PropuestaDe, $TotalResidentes){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						UPDATE
+							bancoproyectos
+							SET
+								idEmpresa = :idEmpresa,
+								idCarrera = :idCarrera,
+								idEstado = :idEstado,
+								idPeriodo = :idPeriodo,
+								vNombreProyecto = :vNombreProyecto,
+								vDescripcion = :vDescripcion,
+								vArea = :vArea,
+								vPropuestaDe = :vPropuestaDe,
+								iTotalResidentes = :iTotalResidentes
+						WHERE idBancoProyecto = :idBancoProyecto
+					");
+
+				$SQL->bindParam(":idBancoProyecto", $idBancoProyecto);
+				$SQL->bindParam(":idEmpresa", $idEmpresa);
+				$SQL->bindParam(":idCarrera", $idCarrera);
+				$SQL->bindParam(":idEstado", $idEstado);
+				$SQL->bindParam(":idPeriodo", $idPeriodo);
+				$SQL->bindParam(":vNombreProyecto", $Proyecto);
+				$SQL->bindParam(":vDescripcion", $Descripcion);
+				$SQL->bindParam(":vArea", $Area);
+				$SQL->bindParam(":vPropuestaDe", $PropuestaDe);
+				$SQL->bindParam(":iTotalResidentes", $TotalResidentes);
+
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">¡El proyecto ha sido actualizado exitosamente!
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function cambiarEstadoProyecto($idBancoProyecto, $status) {
+			try {
+				$STATUSNEW = "";
+				switch ($status) {
+					case '1':
+						$STATUSNEW = 0;
+						break;
+
+					case '0':
+						$STATUSNEW = 1;
+						break;
+				}
+				$SQL = $this->CONNECTION->PREPARE("UPDATE bancoproyectos SET bActive = :status WHERE idBancoProyecto = :idBancoProyecto");
+				$SQL->bindParam(":status",$STATUSNEW);
+				$SQL->bindParam(":idBancoProyecto",$idBancoProyecto);
+				$SQL->execute();
+
+				if($STATUSNEW == 0) {
+					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				} else {
+					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				}
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+
+		# JEFES DE CARRERA
+		public function getSolicitudesResidenciasByJefeCarrera($idJefeCarrera){
+			try {
+				$SQLJEFE = $this->CONNECTION->PREPARE("SELECT idCarrera FROM jefescarrera WHERE idJefeCarrera = :idJefeCarrera");
+				$SQLJEFE->bindParam(":idJefeCarrera",$idJefeCarrera);
+				$SQLJEFE->execute();
+
+				$IDCARRERA = $SQLJEFE->FETCH(PDO::FETCH_ASSOC);
+
+				$SQL = $this->CONNECTION->PREPARE("
+									SELECT
+										PS.idProyectoSeleccionado,
+										PS.idBancoProyecto,
+										PS.idAlumno,
+										PS.idPeriodo,
+										PS.idOpcion,
+										PS.idGiro,
+										PS.idEstado,
+										PS.idSector,
+										PS.vMotivoNoAceptacion,
+										BP.vNombreProyecto,
+										A.vNumeroControl,
+										A.vNombre,
+										A.vApellidoPaterno,
+										A.vApellidoMaterno,
+										P.vPeriodo,
+										O.vOpcion,
+										G.vGiro,
+										E.vEstado,
+										S.vSector
+									FROM proyectoseleccionado AS PS
+									INNER JOIN bancoproyectos AS BP
+									ON BP.idBancoProyecto = PS.idBancoProyecto
+									INNER JOIN alumnos AS A
+									ON A.idAlumno = PS.idAlumno
+									INNER JOIN periodos AS P
+									ON P.idPeriodo = PS.idPeriodo
+									INNER JOIN opciones AS O
+									ON O.idOpcion = PS.idOpcion
+									INNER JOIN giros AS G
+									ON G.idGiro = PS.idGiro
+									INNER JOIN estados AS E
+									ON E.idEstado = PS.idEstado
+									INNER JOIN sectores AS S
+									ON S.idSector = PS.idSector
+									WHERE A.idCarrera = :idCarrera
+									ORDER BY PS.idProyectoSeleccionado DESC
+				");
+				$SQL->bindParam(":idCarrera", $IDCARRERA['idCarrera']);
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function getSolicitudesResidenciasByJefeCarreraAjax($idJefeCarrera, $NumeroControl) {
+			try {
+				$SQLJEFE = $this->CONNECTION->PREPARE("SELECT idCarrera FROM jefescarrera WHERE idJefeCarrera = :idJefeCarrera");
+				$SQLJEFE->bindParam(":idJefeCarrera",$idJefeCarrera);
+				$SQLJEFE->execute();
+
+				$IDCARRERA = $SQLJEFE->FETCH(PDO::FETCH_ASSOC);
+
+				$SQL = $this->CONNECTION->PREPARE("
+									SELECT
+										PS.idProyectoSeleccionado,
+										PS.idBancoProyecto,
+										PS.idAlumno,
+										PS.idPeriodo,
+										PS.idOpcion,
+										PS.idGiro,
+										PS.idEstado,
+										PS.idSector,
+										PS.vMotivoNoAceptacion,
+										BP.vNombreProyecto,
+										A.vNumeroControl,
+										A.vNombre,
+										A.vApellidoPaterno,
+										A.vApellidoMaterno,
+										P.vPeriodo,
+										O.vOpcion,
+										G.vGiro,
+										E.vEstado,
+										S.vSector
+									FROM proyectoseleccionado AS PS
+									INNER JOIN bancoproyectos AS BP
+									ON BP.idBancoProyecto = PS.idBancoProyecto
+									INNER JOIN alumnos AS A
+									ON A.idAlumno = PS.idAlumno
+									INNER JOIN periodos AS P
+									ON P.idPeriodo = PS.idPeriodo
+									INNER JOIN opciones AS O
+									ON O.idOpcion = PS.idOpcion
+									INNER JOIN giros AS G
+									ON G.idGiro = PS.idGiro
+									INNER JOIN estados AS E
+									ON E.idEstado = PS.idEstado
+									INNER JOIN sectores AS S
+									ON S.idSector = PS.idSector
+									WHERE A.idCarrera = :idCarrera
+									AND A.NumeroControl LIKE %:NumeroControl%
+									ORDER BY PS.idProyectoSeleccionado DESC
+				");
+				$SQL->bindParam(":idCarrera", $IDCARRERA['idCarrera']);
+				$SQL->bindParam(":NumeroControl", $NumeroControl);
+				$SQL->execute();
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function aceptarSolicitud($idProyecto){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE proyectoseleccionado SET idEstado = 5 WHERE idProyectoSeleccionado = :idProyecto");
+				$SQL->bindParam(":idProyecto", $idProyecto);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Se ha aceptado correctamente la solicitud.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function rechazarSolicitud($idProyecto, $MotivoRechazo) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE proyectoseleccionado SET idEstado = 6, vMotivoNoAceptacion = :MotivoRechazo WHERE idProyectoSeleccionado = :idProyecto");
+				$SQL->bindParam(":idProyecto", $idProyecto);
+				$SQL->bindParam(":MotivoRechazo", $MotivoRechazo);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Se ha rechazado correctamente la solicitud.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
 	}
 ?>

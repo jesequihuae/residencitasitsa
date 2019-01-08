@@ -9,7 +9,9 @@
 
 		public function abrirConexion(){
 			try{
-				$this->handler = new PDO('mysql:host=127.0.0.1;dbname=residenciasitsa','root',''); //Localhost
+			/*	$this->handler = new PDO('mysql:host=127.0.0.1;dbname=residenciasitsa','root',''); //Localhost
+				$this->handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);*/
+				$this->handler = new PDO('mysql:host=185.201.11.65;dbname=u276604013_dbres','u276604013_itsa','jesus_321'); //Localhost
 				$this->handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			} catch(PDOException $e) {
 				echo $e->getMessage();
@@ -22,7 +24,7 @@
 					idTipoDocumento,
 					vNombre
 				FROM tiposdocumento
-				WHERE bActivo = 1 AND idTipoDocumento IN(5,6,7)";
+				WHERE bActivo = 1 AND idTipoDocumento = 3";
 			$prepare = $this->handler->prepare($sql);
 			$prepare->execute();
 			$resultado = $prepare->fetchAll();
@@ -32,10 +34,7 @@
 		public function guardarCronograma($cronograma,$size,$idAlumno,$idTipoDeDocumento){
 
 			$array = json_decode($cronograma,true);
-			echo "<pre>";
-			print_r($array);
-			echo "</pre>";
-
+			echo $idTipoDeDocumento;
 			/*if(is_array($array)){
 				echo "si";
 			}else{
@@ -84,9 +83,33 @@
 			$sql = trim($sql);
 			$sql = substr($sql,0,-1);
 			$db = $this->handler->prepare($sql);
-			echo $sql;
+			//echo $sql;
 			if($db->execute()){
-				echo "Save";
+
+				$proceso = 0;
+				if($idTipoDeDocumento == 5){
+					$proceso = 5;
+				}else if($idTipoDeDocumento == 6){
+					$proceso = 6;
+				}else if($idTipoDeDocumento == 7){
+					$proceso = 7;
+				}
+
+				$sql = "
+									UPDATE alumnos
+									SET iProceso = $proceso
+									WHERE idAlumno = $idAlumno;
+							";
+				echo $sql;
+
+				if($proceso != 0){
+					$db = $this->handler->prepare($sql);
+ 				 if($db->execute()){
+ 					 echo "Save";
+ 				 }else{
+ 					 echo $db->errorCode();
+ 				 }
+				}
 			}else{
 				echo $db->errorCode();
 			}
@@ -116,6 +139,21 @@
 
 			return $result;
 		}
+		public function buscarCronogramaByUsuario($idAlumno){
+			$sql =
+			"
+				SELECT
+					1
+				FROM cronograma
+				WHERE idAlumno = :idAlumno
+				LIMIT 1
+			";
+			$con = $this->handler->prepare($sql);
+			$con->bindParam(":idAlumno",$idAlumno);
+			$con->execute();
+
+			return $con->rowCount();
+		}
 
 	}
 
@@ -133,6 +171,7 @@
 			$cronograma->abrirConexion();
 
 			$cronograma->guardarCronograma($info,$size,$idAlumno,$idDocumento);
+
 
 		break;
 		case 2:
@@ -154,6 +193,14 @@
 		$resultado = $cronograma->obtenerCronogramaCargado($idAlumno,$idDocumento);
 
 		echo json_encode($resultado);
+		break;
+		case 4:
+		$cronograma->abrirConexion();
+		$idAlumno 		= @$_SESSION["idUsuario"];
+
+		$resultado = $cronograma->buscarCronogramaByUsuario($idAlumno);
+
+		echo ($resultado > 0 )? 1 : 0;
 		break;
 	}
 ?>
