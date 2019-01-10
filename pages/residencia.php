@@ -468,7 +468,7 @@
                                         </div>
                                         <div align="center">
                                           <button class="btn btn-success" type="submit" name="primerReporteForm">Guardar</button>
-                                          -- <button class="btn btn-warning">Limpiar</button> --
+
                                         </div><br>
                                       </form>-->
                                       <?php
@@ -511,7 +511,7 @@
                                       </div>
                                       <div align="center">
                                         <button class="btn btn-success" type="submit"  name="segundoReporteForm">Guardar</button>
-                                        -- <button class="btn btn-warning">Limpiar</button> --
+                                        
                                       </div><br>
                                     </form>-->
                                     <?php
@@ -549,7 +549,7 @@
                                 </div>
                                 <div align="center">
                                   <button class="btn btn-success" type="submit" name="tercerReporteForm">Guardar</button>
-                                  -- <button class="btn btn-warning">Limpiar</button> --
+
                                 </div><br>
                               </form>-->
                             </div>
