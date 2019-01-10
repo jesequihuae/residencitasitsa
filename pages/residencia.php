@@ -605,8 +605,8 @@
 
   function descagarSeguimiento(idSeg,vaSeg){
     if(idSeg <= vaSeg){
-        //window.open('http://localhost:8080/residencitasitsa/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
-        window.open('http://residenciasitsa.diplomadosdelasep.com.mx/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
+        window.open('http://localhost:8080/residencitasitsa/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
+        //window.open('http://residenciasitsa.diplomadosdelasep.com.mx/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
     }else{
       alertify.alert('ITSA', 'No disponible aun!', function(){ alertify.success('Ok'); });
 
@@ -701,7 +701,7 @@
             $("#pro"+json[i]["i"]+json[i]["j"]).prop("checked",true);
           }
         }
-
+        contador = 0;
         console.log(json);
       },
       error: function(e){
@@ -728,7 +728,7 @@
   }
 
   function agregarActividad(){
-     var semanas;
+    var semanas;
     for($j = 0;$j<24;$j++){
       semanas += '<td><input type="checkbox" name="checkbox1" id="'+contador+''+$j+'" /></td>';
     }
