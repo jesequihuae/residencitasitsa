@@ -495,7 +495,7 @@
                                         if($numSeg == 5)
                                         {
                                           //$_SESSION["idTipoDocumento"] = 6;
-                                          require "cronograma/CronogramaPronosticado.php";
+                                          require "cronograma/cronogramaPronosticado.php";
                                         }
                                     ?>
                                 </div>
