@@ -536,7 +536,7 @@
                                         if($numSeg == 6)
                                         {
                                           //$_SESSION["idTipoDocumento"] = 7;
-                                          require "cronograma/CronogramaPronosticado.php";
+                                          require "cronograma/cronogramaPronosticado.php";
                                         }
                                     ?>
                               <p>Tercer seguimiento</p>
@@ -605,7 +605,8 @@
 
   function descagarSeguimiento(idSeg,vaSeg){
     if(idSeg <= vaSeg){
-        window.open('http://localhost:8080/residencitasitsa/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
+        //window.open('http://localhost:8080/residencitasitsa/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
+        window.open('http://residenciasitsa.diplomadosdelasep.com.mx/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
     }else{
       alertify.alert('ITSA', 'No disponible aun!', function(){ alertify.success('Ok'); });
 
