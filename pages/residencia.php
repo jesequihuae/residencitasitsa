@@ -451,7 +451,7 @@
                                         if($numSeg == 4)
                                         {
                                           //$_SESSION["idTipoDocumento"] = 5;
-                                          require "cronograma/CronogramaPronosticado.php";
+                                          require "cronograma/cronogramaPronosticado.php";
                                         }
                                       ?>
                                   </div>
@@ -511,7 +511,7 @@
                                       </div>
                                       <div align="center">
                                         <button class="btn btn-success" type="submit"  name="segundoReporteForm">Guardar</button>
-                                        
+
                                       </div><br>
                                     </form>-->
                                     <?php
