@@ -81,6 +81,7 @@
       $sql =
         "
           SELECT
+            vNombre,
             iSemana
           FROM cronograma
           WHERE idAlumno = $idAlumno AND idDocumento = $idTipoDocumento
