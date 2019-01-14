@@ -114,8 +114,38 @@
 				echo $db->errorCode();
 			}
 		}
+		public function obtenerSemanaInicioFin($idDocumento){
+			$sql =
+				"
+					SELECT
+						iSemanaInicioSeg,
+						iSemanaFinSeg
+					FROM tiposdocumento
+					WHERE idTipoDocumento = $idDocumento
+				";
 
+				$db  = $this->handler->prepare($sql);
+				$db->execute();
+				$res = $db->fetch();
+				//return $res;
+				return array("inicio"=>$res["iSemanaInicioSeg"],"fin"=>$res["iSemanaFinSeg"]);
+
+		}
 		public function obtenerCronogramaCargado($idAlumno,$idDocumento){
+			$idDocumentoReal = 0;
+			$semanaInicio = 0;
+			$semanaFin 	  = 0;
+			if(isset($_SESSION["idTipoDocumento"])){
+
+				$array = $this->obtenerSemanaInicioFin($_SESSION["idTipoDocumento"]);
+				$semanaInicio = $array["inicio"];
+				$semanaFin    = $array["fin"];
+			}
+
+			if($semanaInicio != null && $semanaFin != null){
+				$filtroSemana = " AND iSemana >= $semanaInicio AND iSemana <= $semanaFin";
+			}
+
 			$sql =
 			"
 					SELECT
@@ -129,8 +159,9 @@
 						i,
 						j
 					FROM cronograma
-					WHERE idAlumno = $idAlumno AND idDocumento = $idDocumento
+					WHERE idAlumno = $idAlumno AND idDocumento = $idDocumento ".$filtroSemana."
 			";
+			//return $semanaFin;
 			$prepare = $this->handler->prepare($sql);
 
 			$prepare->execute();

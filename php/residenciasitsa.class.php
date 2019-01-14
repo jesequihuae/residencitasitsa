@@ -567,6 +567,7 @@
 		public function getCarreras() {
 			try {
 				$SQL = $this->CONNECTION->PREPARE("SELECT idCarrera, vCarrera, vClave FROM carreras WHERE bActivo = 1");
+
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {

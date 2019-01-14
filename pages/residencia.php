@@ -649,6 +649,7 @@
 
       },
       success: function(json){
+        
         $(".rowsAdded").remove();
         var nombreActual = "",nombreAnterior;
         contador = 0;
@@ -746,7 +747,6 @@
     var cronograma = "[";
 
     var idTipoDeDocumento = <?php echo (isset($_SESSION["idTipoDocumento"])?$_SESSION["idTipoDocumento"]:0); ?>;
-
     var rowCount = 0;
     for(i = 0;i < contador;i++){
       cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",\"i"+i+"\":"+i+",";
@@ -760,7 +760,11 @@
     //QUITAMOS LA ULTIMA COMA PARA QUE NO TRUENE AL ENVIAR AL SERVIDOR
     cronograma = cronograma.slice(0,-1);
     cronograma+=']';
-
+    if(contador < 6){
+      alertify.set('notifier','position', 'top-center');
+      alertify.error("Al menos debes de llenar 6 actividades");
+      return;
+    }
     console.log(cronograma);
     if(contador > 0){
         $.ajax({
