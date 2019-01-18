@@ -20,7 +20,8 @@
     <!-- Custom Fonts -->
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
-
+    <!-- DataTable CSS -->
+    <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,9 +35,9 @@
 
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
-    <?php 
+    <?php
         include '../php/connection.php';
-        if($ObjectITSA->checkSession()){  
+        if($ObjectITSA->checkSession()){
             if(!$ObjectITSA->checkPermission("solicitudresidentes")) {
                 echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                 exit;
@@ -55,7 +56,7 @@
 
                 <div class="col-lg-12">
                     <h1 class="page-header"><i class="fa fa-briefcase"></i> Solicitudes </h1>
-                    <?php 
+                    <?php
                         if(isset($_POST) && isset($_POST['btnAceptarRechazar'])) {
                             if($_POST['aceptarRechazar'] == 1) {
                                 $ObjectITSA->aceptarSolicitud($_POST['idProyectoAceptarRechazar']);
@@ -68,7 +69,7 @@
                 </div>
             </div>
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <div class="row">
               <div class="col-lg-12">
                   <div class="panel panel-primary">
@@ -78,14 +79,14 @@
                           </h2>
                       </div>
                       <div class="panel-body">
-                            <div class="input-group">
+                            <!--<div class="input-group">
                                 <input type="text" class="form-control" placeholder="Buscar" id="busqueda" name="busqueda">
                                 <div class="input-group-btn">
                                     <button class="btn btn-default" type="button" id="buscarCoincidencias" name="buscarCoincidencias">
                                         <i class="glyphicon glyphicon-search"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div>-->
 
                            <div class="table-responsive">
                               <table class="table table-hover" id="tableSolicitudesFiltro">
@@ -94,7 +95,7 @@
                                     <th>Proyecto</th>
                                     <th>Número Control</th>
                                     <th>Alumno</th>
-                                    <th>Periodo</th>                                    
+                                    <th>Periodo</th>
                                     <th>Opcion</th>
                                     <th>Giro</th>
                                     <th>Estado</th>
@@ -108,14 +109,14 @@
                                     <th>Proyecto</th>
                                     <th>Número Control</th>
                                     <th>Alumno</th>
-                                    <th>Periodo</th>                                    
+                                    <th>Periodo</th>
                                     <th>Opcion</th>
                                     <th>Giro</th>
                                     <th>Estado</th>
                                     <th>Sector</th>
-                                    <th colspan="2"><center>Operaciones</center></th>
+                                    <th><center>Operaciones</center></th>
                                 </thead>
-                                <?php 
+                                <?php
                                     $SOLICITUDES_QUERY = $ObjectITSA->getSolicitudesResidenciasByJefeCarrera($_SESSION['idUsuario']);
                                     while($SOLICITUDES_ = $SOLICITUDES_QUERY->FETCH(PDO::FETCH_ASSOC))  {
                                   ?>
@@ -128,7 +129,7 @@
                                     <td><?php echo $SOLICITUDES_['vOpcion']; ?></td>
                                     <td><?php echo $SOLICITUDES_['vGiro']; ?></td>
                                     <td>
-                                        <?php 
+                                        <?php
                                             echo ($SOLICITUDES_['idEstado'] == 3 ? '<span class="label label-warning">'.$SOLICITUDES_['vEstado'].'</span>' : '');
                                             echo ($SOLICITUDES_['idEstado'] == 4 ? '<span class="label label-default">'.$SOLICITUDES_['vEstado'].'</span>' : '');
                                             echo ($SOLICITUDES_['idEstado'] == 5 ? '<span class="label label-success">'.$SOLICITUDES_['vEstado'].'</span>' : '');
@@ -139,7 +140,7 @@
                                     <td>
                                         <?php if($SOLICITUDES_['idEstado'] == 3) { ?>
                                         <center>
-                                            <button 
+                                            <button
                                                 type="button"
                                                 data-idproyecto="<?php echo $SOLICITUDES_['idProyectoSeleccionado']; ?>"
                                                 data-numerocontrol="<?php echo $SOLICITUDES_['vNumeroControl']; ?>"
@@ -148,13 +149,9 @@
                                                 title="Aceptar Solicitud">
                                                    <i class="fa fa-check"></i>
                                             </button>
-                                        </center>
                                         <?php } ?>
-                                    </td>
-                                    <td>
                                         <?php if($SOLICITUDES_['idEstado'] == 3) { ?>
-                                        <center>
-                                            <button 
+                                            <button
                                                 type="button"
                                                 data-idproyecto="<?php echo $SOLICITUDES_['idProyectoSeleccionado']; ?>"
                                                 data-numerocontrol="<?php echo $SOLICITUDES_['vNumeroControl']; ?>"
@@ -167,8 +164,8 @@
                                         <?php } ?>
                                     </td>
                                 </tr>
-                                <?php 
-                                    } 
+                                <?php
+                                    }
                                 ?>
                               </table>
                           </div>
@@ -197,7 +194,7 @@
                <label class="control-label col-lg-4">Motivo de Rechazo</label>
                <div class="col-lg-8">
                 <textarea class="form-control" name="taMotivoRechazo" id="taMotivoRechazo"></textarea>
-               </div>                                    
+               </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -221,10 +218,12 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
+    <!-- DataTable CSS -->
+    <script src="../js/datatable.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function(){ 
+        $(document).ready(function(){
+          $("#tableSolicitudes").DataTable();
             $("#tableSolicitudesFiltro").hide();
-
             $(".aceptarSolicitud").click(function(){
                 $("#aceptarRechazar").val("1");
                 $("#idProyectoAceptarRechazar").val($(this).data("idproyecto"));

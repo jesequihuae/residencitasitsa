@@ -21,6 +21,8 @@
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
 
+    <!-- DataTable CSS -->
+    <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,9 +36,9 @@
 
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
-    <?php 
+    <?php
         include '../php/connection.php';
-        if($ObjectITSA->checkSession()){  
+        if($ObjectITSA->checkSession()){
             if(!$ObjectITSA->checkPermission("controlempresas")) {
                 echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                 exit;
@@ -55,7 +57,7 @@
 
                 <div class="col-lg-12">
                    <h1 class="page-header"><i class="fa fa-briefcase"></i> Empresas </h1>
-                   <?php 
+                   <?php
                         if(isset($_POST) && isset($_POST['guardarEmpresa'])) {
                             if($_POST['idEmpresa'] == 0) {
                                 $ObjectITSA->registrarEmpresa(
@@ -75,12 +77,12 @@
                                     $_POST['vContacto']
                                 );
                             }
-                        } 
+                        }
                    ?>
                 </div>
             </div>
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <section id="panelRegistroEdicion">
                 <div class="row">
                     <div class="col-lg-6 col-lg-offset-3">
@@ -97,44 +99,44 @@
                                        <label class="control-label col-lg-3">Nombre Empresa:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vNombreEmpresa" id="vNombreEmpresa" placeholder="Nombre de Empresa" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Correo Electrónico:</label>
                                        <div class="col-lg-9">
                                            <input type="email" class="form-control" name="vCorreoElectronico" id="vCorreoElectronico" placeholder="Correo Electrónico" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Direccion:</label>
                                        <div class="col-lg-9">
                                            <textarea class="form-control" id="vDireccion" name="vDireccion" required></textarea>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Titular:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vTitular" id="vTitular" placeholder="Titular" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Contacto:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vContacto" id="vContacto" placeholder="Contacto" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
-                                    <button 
-                                        type="button" 
-                                        class="btn btn-default" 
+                                    <button
+                                        type="button"
+                                        class="btn btn-default"
                                         id="cancelarRegistro">
-                                            <i class="fa fa-times-circle"></i> 
+                                            <i class="fa fa-times-circle"></i>
                                         Cancelar
                                     </button>
-                                    <button 
-                                        type="submit" 
-                                        class="btn btn-info pull-right" 
+                                    <button
+                                        type="submit"
+                                        class="btn btn-info pull-right"
                                         name="guardarEmpresa">
-                                        <i class="fa fa-paper-plane"></i> 
+                                        <i class="fa fa-paper-plane"></i>
                                         Guardar
                                     </button>
                                 </form>
@@ -157,7 +159,7 @@
                                 <i class="fa fa-plus"></i> Nueva empresa
                           </button><br><br>
                           <div class="table-responsive">
-                              <table class="table table-hover">
+                              <table class="table table-hover" id="dtEmpresas">
                                   <thead>
                                       <th>ID</th>
                                       <th>Nombre</th>
@@ -167,7 +169,7 @@
                                       <th>Contacto</th>
                                       <th>Editar</th>
                                   </thead>
-                                  <?php 
+                                  <?php
                                     $EMPRESAS_QUERY = $ObjectITSA->getAllEmpresas();
                                     while($EMPRESAS_ = $EMPRESAS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
                                   ?>
@@ -180,7 +182,7 @@
                                       <td><?php echo $EMPRESAS_['vContacto']; ?></td>
                                       <td>
                                            <center>
-                                                <button 
+                                                <button
                                                     type="button"
                                                     data-idempresa="<?php echo $EMPRESAS_['idEmpresa']; ?>"
                                                     data-nombre="<?php echo $EMPRESAS_['vNombreEmpresa']; ?>"
@@ -216,8 +218,12 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
+
+    <!-- DataTable CSS -->
+    <script src="../js/datatable.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+          $("#dtEmpresas").DataTable();
           $("#panelRegistroEdicion").hide();
 
           $("#btnNuevaEmpresa").click(function(){

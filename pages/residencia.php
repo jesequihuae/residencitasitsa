@@ -639,7 +639,6 @@
     $.ajax({
       url:'../php/cronograma.php',
       type:'POST',
-      dataType: "json",
       data:
             {
               "operacion":"3",
@@ -648,50 +647,56 @@
       beforeSend: function(e){
 
       },
-      success: function(json){
-        
+      success: function(e){
+        var res           = $.parseJSON(e);
+        var json          = res.cronograma;
+        var semanaInicio  = res.semanaInicio;
+        var semanaFin     = res.semanaFin;
         $(".rowsAdded").remove();
         var nombreActual = "",nombreAnterior;
         contador = 0;
         for(var i in json){
-          nombreActual = json[i]["vNombre"];
-          var semanas  = "";
-          if(nombreActual != nombreAnterior){
+          if(contador>=(semanaInicio-1) && contador<semanaFin){
+            nombreActual = json[i]["vNombre"];
+            var semanas  = "";
+            if(nombreActual != nombreAnterior){
 
-              if(isReal){
-                 for(j = 0;j<24;j++){
+                if(isReal){
+                   for(j = 0;j<24;j++){
 
-                //  if(json[i]["i"] == i && json[i]["j"] == j){
-                  //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
-                  //}else{
-                    semanas += '<td><input disabled type="checkbox" name="checkbox1" id="'+contador+''+j+'" /></td>';
-                  //}
+                  //  if(json[i]["i"] == i && json[i]["j"] == j){
+                    //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
+                    //}else{
+                      semanas += '<td><input disabled type="checkbox" name="checkbox1" id="'+contador+''+j+'" /></td>';
+                    //}
+                  }
+                  $("#CronogramaPronosticado").append(
+                            "<tr class='rowsAdded'>"+
+                              "<td><input placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='actividad"+contador+"'>"+json[i]["vNombre"]+"</input></td>"+semanas+
+                            "</tr>"
+                          );
+                }else{
+                  for(j = 0;j<24;j++){
+
+                  //  if(json[i]["i"] == i && json[i]["j"] == j){
+                    //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
+                    //}else{
+                      semanas += '<td><input disabled type="checkbox" name="checkbox1" id="pro'+contador+''+j+'" /></td>';
+                    //}
+                  }
+                  $("#CronogramaPronosticado").append(
+                            "<tr class='rowsAdded'>"+
+                              "<td><label placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='proactividad"+contador+"'>"+json[i]["vNombre"]+"</label></td>"+semanas+
+                            "</tr>"
+                          );
                 }
-                $("#CronogramaPronosticado").append(
-                          "<tr class='rowsAdded'>"+
-                            "<td><input placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='actividad"+contador+"'>"+json[i]["vNombre"]+"</input></td>"+semanas+
-                          "</tr>"
-                        );
-              }else{
-                for(j = 0;j<24;j++){
-
-                //  if(json[i]["i"] == i && json[i]["j"] == j){
-                  //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
-                  //}else{
-                    semanas += '<td><input disabled type="checkbox" name="checkbox1" id="pro'+contador+''+j+'" /></td>';
-                  //}
-                }
-                $("#CronogramaPronosticado").append(
-                          "<tr class='rowsAdded'>"+
-                            "<td><label placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='proactividad"+contador+"'>"+json[i]["vNombre"]+"</label></td>"+semanas+
-                          "</tr>"
-                        );
-              }
 
 
-              contador++;
+
+            }
+            nombreAnterior = nombreActual;
           }
-          nombreAnterior = nombreActual;
+          contador++;
         }
 
 
@@ -781,6 +786,7 @@
 
           },
           success: function(e){
+            console.log(e);
             $("#salida").html(e);
             mostrarMensaje("Cronograma guardado con exito ",1);
             console.log(e);

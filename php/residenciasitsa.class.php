@@ -554,7 +554,9 @@
 													  A.dFechaNacimiento
 													FROM alumnos A
 													INNER JOIN carreras C
-													ON A.idCarrera = C.idCarrera");
+													ON A.idCarrera = C.idCarrera
+													ORDER BY A.idAlumno DESC
+													");
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
@@ -731,7 +733,7 @@
 				$CreditosTotales,
 				$CreditosAcumulados,
 				$Porcentaje,
-				$Periodo,
+				$idPeriodo,
 				$Promedio,
 				$Situacion,
 				$ServicioSocial,
@@ -775,7 +777,7 @@
 								iCreditosTotales,
 								iCreditosAcumulados,
 								fPorcentaje,
-								iPeriodo,
+								idPeriodo,
 								fPromedio,
 								vSituacion,
 								bServicioSocial,
@@ -800,7 +802,7 @@
 								:iCreditosTotales,
 								:iCreditosAcumulados,
 								:fPorcentaje,
-								:iPeriodo,
+								:idPeriodo,
 								:fPromedio,
 								:vSituacion,
 								:bServicioSocial,
@@ -825,7 +827,7 @@
 					$SQL->bindParam(":iCreditosTotales",$CreditosTotales);
 					$SQL->bindParam(":iCreditosAcumulados",$CreditosAcumulados);
 					$SQL->bindParam(":fPorcentaje",$Porcentaje);
-					$SQL->bindParam(":iPeriodo",$Periodo);
+					$SQL->bindParam(":idPeriodo",$idPeriodo);
 					$SQL->bindParam(":fPromedio",$Promedio);
 					$SQL->bindParam(":vSituacion",$Situacion);
 					$SQL->bindParam(":bServicioSocial",$ServicioSocial);
@@ -867,7 +869,7 @@
 				$CreditosTotales,
 				$CreditosAcumulados,
 				$Porcentaje,
-				$Periodo,
+				$idPeriodo,
 				$Promedio,
 				$Situacion,
 				$ServicioSocial,
@@ -894,7 +896,7 @@
 								iCreditosTotales = :iCreditosTotales,
 								iCreditosAcumulados = :iCreditosAcumulados,
 								fPorcentaje = :fPorcentaje,
-								iPeriodo = :iPeriodo,
+								idPeriodo = :idPeriodo,
 								fPromedio = :fPromedio,
 								vSituacion = :vSituacion,
 								bServicioSocial = :bServicioSocial,
@@ -918,7 +920,7 @@
 				$SQL->bindParam(":iCreditosTotales", $CreditosTotales);
 				$SQL->bindParam(":iCreditosAcumulados", $CreditosAcumulados);
 				$SQL->bindParam(":fPorcentaje", $Porcentaje);
-				$SQL->bindParam(":iPeriodo", $Periodo);
+				$SQL->bindParam(":idPeriodo", $idPeriodo);
 				$SQL->bindParam(":fPromedio", $Promedio);
 				$SQL->bindParam(":vSituacion", $Situacion);
 				$SQL->bindParam(":bServicioSocial", $ServicioSocial);
