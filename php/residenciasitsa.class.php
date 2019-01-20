@@ -626,7 +626,7 @@
 
 		public function getAllEmpresas(){
 			try {
-				$SQL = $this->CONNECTION->PREPARE("SELECT idEmpresa, vNombreEmpresa, vCorreoElectronico, vDireccion, vTitular, vContacto FROM empresas");
+				$SQL = $this->CONNECTION->PREPARE("SELECT idEmpresa, vNombreEmpresa,vGradoEstudios,vCorreoElectronico, vDireccion, vTitular, vContacto FROM empresas");
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
@@ -1158,7 +1158,7 @@
 			}
 		}
 
-		public function registrarEmpresa($Nombre, $Correo, $Direccion, $Titular, $Contacto){
+		public function registrarEmpresa($Nombre, $Correo, $Direccion, $Titular, $Contacto,$vGradoEstudios){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("
 						INSERT INTO empresas (
@@ -1166,13 +1166,15 @@
 							vCorreoElectronico,
 							vDireccion,
 							vTitular,
-							vContacto
+							vContacto,
+							vGradoEstudios
 						) VALUES (
 							:Nombre,
 							:Correo,
 							:Direccion,
 							:Titular,
-							:Contacto
+							:Contacto,
+							:vGradoEstudios
 						)
 					");
 				$SQL->bindParam(":Nombre",$Nombre);
@@ -1180,6 +1182,7 @@
 				$SQL->bindParam(":Direccion", $Direccion);
 				$SQL->bindParam(":Titular", $Titular);
 				$SQL->bindParam(":Contacto", $Contacto);
+				$SQL->bindParam(":vGradoEstudios", $vGradoEstudios);
 				$SQL->execute();
 
 				echo '<div class="alert alert-dismissable alert-success">¡La empresa '.$Nombre.' ha sido registrada exitosamente!
@@ -1192,7 +1195,7 @@
 			}
 		}
 
-		public function actualizarEmpresa($idEmpresa, $Nombre, $Correo, $Direccion, $Titular, $Contacto){
+		public function actualizarEmpresa($idEmpresa, $Nombre, $Correo, $Direccion, $Titular, $Contacto,$vGradoEstudios){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("
 						UPDATE
@@ -1202,7 +1205,8 @@
 								vCorreoElectronico = :Correo,
 								vDireccion = :Direccion,
 								vTitular = :Titular,
-								vContacto = :Contacto
+								vContacto = :Contacto,
+								vGradoEstudios = :vGradoEstudios
 						WHERE idEmpresa = :idEmpresa
 					");
 				$SQL->bindParam(":idEmpresa", $idEmpresa);
@@ -1211,6 +1215,7 @@
 				$SQL->bindParam(":Direccion", $Direccion);
 				$SQL->bindParam(":Titular", $Titular);
 				$SQL->bindParam(":Contacto", $Contacto);
+				$SQL->bindParam(":vGradoEstudios", $vGradoEstudios);
 				$SQL->execute();
 
 				echo '<div class="alert alert-dismissable alert-success">¡La empresa ha sido actualizada exitosamente!

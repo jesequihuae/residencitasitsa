@@ -65,7 +65,8 @@
                                     $_POST['vCorreoElectronico'],
                                     $_POST['vDireccion'],
                                     $_POST['vTitular'],
-                                    $_POST['vContacto']
+                                    $_POST['vContacto'],
+                                    $_POST['vGradoEstudios']
                                 );
                             } else {
                                 $ObjectITSA->actualizarEmpresa(
@@ -74,7 +75,8 @@
                                     $_POST['vCorreoElectronico'],
                                     $_POST['vDireccion'],
                                     $_POST['vTitular'],
-                                    $_POST['vContacto']
+                                    $_POST['vContacto'],
+                                    $_POST['vGradoEstudios']
                                 );
                             }
                         }
@@ -111,6 +113,12 @@
                                        <label class="control-label col-lg-3">Direccion:</label>
                                        <div class="col-lg-9">
                                            <textarea class="form-control" id="vDireccion" name="vDireccion" required></textarea>
+                                       </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-lg-3">Grado de estudios:</label>
+                                       <div class="col-lg-9">
+                                           <input type="text" class="form-control" name="vGradoEstudios" id="vGradoEstudios" placeholder="Titular" required>
                                        </div>
                                     </div>
                                     <div class="form-group">
@@ -165,6 +173,7 @@
                                       <th>Nombre</th>
                                       <th>Correo Electrónico</th>
                                       <th>Dirección</th>
+                                      <th>Grado de estudios</th>
                                       <th>Titular</th>
                                       <th>Contacto</th>
                                       <th>Editar</th>
@@ -178,6 +187,7 @@
                                       <td><?php echo $EMPRESAS_['vNombreEmpresa']; ?></td>
                                       <td><?php echo $EMPRESAS_['vCorreoElectronico']; ?></td>
                                       <td><?php echo $EMPRESAS_['vDireccion']; ?></td>
+                                      <td><?php echo $EMPRESAS_['vGradoEstudios']; ?></td>
                                       <td><?php echo $EMPRESAS_['vTitular']; ?></td>
                                       <td><?php echo $EMPRESAS_['vContacto']; ?></td>
                                       <td>
