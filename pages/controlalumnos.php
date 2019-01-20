@@ -63,7 +63,7 @@
                                 $SC = (isset($_POST['bServicioSocial']) ? '1' : '0');
                                 $ME = (isset($_POST['bMateriasEspecial']) ? '1' : '0');
                                 $AC = (isset($_POST['bActividadesComplementarias']) ? '1' : '0');
-                                exit();
+                    
                                 $ObjectITSA->registrarAlumno(
                                     $_POST['idCarrera'],
                                     $_POST['idSexo'],
