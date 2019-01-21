@@ -63,7 +63,7 @@
                                 $SC = (isset($_POST['bServicioSocial']) ? '1' : '0');
                                 $ME = (isset($_POST['bMateriasEspecial']) ? '1' : '0');
                                 $AC = (isset($_POST['bActividadesComplementarias']) ? '1' : '0');
-                    
+
                                 $ObjectITSA->registrarAlumno(
                                     $_POST['idCarrera'],
                                     $_POST['idSexo'],
@@ -352,6 +352,7 @@
                                          <td>
                                             <center>
                                                 <button
+                                                    onclick="editarAl(this)"
                                                     type="button"
                                                     data-idalumno="<?php echo $ALUMNOS_['idAlumno']; ?>"
                                                     data-idcarrera="<?php echo $ALUMNOS_['idCarrera']; ?>"
@@ -422,45 +423,47 @@
             clearFields();
           });
 
-          $(".editarAlumno").click(function(){
+        //  $(".editarAlumno").click(function(){
+
+        });
+        function editarAl(e){
             $("#panelRegistroEdicion").hide(200);
             clearFields();
-            $("#idAlumno").val($(this).data("idalumno"));
-            $("#vNombre").val($(this).data("vnombre"));
-            $("#vApellidoPaterno").val($(this).data("vapellidopaterno"));
-            $("#vApellidoMaterno").val($(this).data("vapellidomaterno"));
-            $("#vNumeroControl").val($(this).data("vnumerocontrol"));
-            $("#vSemestre").val($(this).data("vsemestre"));
-            $("#vPlanEstudios").val($(this).data("vplanestudios"));
-            $("#vSituacion").val($(this).data("vsituacion"));
-            $("#iCreditosTotales").val($(this).data("icreditostotales"));
-            $("#iCreditosAcumulados").val($(this).data("icreditosacumulados"));
-            $("#fPorcentaje").val($(this).data("fporcentaje"));
-            $("#idPeriodo").val($(this).data("idPeriodo"));
-            $("#fpromedio").val($(this).data("fpromedio"));
-            $("#vCorreoInstitucional").val($(this).data("vcorreoinstitucional"));
-            $("#dFechaIngreso").val($(this).data("dfechaingreso"));
-            $("#dFechaTermino").val($(this).data("dfechatermino"));
-            $("#dFechaNacimiento").val($(this).data("dfechanacimiento"));
-            if($(this).data("bserviciosocial") == '0'){
+            $("#idAlumno").val($(e).data("idalumno"));
+            $("#vNombre").val($(e).data("vnombre"));
+            $("#vApellidoPaterno").val($(e).data("vapellidopaterno"));
+            $("#vApellidoMaterno").val($(e).data("vapellidomaterno"));
+            $("#vNumeroControl").val($(e).data("vnumerocontrol"));
+            $("#vSemestre").val($(e).data("vsemestre"));
+            $("#vPlanEstudios").val($(e).data("vplanestudios"));
+            $("#vSituacion").val($(e).data("vsituacion"));
+            $("#iCreditosTotales").val($(e).data("icreditostotales"));
+            $("#iCreditosAcumulados").val($(e).data("icreditosacumulados"));
+            $("#fPorcentaje").val($(e).data("fporcentaje"));
+            $("#idPeriodo").val($(e).data("idPeriodo"));
+            $("#fpromedio").val($(e).data("fpromedio"));
+            $("#vCorreoInstitucional").val($(e).data("vcorreoinstitucional"));
+            $("#dFechaIngreso").val($(e).data("dfechaingreso"));
+            $("#dFechaTermino").val($(e).data("dfechatermino"));
+            $("#dFechaNacimiento").val($(e).data("dfechanacimiento"));
+            if($(e).data("bserviciosocial") == '0'){
                 $("#bServicioSocial").prop('checked', false);
             } else {
                 $("#bServicioSocial").prop('checked', true);
             }
-            if($(this).data("bactividadescomplementarias") == '0'){
+            if($(e).data("bactividadescomplementarias") == '0'){
                 $("#bActividadesComplementarias").prop('checked', false);
             } else {
                 $("#bActividadesComplementarias").prop('checked', true);
             }
-            if($(this).data("bmateriaespecial") == '0'){
+            if($(e).data("bmateriaespecial") == '0'){
                 $("#bMateriasEspecial").prop('checked', false);
             } else {
                 $("#bMateriasEspecial").prop('checked', true);
             }
             $("#panelRegistroEdicion").show(200);
-          });
-        });
-
+          //});
+        }
         function clearFields(){
             $("#idAlumno").val("0");
             $("#vNombre").val("");
