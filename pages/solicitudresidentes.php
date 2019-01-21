@@ -141,6 +141,7 @@
                                         <?php if($SOLICITUDES_['idEstado'] == 3) { ?>
                                         <center>
                                             <button
+                                                onclick="aceptarSolicitud(this)"
                                                 type="button"
                                                 data-idproyecto="<?php echo $SOLICITUDES_['idProyectoSeleccionado']; ?>"
                                                 data-numerocontrol="<?php echo $SOLICITUDES_['vNumeroControl']; ?>"
@@ -153,6 +154,7 @@
                                         <?php if($SOLICITUDES_['idEstado'] == 3) { ?>
                                             <button
                                                 type="button"
+                                                onclick="rechazarSolicitud(this)"
                                                 data-idproyecto="<?php echo $SOLICITUDES_['idProyectoSeleccionado']; ?>"
                                                 data-numerocontrol="<?php echo $SOLICITUDES_['vNumeroControl']; ?>"
                                                 data-nombrecompleto="<?php echo $SOLICITUDES_['vNombre'].' '.$SOLICITUDES_['vApellidoPaterno'].' '.$SOLICITUDES_['vApellidoMaterno']; ?>"
@@ -224,25 +226,8 @@
         $(document).ready(function(){
           $("#tableSolicitudes").DataTable();
             $("#tableSolicitudesFiltro").hide();
-            $(".aceptarSolicitud").click(function(){
-                $("#aceptarRechazar").val("1");
-                $("#idProyectoAceptarRechazar").val($(this).data("idproyecto"));
-                $("#TituloModal").text("Solicitud de " + $(this).data("numerocontrol") + " | " + $(this).data("nombrecompleto"));
-                $("#hdrActDes").text("¿Está seguro de aceptar la solicitud?");
-                document.getElementById("grupoRechazo").style.display = "none";
-                $('#taMotivoRechazo').prop('required',false);
-                $("#modalAceptarRechazar").modal('show');
-            });
+            //$(".aceptarSolicitud").click(function(){
 
-            $(".rechazarSolicitud").click(function() {
-                $("#aceptarRechazar").val("0");
-                $("#idProyectoAceptarRechazar").val($(this).data("idproyecto"));
-                $("#TituloModal").text("Solicitud de " + $(this).data("numerocontrol") + " | " + $(this).data("nombrecompleto"));
-                $("#hdrActDes").text("¿Está seguro de rechazar la solicitud?");
-                document.getElementById("grupoRechazo").style.display = "";
-                $('#taMotivoRechazo').prop('required',true);
-                $("#modalAceptarRechazar").modal('show');
-            });
 
             $("#buscarCoincidencias").click(function(){
                 if($("#busqueda").val() != "") {
@@ -256,6 +241,28 @@
                 }
             });
         });
+        function aceptarSolicitud(e){
+
+            $("#aceptarRechazar").val("1");
+            $("#idProyectoAceptarRechazar").val($(e).data("idproyecto"));
+            $("#TituloModal").text("Solicitud de " + $(e).data("numerocontrol") + " | " + $(e).data("nombrecompleto"));
+            $("#hdrActDes").text("¿Está seguro de aceptar la solicitud?");
+            document.getElementById("grupoRechazo").style.display = "none";
+            $('#taMotivoRechazo').prop('required',false);
+            $("#modalAceptarRechazar").modal('show');
+        //});
+      }
+      //$(".rechazarSolicitud").click(function() {
+      function rechazarSolicitud(e){
+          $("#aceptarRechazar").val("0");
+          $("#idProyectoAceptarRechazar").val($(e).data("idproyecto"));
+          $("#TituloModal").text("Solicitud de " + $(e).data("numerocontrol") + " | " + $(e).data("nombrecompleto"));
+          $("#hdrActDes").text("¿Está seguro de rechazar la solicitud?");
+          document.getElementById("grupoRechazo").style.display = "";
+          $('#taMotivoRechazo').prop('required',true);
+          $("#modalAceptarRechazar").modal('show');
+      //});
+    }
     </script>
 </body>
 </html>
