@@ -55,8 +55,6 @@
         INNER JOIN tiposdocumento td ON(td.idTipoDocumento = d.idTipoDocumento)
         WHERE d.idAlumno = 42
         ORDER BY
-        	idTipoDocumento,
-        	vNombre,
         	iOrden
         ";
         $pdo = $this->get('pdo');
@@ -86,9 +84,7 @@
        FROM documentos d
        INNER JOIN tiposdocumento td ON(td.idTipoDocumento = d.idTipoDocumento)
        WHERE d.idAlumno = $idAlumno
-       ORDER BY
-         idTipoDocumento,
-         vNombre,
+       ORDER BY      
          iOrden
        ";
        $pdo = $this->get('pdo');

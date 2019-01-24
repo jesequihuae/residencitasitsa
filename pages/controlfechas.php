@@ -21,6 +21,9 @@
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
 
+    <!-- DataTable CSS -->
+    <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,9 +37,9 @@
 
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
-    <?php 
+    <?php
         include '../php/connection.php';
-        if($ObjectITSA->checkSession()){  
+        if($ObjectITSA->checkSession()){
             if(!$ObjectITSA->checkPermission("controlfechas")) {
                 echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                 exit;
@@ -55,7 +58,7 @@
 
                 <div class="col-lg-12">
                     <h1 class="page-header"><i class="fa fa-briefcase"></i> Fechas </h1>
-                <?php 
+                <?php
                     if(isset($_POST) && isset($_POST['guardarFecha'])){
                         if($_POST['idFechaEntregaPeriodo']== 0){
                             $ObjectITSA->registrarFechaPeriodo(
@@ -70,10 +73,10 @@
                                     $_POST['idPeriodo'],
                                     $_POST['vDescripcion'],
                                     $_POST['dFechaInicioEntrega'],
-                                    $_POST['dFechaFinalEntrega'] 
+                                    $_POST['dFechaFinalEntrega']
                             );
                         }
-                    } 
+                    }
                     else if(isset($_POST) && isset($_POST['eliminarFecha'])){
                        $ObjectITSA->eliminarFechaPeriodo($_POST['idFechaEliminar']);
                     }
@@ -81,7 +84,7 @@
                 </div>
             </div>
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <section id="panelRegistroEdicion">
                 <div class="row">
                     <div class="col-lg-6 col-lg-offset-3">
@@ -98,36 +101,36 @@
                                        <label class="control-label col-lg-3">Periodo:</label>
                                        <div class="col-lg-9">
                                            <select class="form-control" id="idPeriodo" name="idPeriodo">
-                                                <?php 
+                                                <?php
                                                     $PERIODOS_QUERY = $ObjectITSA->getAllPeriodos();
                                                     while($PERIODO_ = $PERIODOS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
                                                         if($PERIODO_['bActivo'] == 1){
                                                 ?>
                                                     <option value="<?php echo $PERIODO_['idPeriodo']; ?>"><?php echo $PERIODO_['vPeriodo']; ?></option>
-                                                <?php 
+                                                <?php
                                                         }
-                                                    } 
+                                                    }
                                                 ?>
                                            </select>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Descripción:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vDescripcion" id="vDescripcion" placeholder="Descripción" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Fecha de Inicio:</label>
                                        <div class="col-lg-9">
                                            <input type="date" class="form-control" name="dFechaInicioEntrega" id="dFechaInicioEntrega" placeholder="Fecha inicio entrega" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Fecha Final:</label>
                                        <div class="col-lg-9">
                                            <input type="date" class="form-control" name="dFechaFinalEntrega" id="dFechaFinalEntrega" placeholder="Fecha Final entrega" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <button type="button" class="btn btn-default" id="cancelarRegistro"><i class="fa fa-times-circle"></i> Cancelar</button>
                                     <button type="submit" class="btn btn-info pull-right" name="guardarFecha"><i class="fa fa-paper-plane"></i> Guardar</button>
@@ -149,16 +152,16 @@
                                 <i class="fa fa-plus"></i> Nueva Fecha
                           </button><br><br>
                           <div class="table-responsive">
-                              <table class="table table-hover">
+                              <table class="table table-hover" id="dtFecha">
                                   <thead>
                                     <th>ID</th>
                                     <th>Periodo</th>
                                     <th>Descripcion</th>
                                     <th>Fecha Inicio</th>
                                     <th>Fecha Final</th>
-                                    <th colspan="2"><center>Operaciones</center></th>
+                                    <th><center>Operaciones</center></th>
                                   </thead>
-                                  <?php 
+                                  <?php
                                     $FECHAS_QUERY = $ObjectITSA->getAllFechasEntrega();
                                     while($FECHAS_ = $FECHAS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
                                   ?>
@@ -170,7 +173,7 @@
                                       <td><?php echo $FECHAS_['dFechaFinalEntrega']; ?></td>
                                       <td>
                                            <center>
-                                                <button 
+                                                <button
                                                     type="button"
                                                     data-idfechaentregaperiodo="<?php echo $FECHAS_['idFechaEntregaPeriodo']; ?>"
                                                     data-idperiodo="<?php echo $FECHAS_['idPeriodo']; ?>"
@@ -181,18 +184,15 @@
                                                     title="Editar Fecha">
                                                        <i class="fa fa-pencil"></i>
                                                 </button>
+
+                                              <button
+                                                type="button"
+                                                data-idfecha="<?php echo $FECHAS_['idFechaEntregaPeriodo']; ?>"
+                                                class="eliminarFecha btn btn-danger btn-sm"
+                                                >
+                                                <i class="fa fa-trash"></i>
+                                              </button>
                                             </center>
-                                      </td>
-                                      <td>
-                                        <center>
-                                          <button
-                                            type="button"
-                                            data-idfecha="<?php echo $FECHAS_['idFechaEntregaPeriodo']; ?>"
-                                            class="eliminarFecha btn btn-danger btn-sm"
-                                            >
-                                            <i class="fa fa-trash"></i>
-                                          </button>
-                                        </center>
                                       </td>
                                   </tr>
                                   <?php } ?>
@@ -240,8 +240,13 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
+
+    <!-- DataTable CSS -->
+    <script src="../js/datatable.min.js"></script>
+
         <script type="text/javascript">
         $(document).ready(function(){
+          $("#dtFecha").DataTable();
           $("#panelRegistroEdicion").hide();
 
           $("#btnNuevaFecha").click(function(){

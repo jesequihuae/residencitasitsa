@@ -81,10 +81,12 @@
       $sql =
         "
           SELECT
-          	vNombre,
+            vNombre,
             iSemana
           FROM cronograma
           WHERE idAlumno = $idAlumno AND idDocumento = $idTipoDocumento
+          GROUP BY
+                  iSemana
         ";
         $con = $this->connection->prepare($sql);
         $con->execute();

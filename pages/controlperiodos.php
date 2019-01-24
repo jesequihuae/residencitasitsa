@@ -21,6 +21,9 @@
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
 
+    <!-- DataTable CSS -->
+    <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,9 +37,9 @@
 
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
-    <?php 
+    <?php
         include '../php/connection.php';
-        if($ObjectITSA->checkSession()){  
+        if($ObjectITSA->checkSession()){
             if(!$ObjectITSA->checkPermission("controlperiodos")) {
                 echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                 exit;
@@ -55,7 +58,7 @@
 
                 <div class="col-lg-12">
                     <h1 class="page-header"><i class="fa fa-briefcase"></i> Periodos </h1>
-                    <?php 
+                    <?php
                         if(isset($_POST) && isset($_POST['guardarPeriodo'])){
                             if($_POST['idPeriodo'] == 0) {
                                 $ObjectITSA->registrarPeriodo(
@@ -78,7 +81,7 @@
                 </div>
             </div>
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <section id="panelRegistroEdicion">
                 <div class="row">
                     <div class="col-lg-6 col-lg-offset-3">
@@ -95,7 +98,7 @@
                                        <label class="control-label col-lg-3">Periodo:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vPeriodo" id="vPeriodo" placeholder="Periodo" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <button type="button" class="btn btn-default" id="cancelarRegistro"><i class="fa fa-times-circle"></i> Cancelar</button>
                                     <button type="submit" class="btn btn-info pull-right" name="guardarPeriodo"><i class="fa fa-paper-plane"></i> Guardar</button>
@@ -117,14 +120,14 @@
                                 <i class="fa fa-plus"></i> Nuevo periodo
                           </button><br><br>
                           <div class="table-responsive">
-                              <table class="table table-hover">
+                              <table class="table table-hover" id="dtPeriodos">
                                   <thead>
                                       <th>ID</th>
                                       <th>Periodo</th>
                                       <th>Estado</th>
-                                      <th colspan="2"><center>Operaciones</center></th>
+                                      <th>Operaciones</th>
                                   </thead>
-                                  <?php 
+                                  <?php
                                     $PERIODOS_QUERY = $ObjectITSA->getAllPeriodos();
                                     while($PERIODOS_ = $PERIODOS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
                                   ?>
@@ -132,13 +135,13 @@
                                       <td><?php echo $PERIODOS_['idPeriodo']; ?></td>
                                       <td><?php echo $PERIODOS_['vPeriodo']; ?></td>
                                       <td>
-                                          <?php 
+                                          <?php
                                             echo ($PERIODOS_['bActivo'] == 1 ? '<span class="label label-success">Activo</span>' : '<span class="label label-danger">Inactivo</span>');
                                           ?>
                                       </td>
                                       <td>
                                            <center>
-                                                <button 
+                                                <button
                                                     type="button"
                                                     data-idperiodo="<?php echo $PERIODOS_['idPeriodo']; ?>"
                                                     data-vperiodo="<?php echo $PERIODOS_['vPeriodo']; ?>"
@@ -146,18 +149,15 @@
                                                     title="Editar Periodo">
                                                        <i class="fa fa-pencil"></i>
                                                 </button>
-                                            </center>
-                                      </td>
-                                      <td>  
-                                          <center>
-                                          <?php 
-                                            echo ($PERIODOS_['bActivo'] == 1 ? '<button type="button" data-status="1" data-id="'.$PERIODOS_['idPeriodo'].'" class="cambiarStatus btn btn-danger btn-sm" title="Desactivar"><i class="fa fa-close"></i></button>' : '<button type="button" data-status="0" data-id="'.$PERIODOS_['idPeriodo'].'" class="cambiarStatus btn btn-success btn-sm" title="Activar"><i class="fa fa-check"></i></button>'); 
-                                          ?>                                              
-                                          </center>
+                                                &nbsp;
+                                           <?php
+                                             echo ($PERIODOS_['bActivo'] == 1 ? '<button type="button" data-status="1" data-id="'.$PERIODOS_['idPeriodo'].'" class="cambiarStatus btn btn-danger btn-sm" title="Desactivar"><i class="fa fa-close"></i></button>' : '<button type="button" data-status="0" data-id="'.$PERIODOS_['idPeriodo'].'" class="cambiarStatus btn btn-success btn-sm" title="Activar"><i class="fa fa-check"></i></button>');
+                                           ?>
+                                         </center>
                                       </td>
                                   </tr>
-                                  <?php 
-                                    } 
+                                  <?php
+                                    }
                                   ?>
                               </table>
                           </div>
@@ -203,8 +203,11 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
+    <!-- DataTable CSS -->
+    <script src="../js/datatable.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+          $("#dtPeriodos").DataTable();
           $("#panelRegistroEdicion").hide();
 
           $("#btnNuevoPeriodo").click(function(){
@@ -230,7 +233,7 @@
               var status = $(this).data("status");
               var id = $(this).data("id");
               $("#idActividadCambiarEstado").val(id);
-              if(status==1) { 
+              if(status==1) {
                 $("#hdrActDes").text("¿Está seguro de desactivar?");
               } else {
                 $("#hdrActDes").text("¿Está seguro de activar?");
