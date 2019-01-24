@@ -1512,5 +1512,22 @@
 					  </div>';
 			}
 		}
+
+		public function actualizarODT($idOdt, $NombreOdt, $Archivo) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE odt SET vNombreOdt = :Nombre WHERE idOdt = :idODT");
+				$SQL->bindParam(":idODT",$idOdt);
+				$SQL->bindParam(":Nombre", $NombreOdt);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Se ha realizado la actualización correctamente.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
 	}
 ?>

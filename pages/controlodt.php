@@ -54,8 +54,21 @@
             <div class="row">
 
                 <div class="col-lg-12">
-                    <h1 class="page-header"><i class="fa fa-briefcase"></i> Control ODT </h1>
-                   
+                    <h1 class="page-header"><i class="fa fa-file-o"></i> Control ODT </h1>
+                    <?php 
+                        if(isset($_POST) && isset($_POST['guardarOdt'])){
+                            if($_POST['idOdt'] == 0) {
+                                #REGISTRAR
+                            } else {
+                                #Actualizar
+                                $ObjectITSA->actualizarODT(
+                                    $_POST['idOdt'],
+                                    $_POST['vNombreOdt'],
+                                    $_FILES['FileODT']
+                                );
+                            }
+                        }
+                    ?>
                 </div>
             </div>
 
@@ -65,10 +78,10 @@
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h2 class="panel-title">ODT</h2>
+                                <h2 class="panel-title"><i class="fa fa-file-o"></i>  ODT</h2>
                             </div>
                             <div class="panel-body">
-                                <form class="form-horizontal" method="post" enctype="multiple/form-data">
+                                <form class="form-horizontal" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="idOdt" id="idOdt" value="0">
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Nombre:</label>
@@ -79,7 +92,8 @@
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">ODT:</label>
                                        <div class="col-lg-9">
-                                           <input type="file" accept=".odt" name="vNombreOdt" id="vNombreOdt" required>
+                                           <input type="file" accept=".odt" name="FileODT" id="FileODT">
+                                           <p class="help-block"><div id="textFileInput"></div></p>
                                        </div>
                                     </div>
                                     <button type="button" class="btn btn-default" id="cancelarRegistro"><i class="fa fa-times-circle"></i> Cancelar</button>
@@ -96,7 +110,7 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h2 class="panel-title">
-                                Control ODT's
+                                <i class="fa fa-file-o"></i>  Control ODT's
                             </h2>
                         </div>
                         <div class="panel-body">
@@ -104,14 +118,13 @@
                                 <i class="fa fa-plus"></i> Nuevo ODT
                             </button><br><br>
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-hover" id="odtTable">
                                     <thead>
                                         <!-- <th>ID</th> -->
                                         <th>Nombre</th>
                                         <th>Ruta</th>
                                         <th><center>Descargar</center></th>
                                         <th><center>Editar</center></th>
-                                        <th><center>Eliminar</center></th>
                                     </thead>
                                     <?php 
                                         $ODT_QUERY = $ObjectITSA->getAllODT();
@@ -139,13 +152,6 @@
                                                 </button>
                                             </center>
                                         </td>
-                                        <td>
-                                            <center>
-                                                <button class="btn btn-danger btn-xs" title="Eliminar">
-                                                    <i class="fa fa-remove"></i>
-                                                </button>
-                                            </center>
-                                        </td>
                                     </tbody>
                                     <?php } ?>
                                 </table>
@@ -168,6 +174,7 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
+     <script src="../js/datatable.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $("#panelRegistroEdicionOdt").hide();
@@ -175,6 +182,8 @@
             $("#btnNuevoODT").click(function(){
                 $("#panelRegistroEdicionOdt").hide();
                 clearFields();
+                $("#textFileInput").text("Favor de Seleccionar un Archivo con extensión .odt");
+                $('#FileODT').prop('required', true);
                 $("#panelRegistroEdicionOdt").show(150);
             });
 
@@ -186,6 +195,7 @@
             $(".editarOdt").click(function(){
                 $("#panelRegistroEdicionOdt").hide(200);
                 clearFields();
+                $("#textFileInput").text("Si no se selecciona un archivo se dejará el existente.");
                 $("#idOdt").val($(this).data("idodt"));
                 $("#vNombreOdt").val($(this).data("vnombre"));
                 $("#panelRegistroEdicionOdt").show(200);
@@ -195,6 +205,8 @@
         function clearFields(){
             $("#idOdt").val("0");
             $("#vNombreOdt").val("");
+            $("#textFileInput").text("");
+            $('#FileODT').prop('required', false);
         }
     </script>
 </body>
