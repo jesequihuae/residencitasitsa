@@ -21,6 +21,8 @@
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
 
+    <!-- DataTable CSS -->
+    <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,9 +36,9 @@
 
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
-    <?php 
+    <?php
         include '../php/connection.php';
-        if($ObjectITSA->checkSession()){  
+        if($ObjectITSA->checkSession()){
             if(!$ObjectITSA->checkPermission("controlbancoproyectos")) {
                 echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                 exit;
@@ -55,7 +57,7 @@
 
                 <div class="col-lg-12">
                    <h1 class="page-header"><i class="fa fa-briefcase"></i> Banco de Proyectos </h1>
-                   <?php 
+                   <?php
                     if(isset($_POST) && isset($_POST['guardarProyecto'])) {
                         if($_POST['idBancoProyecto'] == 0) {
                             $ObjectITSA->registrarProyecto(
@@ -93,7 +95,7 @@
                 </div>
             </div>
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <section id="panelRegistroEdicion">
                 <div class="row">
                     <div class="col-lg-6 col-lg-offset-2">
@@ -110,95 +112,95 @@
                                        <label class="control-label col-lg-3">Empresa:</label>
                                        <div class="col-lg-9">
                                           <select id="idEmpresa" name="idEmpresa" class="form-control">
-                                              <?php 
+                                              <?php
                                                 $EMPRESAS_QUERY = $ObjectITSA->getAllEmpresas();
                                                 while($EMPRESAS_ = $EMPRESAS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
                                               ?>
                                                 <option value="<?php echo $EMPRESAS_['idEmpresa']; ?>"><?php echo $EMPRESAS_['vNombreEmpresa']; ?></option>
                                               <?php } ?>
                                           </select>
-                                       </div> 
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Carrera:</label>
                                        <div class="col-lg-9">
                                           <select id="idCarrera" name="idCarrera" class="form-control">
-                                              <?php 
+                                              <?php
                                                 $CARRERAS_QUERY = $ObjectITSA->getAllCarreras();
                                                 while($CARRERAS_ = $CARRERAS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
-                                                    if($CARRERAS_['bActivo'] == 1) { 
+                                                    if($CARRERAS_['bActivo'] == 1) {
                                               ?>
                                                 <option value="<?php echo $CARRERAS_['idCarrera']; ?>"><?php echo $CARRERAS_['vCarrera']; ?></option>
-                                              <?php 
+                                              <?php
                                                     }
-                                                 } 
+                                                 }
                                                 ?>
                                           </select>
-                                       </div> 
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Periodo:</label>
                                        <div class="col-lg-9">
                                           <select id="idPeriodo" name="idPeriodo" class="form-control">
-                                              <?php 
+                                              <?php
                                                 $PERIODOS_QUERY = $ObjectITSA->getAllPeriodos();
                                                 while($PERIODOS_ = $PERIODOS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
-                                                    if($PERIODOS_['bActivo'] == 1) { 
+                                                    if($PERIODOS_['bActivo'] == 1) {
                                               ?>
                                                 <option value="<?php echo $PERIODOS_['idPeriodo']; ?>"><?php echo $PERIODOS_['vPeriodo']; ?></option>
-                                              <?php 
+                                              <?php
                                                     }
-                                                 } 
+                                                 }
                                                 ?>
                                           </select>
-                                       </div> 
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Disponibilidad:</label>
                                        <div class="col-lg-9">
                                           <select id="idEstado" name="idEstado" class="form-control">
-                                              <?php 
+                                              <?php
                                                 $ESTADOS_QUERY = $ObjectITSA->getAllEstados();
                                                 while($ESTADOS_ = $ESTADOS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
-                                                    if($ESTADOS_['idEstado'] == 1 || $ESTADOS_['idEstado'] == 2) { 
+                                                    if($ESTADOS_['idEstado'] == 1 || $ESTADOS_['idEstado'] == 2) {
                                               ?>
                                                 <option value="<?php echo $ESTADOS_['idEstado']; ?>"><?php echo $ESTADOS_['vEstado']; ?></option>
-                                              <?php 
+                                              <?php
                                                     }
-                                                 } 
+                                                 }
                                                 ?>
                                           </select>
-                                       </div> 
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Proyecto:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vNombreProyecto" id="vNombreProyecto" placeholder="Nombre de Proyecto" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                      <div class="form-group">
                                        <label class="control-label col-lg-3">Descripción:</label>
                                        <div class="col-lg-9">
                                            <textarea class="form-control" name="vDescripcion" id="vDescripcion" required></textarea>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Área:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vArea" id="vArea" placeholder="Area" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Propuesta de:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vPropuestaDe" id="vPropuestaDe" placeholder="Propuesta de" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Total de residentes:</label>
                                        <div class="col-lg-9">
                                            <input type="number" min="0" class="form-control" name="iTotalResidentes" id="iTotalResidentes" placeholder="Total de Residentes" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <button type="button" class="btn btn-default" id="cancelarRegistro"><i class="fa fa-times-circle"></i> Cancelar</button>
                                     <button type="submit" class="btn btn-info pull-right" name="guardarProyecto"><i class="fa fa-paper-plane"></i> Guardar</button>
@@ -220,7 +222,7 @@
                                 <i class="fa fa-plus"></i> Nuevo Proyecto
                           </button><br><br>
                           <div class="table-responsive">
-                              <table class="table table-hover">
+                              <table class="table table-hover" id="dtControlProyectos">
                                   <thead>
                                       <th>ID</th>
                                       <th>Empresa</th>
@@ -232,56 +234,53 @@
                                       <th>Propuesta</th>
                                       <th># Residentes</th>
                                       <th>Estado</th>
-                                      <th colspan="2"><center>Operaciones</center></th>
+                                      <th>Operaciones</th>
                                   </thead>
-                                  <?php 
+                                  <?php
                                     $PROYECTOS_QUERY = $ObjectITSA->getAllProyectos();
                                     while($PROYECTOS_ = $PROYECTOS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
                                   ?>
                                   <tr>
-                                      <td><?php echo $PROYECTOS_['idBancoProyecto']; ?></td>
-                                      <td><?php echo $PROYECTOS_['vNombreEmpresa']; ?></td>
-                                      <td><?php echo $PROYECTOS_['vCarrera']; ?></td>
-                                      <td><?php echo $PROYECTOS_['vEstado']; ?></td>
-                                      <td><?php echo $PROYECTOS_['vNombreProyecto']; ?></td>
-                                      <td><?php echo $PROYECTOS_['vDescripcion']; ?></td>
-                                      <td><?php echo $PROYECTOS_['vArea']; ?></td>
-                                      <td><?php echo $PROYECTOS_['vPropuestaDe']; ?></td>
-                                      <td><?php echo $PROYECTOS_['iTotalResidentes']; ?></td>
-                                      <td>
+                                    <td><?php echo $PROYECTOS_['idBancoProyecto']; ?></td>
+                                    <td><?php echo $PROYECTOS_['vNombreEmpresa']; ?></td>
+                                    <td><?php echo $PROYECTOS_['vCarrera']; ?></td>
+                                    <td><?php echo $PROYECTOS_['vEstado']; ?></td>
+                                    <td><?php echo $PROYECTOS_['vNombreProyecto']; ?></td>
+                                    <td><?php echo $PROYECTOS_['vDescripcion']; ?></td>
+                                    <td><?php echo $PROYECTOS_['vArea']; ?></td>
+                                    <td><?php echo $PROYECTOS_['vPropuestaDe']; ?></td>
+                                    <td><?php echo $PROYECTOS_['iTotalResidentes']; ?></td>
+                                    <td>
                                           <center>
-                                              <?php 
+                                              <?php
                                                 echo ($PROYECTOS_['bActive'] == 1 ? '<span class="label label-success">Activo</span>' : '<span class="label label-danger">Inactivo</span>');
                                               ?>
                                           </center>
                                       </td>
                                       <td>
-                                          <center>
-                                              <button
-                                                class="editarProyecto btn btn-primary btn-sm"
-                                                data-idbancoproyecto="<?php echo $PROYECTOS_['idBancoProyecto']; ?>"
-                                                data-idempresa="<?php echo $PROYECTOS_['idEmpresa']; ?>"
-                                                data-idperiodo="<?php echo $PROYECTOS_['idPeriodo']; ?>"
-                                                data-idcarrera="<?php echo $PROYECTOS_['idCarrera']; ?>"
-                                                data-proyecto="<?php echo $PROYECTOS_['vNombreProyecto']; ?>"
-                                                data-idestado="<?php echo $PROYECTOS_['idEstado']; ?>"
-                                                data-descripcion="<?php echo $PROYECTOS_['vDescripcion']; ?>"
-                                                data-area="<?php echo $PROYECTOS_['vArea']; ?>"
-                                                data-propuestade="<?php echo $PROYECTOS_['vPropuestaDe']; ?>"
-                                                data-totalresidentes="<?php echo $PROYECTOS_['iTotalResidentes']; ?>  "
-                                                title="Editar"
-                                              >
-                                                <i class="fa fa-pencil"></i>
-                                              </button>
-                                          </center>
-                                      </td>
-                                      <td>
-                                        <center>
-                                          <?php 
-                                            echo ($PROYECTOS_['bActive'] == 1 ? '<button type="button" data-status="1" data-id="'.$PROYECTOS_['idBancoProyecto'].'" class="cambiarStatus btn btn-danger btn-sm" title="Desactivar"><i class="fa fa-close"></i></button>' : '<button type="button" data-status="0" data-id="'.$PROYECTOS_['idBancoProyecto'].'" class="cambiarStatus btn btn-success btn-sm" title="Activar"><i class="fa fa-check"></i></button>'); 
-                                          ?>                                              
-                                          </center>
-                                      </td>
+                                            <center>
+                                                <button
+                                                  class="editarProyecto btn btn-primary btn-sm"
+                                                  data-idbancoproyecto="<?php echo $PROYECTOS_['idBancoProyecto']; ?>"
+                                                  data-idempresa="<?php echo $PROYECTOS_['idEmpresa']; ?>"
+                                                  data-idperiodo="<?php echo $PROYECTOS_['idPeriodo']; ?>"
+                                                  data-idcarrera="<?php echo $PROYECTOS_['idCarrera']; ?>"
+                                                  data-proyecto="<?php echo $PROYECTOS_['vNombreProyecto']; ?>"
+                                                  data-idestado="<?php echo $PROYECTOS_['idEstado']; ?>"
+                                                  data-descripcion="<?php echo $PROYECTOS_['vDescripcion']; ?>"
+                                                  data-area="<?php echo $PROYECTOS_['vArea']; ?>"
+                                                  data-propuestade="<?php echo $PROYECTOS_['vPropuestaDe']; ?>"
+                                                  data-totalresidentes="<?php echo $PROYECTOS_['iTotalResidentes']; ?>  "
+                                                  title="Editar"
+                                                >
+                                                  <i class="fa fa-pencil"></i>
+                                                </button>
+                                              &nbsp;
+                                              <?php
+                                                echo ($PROYECTOS_['bActive'] == 1 ? '<button type="button" data-status="1" data-id="'.$PROYECTOS_['idBancoProyecto'].'" class="cambiarStatus btn btn-danger btn-sm" title="Desactivar"><i class="fa fa-close"></i></button>' : '<button type="button" data-status="0" data-id="'.$PROYECTOS_['idBancoProyecto'].'" class="cambiarStatus btn btn-success btn-sm" title="Activar"><i class="fa fa-check"></i></button>');
+                                              ?>
+                                              </center>
+                                        </td>
                                   </tr>
                                   <?php } ?>
                               </table>
@@ -329,8 +328,12 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
+
+    <!-- DataTable CSS -->
+    <script src="../js/datatable.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+          $("#dtControlProyectos").DataTable();
           $("#panelRegistroEdicion").hide();
 
           $("#btnNuevoProyecto").click(function(){
@@ -364,7 +367,7 @@
               var status = $(this).data("status");
               var id = $(this).data("id");
               $("#idBancoProyectoCambiasStatus").val(id);
-              if(status==1) { 
+              if(status==1) {
                 $("#hdrActDes").text("¿Está seguro de desactivar?");
               } else {
                 $("#hdrActDes").text("¿Está seguro de activar?");

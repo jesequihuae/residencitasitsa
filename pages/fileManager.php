@@ -29,6 +29,19 @@
       <div class="container-fluid">
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
+    <?php
+        include '../php/connection.php';
+        if($ObjectITSA->checkSession()){
+            if(!$ObjectITSA->checkPermission("fileManager")) {
+                echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
+                exit;
+            }
+        } else {
+            echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
+            exit;
+        }
+    ?>
+
           <div class="col-md-2">
           	<div class="form-group">
           		<label>Numero de Control</label>

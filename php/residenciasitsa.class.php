@@ -554,7 +554,9 @@
 													  A.dFechaNacimiento
 													FROM alumnos A
 													INNER JOIN carreras C
-													ON A.idCarrera = C.idCarrera");
+													ON A.idCarrera = C.idCarrera
+													ORDER BY A.idAlumno DESC
+													");
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
@@ -624,7 +626,7 @@
 
 		public function getAllEmpresas(){
 			try {
-				$SQL = $this->CONNECTION->PREPARE("SELECT idEmpresa, vNombreEmpresa, vCorreoElectronico, vDireccion, vTitular, vContacto FROM empresas");
+				$SQL = $this->CONNECTION->PREPARE("SELECT idEmpresa, vNombreEmpresa,vGradoEstudios,vCorreoElectronico, vDireccion, vTitular, vContacto FROM empresas");
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
@@ -731,7 +733,7 @@
 				$CreditosTotales,
 				$CreditosAcumulados,
 				$Porcentaje,
-				$Periodo,
+				$idPeriodo,
 				$Promedio,
 				$Situacion,
 				$ServicioSocial,
@@ -775,7 +777,7 @@
 								iCreditosTotales,
 								iCreditosAcumulados,
 								fPorcentaje,
-								iPeriodo,
+								idPeriodo,
 								fPromedio,
 								vSituacion,
 								bServicioSocial,
@@ -800,7 +802,7 @@
 								:iCreditosTotales,
 								:iCreditosAcumulados,
 								:fPorcentaje,
-								:iPeriodo,
+								:idPeriodo,
 								:fPromedio,
 								:vSituacion,
 								:bServicioSocial,
@@ -825,7 +827,7 @@
 					$SQL->bindParam(":iCreditosTotales",$CreditosTotales);
 					$SQL->bindParam(":iCreditosAcumulados",$CreditosAcumulados);
 					$SQL->bindParam(":fPorcentaje",$Porcentaje);
-					$SQL->bindParam(":iPeriodo",$Periodo);
+					$SQL->bindParam(":idPeriodo",$idPeriodo);
 					$SQL->bindParam(":fPromedio",$Promedio);
 					$SQL->bindParam(":vSituacion",$Situacion);
 					$SQL->bindParam(":bServicioSocial",$ServicioSocial);
@@ -867,7 +869,7 @@
 				$CreditosTotales,
 				$CreditosAcumulados,
 				$Porcentaje,
-				$Periodo,
+				$idPeriodo,
 				$Promedio,
 				$Situacion,
 				$ServicioSocial,
@@ -894,7 +896,7 @@
 								iCreditosTotales = :iCreditosTotales,
 								iCreditosAcumulados = :iCreditosAcumulados,
 								fPorcentaje = :fPorcentaje,
-								iPeriodo = :iPeriodo,
+								idPeriodo = :idPeriodo,
 								fPromedio = :fPromedio,
 								vSituacion = :vSituacion,
 								bServicioSocial = :bServicioSocial,
@@ -918,7 +920,7 @@
 				$SQL->bindParam(":iCreditosTotales", $CreditosTotales);
 				$SQL->bindParam(":iCreditosAcumulados", $CreditosAcumulados);
 				$SQL->bindParam(":fPorcentaje", $Porcentaje);
-				$SQL->bindParam(":iPeriodo", $Periodo);
+				$SQL->bindParam(":idPeriodo", $idPeriodo);
 				$SQL->bindParam(":fPromedio", $Promedio);
 				$SQL->bindParam(":vSituacion", $Situacion);
 				$SQL->bindParam(":bServicioSocial", $ServicioSocial);
@@ -1156,7 +1158,7 @@
 			}
 		}
 
-		public function registrarEmpresa($Nombre, $Correo, $Direccion, $Titular, $Contacto){
+		public function registrarEmpresa($Nombre, $Correo, $Direccion, $Titular, $Contacto,$vGradoEstudios){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("
 						INSERT INTO empresas (
@@ -1164,13 +1166,15 @@
 							vCorreoElectronico,
 							vDireccion,
 							vTitular,
-							vContacto
+							vContacto,
+							vGradoEstudios
 						) VALUES (
 							:Nombre,
 							:Correo,
 							:Direccion,
 							:Titular,
-							:Contacto
+							:Contacto,
+							:vGradoEstudios
 						)
 					");
 				$SQL->bindParam(":Nombre",$Nombre);
@@ -1178,6 +1182,7 @@
 				$SQL->bindParam(":Direccion", $Direccion);
 				$SQL->bindParam(":Titular", $Titular);
 				$SQL->bindParam(":Contacto", $Contacto);
+				$SQL->bindParam(":vGradoEstudios", $vGradoEstudios);
 				$SQL->execute();
 
 				echo '<div class="alert alert-dismissable alert-success">¡La empresa '.$Nombre.' ha sido registrada exitosamente!
@@ -1190,7 +1195,7 @@
 			}
 		}
 
-		public function actualizarEmpresa($idEmpresa, $Nombre, $Correo, $Direccion, $Titular, $Contacto){
+		public function actualizarEmpresa($idEmpresa, $Nombre, $Correo, $Direccion, $Titular, $Contacto,$vGradoEstudios){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("
 						UPDATE
@@ -1200,7 +1205,8 @@
 								vCorreoElectronico = :Correo,
 								vDireccion = :Direccion,
 								vTitular = :Titular,
-								vContacto = :Contacto
+								vContacto = :Contacto,
+								vGradoEstudios = :vGradoEstudios
 						WHERE idEmpresa = :idEmpresa
 					");
 				$SQL->bindParam(":idEmpresa", $idEmpresa);
@@ -1209,6 +1215,7 @@
 				$SQL->bindParam(":Direccion", $Direccion);
 				$SQL->bindParam(":Titular", $Titular);
 				$SQL->bindParam(":Contacto", $Contacto);
+				$SQL->bindParam(":vGradoEstudios", $vGradoEstudios);
 				$SQL->execute();
 
 				echo '<div class="alert alert-dismissable alert-success">¡La empresa ha sido actualizada exitosamente!
@@ -1487,6 +1494,18 @@
 				echo '<div class="alert alert-dismissable alert-success">Se ha rechazado correctamente la solicitud.
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function getAllODT(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOdt, vNombreOdt, vRuta FROM odt");
+				$SQL->execute();
+				return $SQL;
 			} catch (PDOException $e) {
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>

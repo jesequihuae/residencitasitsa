@@ -133,19 +133,6 @@
 		}
 		public function obtenerCronogramaCargado($idAlumno,$idDocumento){
 			$idDocumentoReal = 0;
-			$semanaInicio = 0;
-			$semanaFin 	  = 0;
-			if(isset($_SESSION["idTipoDocumento"])){
-
-				$array = $this->obtenerSemanaInicioFin($_SESSION["idTipoDocumento"]);
-				$semanaInicio = $array["inicio"];
-				$semanaFin    = $array["fin"];
-			}
-
-			if($semanaInicio != null && $semanaFin != null){
-				$filtroSemana = " AND iSemana >= $semanaInicio AND iSemana <= $semanaFin";
-			}
-
 			$sql =
 			"
 					SELECT
@@ -159,8 +146,7 @@
 						i,
 						j
 					FROM cronograma
-					WHERE idAlumno = $idAlumno AND idDocumento = $idDocumento ".$filtroSemana."
-			";
+					WHERE idAlumno = $idAlumno"; //AND idDocumento = $idDocumento ".$filtroSemana."
 			//return $semanaFin;
 			$prepare = $this->handler->prepare($sql);
 
@@ -223,7 +209,18 @@
 
 		$resultado = $cronograma->obtenerCronogramaCargado($idAlumno,$idDocumento);
 
-		echo json_encode($resultado);
+		$semanaInicio = 0;
+		$semanaFin 	  = 0;
+		if(isset($_SESSION["idTipoDocumento"])){
+
+			$array = $cronograma->obtenerSemanaInicioFin($_SESSION["idTipoDocumento"]);
+			$semanaInicio = $array["inicio"];
+			$semanaFin    = $array["fin"];
+		}
+
+
+
+		echo json_encode(array("cronograma"=>$resultado,"semanaInicio"=>$semanaInicio,"semanaFin"=>$semanaFin));
 		break;
 		case 4:
 		$cronograma->abrirConexion();

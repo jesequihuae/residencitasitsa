@@ -21,6 +21,9 @@
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
 
+    <!-- DataTable CSS -->
+    <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,9 +37,9 @@
 
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
-    <?php 
+    <?php
         include '../php/connection.php';
-        if($ObjectITSA->checkSession()){  
+        if($ObjectITSA->checkSession()){
             if(!$ObjectITSA->checkPermission("controlcarreras")) {
                 echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                 exit;
@@ -55,7 +58,7 @@
 
                 <div class="col-lg-12">
                     <h1 class="page-header"><i class="fa fa-briefcase"></i> Carreras </h1>
-                    <?php 
+                    <?php
                         if(isset($_POST) && isset($_POST['guardarCarrera'])){
                             if($_POST['idCarrera'] == 0) {
                                 $ObjectITSA->registrarCarrera(
@@ -69,7 +72,7 @@
                                     $_POST['vCarrera']
                                 );
                             }
-                        } 
+                        }
                         else if(isset($_POST['activarDesactivar'])) {
                                 $ObjectITSA->changeStatusCarrera(
                                     $_POST['idActividadCambiarEstado'],
@@ -80,7 +83,7 @@
                 </div>
             </div>
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <section id="panelRegistroEdicion">
                 <div class="row">
                     <div class="col-lg-6 col-lg-offset-3">
@@ -97,13 +100,13 @@
                                        <label class="control-label col-lg-3">Clave:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vClave" id="vClave" placeholder="Clave" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Carrera:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vCarrera" id="vCarrera" placeholder="Carrera" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <button type="button" class="btn btn-default" id="cancelarRegistro"><i class="fa fa-times-circle"></i> Cancelar</button>
                                     <button type="submit" class="btn btn-info pull-right" name="guardarCarrera"><i class="fa fa-paper-plane"></i> Guardar</button>
@@ -111,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
             </section>
 
             <div class="row">
@@ -127,15 +130,15 @@
                                 <i class="fa fa-plus"></i> Nueva Carrera
                           </button><br><br>
                           <div class="table-responsive">
-                              <table class="table table-hover">
+                              <table class="table table-hover" id="dtCarreras">
                                   <thead>
                                       <th>ID</th>
                                       <th>Clave</th>
                                       <th>Carrera</th>
                                       <th>Estado</th>
-                                      <th colspan="2"><center>Operaciones</center></th>
+                                      <th><center>Operaciones</center></th>
                                   </thead>
-                                  <?php 
+                                  <?php
                                     $CARRERAS_QUERY = $ObjectITSA->getAllCarreras();
                                     while($CARRERAS_ = $CARRERAS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
                                   ?>
@@ -144,13 +147,13 @@
                                       <td><?php echo $CARRERAS_['vClave']; ?></td>
                                       <td><?php echo $CARRERAS_['vCarrera']; ?></td>
                                       <td>
-                                          <?php 
+                                          <?php
                                             echo ($CARRERAS_['bActivo'] == 1 ? '<span class="label label-success">Activa</span>' : '<span class="label label-danger">Inactiva</span>');
                                           ?>
                                       </td>
                                       <td>
                                             <center>
-                                                  <button 
+                                                  <button
                                                       type="button"
                                                       data-idcarrera="<?php echo $CARRERAS_['idCarrera']; ?>"
                                                       data-vclave="<?php echo $CARRERAS_['vClave']; ?>"
@@ -159,15 +162,13 @@
                                                       title="Editar Carrera">
                                                          <i class="fa fa-pencil"></i>
                                                   </button>
-                                              </center>
+                                                  &nbsp;
+                                             <?php
+                                               echo ($CARRERAS_['bActivo'] == 1 ? '<button type="button" data-status="1" data-id="'.$CARRERAS_['idCarrera'].'" class="cambiarStatus btn btn-danger btn-sm" title="Desactivar"><i class="fa fa-close"></i></button>' : '<button type="button" data-status="0" data-id="'.$CARRERAS_['idCarrera'].'" class="cambiarStatus btn btn-success btn-sm" title="Activar"><i class="fa fa-check"></i></button>');
+                                             ?>
+                                             </center>
                                       </td>
-                                      <td>  
-                                          <center>
-                                          <?php 
-                                            echo ($CARRERAS_['bActivo'] == 1 ? '<button type="button" data-status="1" data-id="'.$CARRERAS_['idCarrera'].'" class="cambiarStatus btn btn-danger btn-sm" title="Desactivar"><i class="fa fa-close"></i></button>' : '<button type="button" data-status="0" data-id="'.$CARRERAS_['idCarrera'].'" class="cambiarStatus btn btn-success btn-sm" title="Activar"><i class="fa fa-check"></i></button>'); 
-                                          ?>                                              
-                                          </center>
-                                      </td>
+
                                   </tr>
                                   <?php } ?>
                               </table>
@@ -215,8 +216,11 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
+    <!-- DataTable CSS -->
+    <script src="../js/datatable.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+          $("#dtCarreras").DataTable();
           $("#panelRegistroEdicion").hide();
 
           $("#btnNuevaCarrera").click(function(){
@@ -243,7 +247,7 @@
               var status = $(this).data("status");
               var id = $(this).data("id");
               $("#idActividadCambiarEstado").val(id);
-              if(status==1) { 
+              if(status==1) {
                 $("#hdrActDes").text("¿Está seguro de desactivar?");
               } else {
                 $("#hdrActDes").text("¿Está seguro de activar?");
