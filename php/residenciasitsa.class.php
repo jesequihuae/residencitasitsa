@@ -1500,5 +1500,17 @@
 					  </div>';
 			}
 		}
+
+		public function getAllODT(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOdt, vNombreOdt, vRuta FROM odt");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
 	}
 ?>
