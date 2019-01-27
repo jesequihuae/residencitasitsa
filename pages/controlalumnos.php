@@ -368,7 +368,7 @@
                                                     data-icreditostotales="<?php echo $ALUMNOS_['iCreditosTotales']; ?>"
                                                     data-icreditosacumulados="<?php echo $ALUMNOS_['iCreditosAcumulados']; ?>"
                                                     data-fporcentaje="<?php echo $ALUMNOS_['fPorcentaje']; ?>"
-                                                    data-iperiodo="<?php echo $ALUMNOS_['idPeriodo']; ?>"
+                                                    data-idperiodo="<?php echo $ALUMNOS_['iPeriodo']; ?>"
                                                     data-fpromedio="<?php echo $ALUMNOS_['fPromedio']; ?>"
                                                     data-vsituacion="<?php echo $ALUMNOS_['vSituacion']; ?>"
                                                     data-bserviciosocial="<?php echo $ALUMNOS_['bServicioSocial']; ?>"
@@ -440,7 +440,7 @@
             $("#iCreditosTotales").val($(e).data("icreditostotales"));
             $("#iCreditosAcumulados").val($(e).data("icreditosacumulados"));
             $("#fPorcentaje").val($(e).data("fporcentaje"));
-            $("#idPeriodo").val($(e).data("idPeriodo"));
+            $("#idPeriodo").val($(e).data("idperiodo"));
             $("#fpromedio").val($(e).data("fpromedio"));
             $("#vCorreoInstitucional").val($(e).data("vcorreoinstitucional"));
             $("#dFechaIngreso").val($(e).data("dfechaingreso"));

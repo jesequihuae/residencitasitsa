@@ -57,16 +57,13 @@
                     <h1 class="page-header"><i class="fa fa-file-o"></i> Control ODT </h1>
                     <?php 
                         if(isset($_POST) && isset($_POST['guardarOdt'])){
-                            if($_POST['idOdt'] == 0) {
-                                #REGISTRAR
-                            } else {
-                                #Actualizar
-                                $ObjectITSA->actualizarODT(
-                                    $_POST['idOdt'],
-                                    $_POST['vNombreOdt'],
-                                    $_FILES['FileODT']
-                                );
-                            }
+                            #Actualizar
+                            $ObjectITSA->actualizarODT(
+                                $_POST['idOdt'],
+                                $_POST['vNombreOdt'],
+                                $_POST['rutaOdt'],
+                                $_FILES['FileODT']
+                            );
                         }
                     ?>
                 </div>
@@ -83,6 +80,7 @@
                             <div class="panel-body">
                                 <form class="form-horizontal" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="idOdt" id="idOdt" value="0">
+                                    <input type="hidden" name="rutaOdt" id="rutaOdt" value="">
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Nombre:</label>
                                        <div class="col-lg-9">
@@ -114,9 +112,6 @@
                             </h2>
                         </div>
                         <div class="panel-body">
-                            <button type="button" class="btn btn-primary pull-right" id="btnNuevoODT">
-                                <i class="fa fa-plus"></i> Nuevo ODT
-                            </button><br><br>
                             <div class="table-responsive">
                                 <table class="table table-hover" id="odtTable">
                                     <thead>
@@ -146,6 +141,7 @@
                                                     type="button"
                                                     data-idodt="<?php echo $ODT_['idOdt']; ?>"
                                                     data-vnombre="<?php echo $ODT_['vNombreOdt']; ?>"
+                                                    data-ruta="<?php echo $ODT_['vRuta']; ?>"
                                                     class="btn btn-info btn-xs editarOdt" 
                                                     title="Editar">
                                                     <i class="fa fa-pencil"></i>
@@ -179,14 +175,6 @@
         $(document).ready(function(){
             $("#panelRegistroEdicionOdt").hide();
 
-            $("#btnNuevoODT").click(function(){
-                $("#panelRegistroEdicionOdt").hide();
-                clearFields();
-                $("#textFileInput").text("Favor de Seleccionar un Archivo con extensión .odt");
-                $('#FileODT').prop('required', true);
-                $("#panelRegistroEdicionOdt").show(150);
-            });
-
             $("#cancelarRegistro").click(function() {
                 $("#panelRegistroEdicionOdt").hide(50);
                 clearFields();
@@ -198,6 +186,7 @@
                 $("#textFileInput").text("Si no se selecciona un archivo se dejará el existente.");
                 $("#idOdt").val($(this).data("idodt"));
                 $("#vNombreOdt").val($(this).data("vnombre"));
+                $("#rutaOdt").val($(this).data("ruta"));
                 $("#panelRegistroEdicionOdt").show(200);
               });
         });

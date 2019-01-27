@@ -1513,17 +1513,38 @@
 			}
 		}
 
-		public function actualizarODT($idOdt, $NombreOdt, $Archivo) {
+		public function actualizarODT($idOdt, $NombreOdt, $Ruta, $Archivo) {
 			try {
-				$SQL = $this->CONNECTION->PREPARE("UPDATE odt SET vNombreOdt = :Nombre WHERE idOdt = :idODT");
+				$RutaArchivo = "../pages/exportFilesTbsOdt/filesOdt/";
+				$RutaSQL = $Ruta; 
+				$SQL = $this->CONNECTION->PREPARE("UPDATE odt SET vNombreOdt = :Nombre, vRuta = :Ruta WHERE idOdt = :idODT");
+				$this->CONNECTION->beginTransaction();
+
+				if($Archivo['name'] != "") {
+					try {						
+						move_uploaded_file($Archivo['tmp_name'], $RutaArchivo.$Archivo['name']);
+						@unlink($RutaArchivo.$Ruta);
+						$RutaSQL = $Archivo['name'];
+					} catch (Exception $ex) {
+						@unlink($RutaArchivo.$Archivo['name']);						
+						$this->CONNECTION->rollback();
+						exit('<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$ex->getMessage().'
+								<button type="button" class="close" data-dismiss="alert">x</button>
+							  </div>');
+					}
+				}
+				
 				$SQL->bindParam(":idODT",$idOdt);
 				$SQL->bindParam(":Nombre", $NombreOdt);
+				$SQL->bindParam(":Ruta", $RutaSQL);
 				$SQL->execute();
 
+				$this->CONNECTION->commit();
 				echo '<div class="alert alert-dismissable alert-success">Se ha realizado la actualización correctamente.
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
 			} catch (PDOException $e) {
+				$this->CONNECTION->rollback();
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
