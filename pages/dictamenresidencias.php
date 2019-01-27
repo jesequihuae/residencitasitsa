@@ -20,6 +20,8 @@
     <!-- Custom Fonts -->
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
+    <!-- DataTable CSS -->
+    <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -67,7 +69,7 @@
                     </div> 
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover" id="dtAceptados">
                                 <thead>
                                     <th>ID</th>
                                     <th>Control</th>
@@ -114,7 +116,7 @@
                     </div> 
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover" id="dtRechazados">
                                 <thead>
                                     <th>ID</th>
                                     <th>Control</th>
@@ -167,5 +169,12 @@
     <!-- Custom Theme JavaScript -->
     <script src="../js/startmin.js"></script>
     <script src="../js/jquery.datetimepicker.full.min.js"></script>
+    <script src="../js/datatable.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#dtAceptados").DataTable();
+            $("#dtRechazados").DataTable();
+        });
+    </script>
 </body>
 </html>
