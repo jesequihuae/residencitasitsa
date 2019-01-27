@@ -80,6 +80,27 @@
                                     <th>Asesor Interno</th>
                                     <th>Asesor Externo</th>
                                 </thead>
+                                <tbody>
+                                    <?php
+                                        $ACEPTADOS_QUERY = $ObjectITSA->getDictamenAceptados();
+                                        while($ACEPTADOS_ = $ACEPTADOS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $ACEPTADOS_['idAlumno']; ?></td>
+                                        <td><?php echo $ACEPTADOS_['vNumeroControl']; ?></td>
+                                        <td><?php echo $ACEPTADOS_['vNombre'].' '.$ACEPTADOS_['vApellidoPaterno'].' '.$ACEPTADOS_['vApellidoMaterno']; ?></td>
+                                        <td><?php echo $ACEPTADOS_['vCorreoInstitucional']; ?></td>
+                                        <td><?php echo $ACEPTADOS_['telefono']; ?></td>
+                                        <td><?php echo ($ACEPTADOS_['bSexo'] == 0 ? 'H' : 'M') ?></td>
+                                        <td><?php echo $ACEPTADOS_['vNombreProyecto']; ?></td>
+                                        <td><?php echo $ACEPTADOS_['vNombreEmpresa']; ?></td>
+                                        <td><?php echo $ACEPTADOS_['asesorInterno']; ?></td>
+                                        <td><?php echo $ACEPTADOS_['asesorExterno']; ?></td>
+                                    </tr>
+                                    <?php 
+                                        }
+                                    ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -92,7 +113,43 @@
                         <h2 class="panel-title"> Anteproyectos Rechazados</h2>
                     </div> 
                     <div class="panel-body">
-                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <th>ID</th>
+                                    <th>Control</th>
+                                    <th>Nombre Alumno</th>
+                                    <th>Correo</th>
+                                    <th>Telefono</th>
+                                    <th>Sexo</th>
+                                    <th>Anteproyecto</th>
+                                    <th>Empresa/Dependencia</th>
+                                    <th>Asesor Interno</th>
+                                    <th>Asesor Externo</th>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                        $RECHAZADOS_QUERY = $ObjectITSA->getDictamenRechazados();
+                                        while($RECHAZADOS_ = $RECHAZADOS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $RECHAZADOS_['idAlumno']; ?></td>
+                                        <td><?php echo $RECHAZADOS_['vNumeroControl']; ?></td>
+                                        <td><?php echo $RECHAZADOS_['vNombre'].' '.$RECHAZADOS_['vApellidoPaterno'].' '.$RECHAZADOS_['vApellidoMaterno']; ?></td>
+                                        <td><?php echo $RECHAZADOS_['vCorreoInstitucional']; ?></td>
+                                        <td><?php echo $RECHAZADOS_['telefono']; ?></td>
+                                        <td><?php echo ($RECHAZADOS_['bSexo'] == 0 ? 'H' : 'M') ?></td>
+                                        <td><?php echo $RECHAZADOS_['vNombreProyecto']; ?></td>
+                                        <td><?php echo $RECHAZADOS_['vNombreEmpresa']; ?></td>
+                                        <td><?php echo $RECHAZADOS_['asesorInterno']; ?></td>
+                                        <td><?php echo $RECHAZADOS_['asesorExterno']; ?></td>
+                                    </tr>
+                                    <?php 
+                                        }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

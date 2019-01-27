@@ -1550,5 +1550,75 @@
 					  </div>';
 			}
 		}
+
+		public function getDictamenAceptados(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT
+														PS.idProyectoSeleccionado,
+													    A.idAlumno,
+													    A.vNumeroControl,
+													    A.vNombre,
+													    A.vApellidoPaterno,
+													    A.vApellidoMaterno,
+													    A.vCorreoInstitucional,
+													    A.telefono,
+													    A.bSexo,
+													    PS.idbancoProyecto,
+													    BP.vNombreProyecto,
+													    E.vNombreEmpresa,
+													   	PS.asesorInterno,
+													    PS.asesorExterno
+													FROM proyectoseleccionado PS
+													INNER JOIN alumnos A
+													ON PS.idAlumno = A.idAlumno
+													INNER JOIN bancoproyectos BP
+													ON BP.idbancoProyecto = PS.idbancoProyecto
+													INNER JOIN empresas E
+													ON E.idEmpresa = BP.idEmpresa
+													WHERE PS.idEstado = 5
+													ORDER BY PS.idProyectoSeleccionado DESC");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';	
+			}
+		}
+
+		public function getDictamenRechazados(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT
+														PS.idProyectoSeleccionado,
+													    A.idAlumno,
+													    A.vNumeroControl,
+													    A.vNombre,
+													    A.vApellidoPaterno,
+													    A.vApellidoMaterno,
+													    A.vCorreoInstitucional,
+													    A.telefono,
+													    A.bSexo,
+													    PS.idbancoProyecto,
+													    BP.vNombreProyecto,
+													    E.vNombreEmpresa,
+													   	PS.asesorInterno,
+													    PS.asesorExterno
+													FROM proyectoseleccionado PS
+													INNER JOIN alumnos A
+													ON PS.idAlumno = A.idAlumno
+													INNER JOIN bancoproyectos BP
+													ON BP.idbancoProyecto = PS.idbancoProyecto
+													INNER JOIN empresas E
+													ON E.idEmpresa = BP.idEmpresa
+													WHERE PS.idEstado = 6
+													ORDER BY PS.idProyectoSeleccionado DESC");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';	
+			}
+		}
 	}
 ?>
