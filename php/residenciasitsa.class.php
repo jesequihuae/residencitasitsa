@@ -10,6 +10,7 @@
 
 		public function login($Datos) {
 			try {
+				
 				$SQL = $this->CONNECTION->prepare("SELECT idTipoUsuario, idUsuario FROM usuarios WHERE vUsuario = :usuario AND vContrasena = :contrasena AND bActivo = 1");
 				$SQL->bindParam(":usuario", $Datos['usuario']);
 				$SQL->bindParam(":contrasena", $Datos['contrasena']);
@@ -66,7 +67,7 @@
 							array_push($PERMISOS, $submodulos['vRuta']);
 						}
 						$NAVBAR_ .= '</ul></li>';
-					}
+						}
 					$_SESSION['navbar'] = $NAVBAR_;
 					$_SESSION['permisos'] = $PERMISOS;
 
@@ -645,7 +646,18 @@
 		}
 		public function getAllOpciones(){
 			try {
-				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion FROM opciones WHERE bActivo = 1");
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion, vClave, bActivo FROM opciones WHERE bActivo = 1");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						</div>';
+			}
+		}
+		public function getOpciones(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion, vClave, bActivo FROM opciones");
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
@@ -1013,6 +1025,82 @@
 					  </div>';
 			}
 		}
+
+		public function registrarOpcion($Clave, $Opcion){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("INSERT INTO opciones (vOpcion,vClave) VALUES (:Opcion, :Clave);");
+				$SQL->bindParam(":Opcion",$Clave);
+				$SQL->bindParam(":Clave",$Opcion);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido registrada exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+					<button type="button" class="close" data-dismiss="alert">x</button>
+				  </div>';
+			}
+		}
+		public function actualizarOpcion($idOpcion, $Opcion, $Clave){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						UPDATE
+							opciones
+							SET
+								vOpcion = :vOpcion,
+								vClave = :vClave
+						WHERE idOpcion = :idOpcion
+					");
+				$SQL->bindParam(":idOpcion",$idOpcion);
+				$SQL->bindParam(":vOpcion",$Opcion);
+				$SQL->bindParam(":vClave",$Clave);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido actualizada exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+					<button type="button" class="close" data-dismiss="alert">x</button>
+				  </div>';
+			}
+		}
+
+		public function changeStatusOpcion($idOpcion, $status) {
+			try {
+				$STATUSNEW = "";
+				switch ($status) {
+					case '1':
+						$STATUSNEW = 0;
+						break;
+
+					case '0':
+						$STATUSNEW = 1;
+						break;
+				}
+				$SQL = $this->CONNECTION->PREPARE("UPDATE opciones SET bActivo = :status WHERE idOpcion = :idOpcion");
+				$SQL->bindParam(":status",$STATUSNEW);
+				$SQL->bindParam(":idOpcion",$idOpcion);
+				$SQL->execute();
+
+				if($STATUSNEW == 0) {
+					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				} else {
+					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				}
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+
 
 		public function changeStatusPeriodo($idPeriodo, $status) {
 			try {
