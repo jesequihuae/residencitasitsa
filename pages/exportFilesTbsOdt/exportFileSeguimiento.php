@@ -33,8 +33,19 @@ foreach ($cron as $r) {
   $i++;
 }
 
-
-
+$numSeg = 0;
+switch ($_GET["idSeg"]) {
+  case 5:
+    $numSeg = 1;
+    break;
+  case 6:
+    $numSeg = 2;
+  break;
+  case 7:
+    $numSeg = 3;
+  break;
+}
+$TBS->VarRef['seg'] = $numSeg;
 //print_r($cron);
 //exit();
 $data = array();
