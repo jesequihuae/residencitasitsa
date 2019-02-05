@@ -657,6 +657,89 @@
 						</div>';
 			}
 		}
+		public function getOpciones(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion, vClave, bActivo FROM opciones");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						</div>';
+			}
+		}
+		public function actualizarOpcion($idOpcion, $Opcion, $Clave){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						UPDATE
+							opciones
+							SET
+								vOpcion = :vOpcion,
+								vClave = :vClave
+						WHERE idOpcion = :idOpcion
+					");
+				$SQL->bindParam(":idOpcion",$idOpcion);
+				$SQL->bindParam(":vOpcion",$Opcion);
+				$SQL->bindParam(":vClave",$Clave);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido actualizada exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+					<button type="button" class="close" data-dismiss="alert">x</button>
+				  </div>';
+			}
+		}
+		public function changeStatusOpcion($idOpcion, $status) {
+			try {
+				$STATUSNEW = "";
+				switch ($status) {
+					case '1':
+						$STATUSNEW = 0;
+						break;
+
+					case '0':
+						$STATUSNEW = 1;
+						break;
+				}
+				$SQL = $this->CONNECTION->PREPARE("UPDATE opciones SET bActivo = :status WHERE idOpcion = :idOpcion");
+				$SQL->bindParam(":status",$STATUSNEW);
+				$SQL->bindParam(":idOpcion",$idOpcion);
+				$SQL->execute();
+
+				if($STATUSNEW == 0) {
+					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				} else {
+					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				}
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+		public function registrarOpcion($Clave, $Opcion){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("INSERT INTO opciones (vOpcion,vClave) VALUES (:Opcion, :Clave);");
+				$SQL->bindParam(":Opcion",$Clave);
+				$SQL->bindParam(":Clave",$Opcion);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido registrada exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+					<button type="button" class="close" data-dismiss="alert">x</button>
+				  </div>';
+			}
+		}
 		public function getAllSectores(){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("SELECT idSector, vSector FROM sectores WHERE bActivo = 1");
@@ -1516,24 +1599,24 @@
 		public function actualizarODT($idOdt, $NombreOdt, $Ruta, $Archivo) {
 			try {
 				$RutaArchivo = "../pages/exportFilesTbsOdt/filesOdt/";
-				$RutaSQL = $Ruta; 
+				$RutaSQL = $Ruta;
 				$SQL = $this->CONNECTION->PREPARE("UPDATE odt SET vNombreOdt = :Nombre, vRuta = :Ruta WHERE idOdt = :idODT");
 				$this->CONNECTION->beginTransaction();
 
 				if($Archivo['name'] != "") {
-					try {						
+					try {
 						move_uploaded_file($Archivo['tmp_name'], $RutaArchivo.$Archivo['name']);
 						@unlink($RutaArchivo.$Ruta);
 						$RutaSQL = $Archivo['name'];
 					} catch (Exception $ex) {
-						@unlink($RutaArchivo.$Archivo['name']);						
+						@unlink($RutaArchivo.$Archivo['name']);
 						$this->CONNECTION->rollback();
 						exit('<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$ex->getMessage().'
 								<button type="button" class="close" data-dismiss="alert">x</button>
 							  </div>');
 					}
 				}
-				
+
 				$SQL->bindParam(":idODT",$idOdt);
 				$SQL->bindParam(":Nombre", $NombreOdt);
 				$SQL->bindParam(":Ruta", $RutaSQL);
@@ -1582,7 +1665,7 @@
 			} catch (PDOException $e) {
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';	
+					  </div>';
 			}
 		}
 
@@ -1617,7 +1700,7 @@
 			} catch (PDOException $e) {
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';	
+					  </div>';
 			}
 		}
 	}
