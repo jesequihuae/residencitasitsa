@@ -26,12 +26,10 @@
 
 	include_once 'residenciasitsa.class.php';
 	$ObjectITSA = new ITSA($handler);
-
 	include_once 'filemanager.class.php';
 	$ObjectITSAFiles = new fileManager($handler);
 
 	include_once 'alumnosTemporal.class.php';
 	$ObjectITSA1  = new alumnosTemporal($handler);
-	
 
 ?>
