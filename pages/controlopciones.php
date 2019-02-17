@@ -57,7 +57,11 @@
                     <h1 class="page-header"><i class="fa fa-briefcase"></i> Opciones </h1>
                     <?php 
                         if(isset($_POST) && isset($_POST['guardarCarrera'])){
+<<<<<<< HEAD
                             if($_POST['idOpcion'] == 0) {
+=======
+                            if($_POST['idCarrera'] == 0) {
+>>>>>>> 938f50acb7bd1bb50665703ed38dd3e82f5cd26a
                                 $ObjectITSA->registrarOpcion(
                                     $_POST['vOpcion'],
                                     $_POST['vClave']
