@@ -218,8 +218,14 @@
                           <h2 class="panel-title">Proyectos registrados</h2>
                       </div>
                       <div class="panel-body">
+                        <div class="form-group">
+                            <input type="file" name="file" required>
+                        </div>
                           <button type="button" class="btn btn-primary pull-right" id="btnNuevoProyecto">
                                 <i class="fa fa-plus"></i> Nuevo Proyecto
+                          </button>
+                          <button type="button" class="btn btn-success pull-right" id="btnSubirExcel">
+                                <i class="fa fa-plus"></i> Subir Excel
                           </button><br><br>
                           <div class="table-responsive">
                               <table class="table table-hover" id="dtControlProyectos">

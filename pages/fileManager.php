@@ -99,7 +99,6 @@
 		}
 
 		function callAjax($data,$idCarrera,$idPeriodo){
-
 			$.ajax({
 				  type: "POST",
 				  url: 'helper/obtenerArchivosAsync.php',

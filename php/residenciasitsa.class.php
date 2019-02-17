@@ -1708,5 +1708,141 @@
 					  </div>';	
 			}
 		}
+
+		/*APARTADO PARA LAS ESTADISTICAS*/
+		public function graficaOpcionElegida(){
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT carr.vClave as 'Carrera', 
+						op.vOpcion as 'Opcion',
+						op.vClave AS vClaveOpcion,
+						COUNT(ps.idOpcion) as 'Total' FROM proyectoseleccionado as ps 
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				INNER JOIN opciones as op ON ps.idOpcion = op.idOpcion 
+				GROUP BY 
+								ps.idOpcion,
+								carr.vCarrera,
+								op.vClave
+				HAVING COUNT(ps.idOpcion)");
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaTotalGiro($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT carr.vClave AS 'Carrera', 
+						gir.vGiro AS 'Giro',
+						carr.idCarrera AS 'idCarrera',
+           				gir.vClave AS 'vClaveGiro',
+						COUNT(ps.idGiro) as 'Total' FROM proyectoseleccionado as ps 
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
+				WHERE carr.idCarrera = :idCarrera
+				GROUP BY 
+								ps.idGiro,
+								carr.vCarrera,
+								gir.vGiro
+				HAVING COUNT(ps.idGiro)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaGiroMujeryHombre($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT gir.vGiro as 'Giro',
+			   carr.vCarrera as 'Carrera',
+			   gir.vClave as 'vClaveGiro',
+		       IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
+		       COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
+		       INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+		       INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+		       INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
+		       WHERE carr.idCarrera = :idCarrera
+		       GROUP BY 
+						ps.idGiro,
+						carr.vCarrera,
+						gir.vGiro,
+		                al.bSexo
+		HAVING COUNT(al.bSexo)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaSector($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT carr.vClave as 'Carrera2', 
+						sec.vSector as 'Sector',
+						sec.vClaveSector as 'vClaveSector',
+						COUNT(ps.idSector) as 'Total' FROM proyectoseleccionado as ps 
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				INNER JOIN sectores as sec ON ps.idSector = sec.idSector
+                 WHERE carr.idCarrera = :idCarrera
+				GROUP BY 
+								ps.idSector,
+								carr.vCarrera,
+								sec.idSector
+				HAVING COUNT(ps.idSector)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaSectorMujeryHombre($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT sec.vSector as 'Sector',
+			   carr.vCarrera as 'Carrera',
+			   sec.vClaveSector as 'Clave',
+		       IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
+		       COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
+		       INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+		       INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+		       INNER JOIN sectores as sec ON ps.idSector = sec.idSector
+		       WHERE carr.idCarrera = :idCarrera
+		       GROUP BY 
+						ps.idSector,
+						carr.vCarrera,
+						sec.idSector,
+		                al.bSexo
+		HAVING COUNT(al.bSexo)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
 	}
 ?>

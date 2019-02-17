@@ -17,7 +17,7 @@
 	$ObjectITSA1  = new alumnosTemporal($handler);*/
 
 	try{
-		$handler = new PDO('mysql:host=localhost;dbname=residenciasitsa','root','root'); //Localhost
+		$handler = new PDO('mysql:host=localhost;dbname=residenciasitsa','root','root',array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES  \'UTF8\'')); //Localhost
 		$handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	} catch(PDOException $e) {
 		echo $e->getMessage();
