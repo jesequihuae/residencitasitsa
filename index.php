@@ -28,19 +28,12 @@
         <div class="container">
             <div class="row">
                 <?php
-<<<<<<< HEAD
-                 //    print_r($_POST); 
-=======
->>>>>>> 938f50acb7bd1bb50665703ed38dd3e82f5cd26a
+
                   if(isset($_POST) && isset($_POST['login'])) {
                     include_once 'php/connection.php';
                     $ObjectITSA->login($_POST);
                   }
-<<<<<<< HEAD
 
-               //  print_r($_POST);
-=======
->>>>>>> 938f50acb7bd1bb50665703ed38dd3e82f5cd26a
                 ?>
                 <div class="col-md-4 col-md-offset-4">
                     <div class="login-panel panel panel-default">

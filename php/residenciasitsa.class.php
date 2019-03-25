@@ -10,7 +10,6 @@
 
 		public function login($Datos) {
 			try {
-				
 				$SQL = $this->CONNECTION->prepare("SELECT idTipoUsuario, idUsuario FROM usuarios WHERE vUsuario = :usuario AND vContrasena = :contrasena AND bActivo = 1");
 				$SQL->bindParam(":usuario", $Datos['usuario']);
 				$SQL->bindParam(":contrasena", $Datos['contrasena']);
@@ -67,7 +66,7 @@
 							array_push($PERMISOS, $submodulos['vRuta']);
 						}
 						$NAVBAR_ .= '</ul></li>';
-						}
+					}
 					$_SESSION['navbar'] = $NAVBAR_;
 					$_SESSION['permisos'] = $PERMISOS;
 
@@ -649,18 +648,7 @@
 		}
 		public function getAllOpciones(){
 			try {
-				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion, vClave, bActivo FROM opciones WHERE bActivo = 1");
-				$SQL->execute();
-				return $SQL;
-			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-						</div>';
-			}
-		}
-		public function getOpciones(){
-			try {
-				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion, vClave, bActivo FROM opciones");
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion FROM opciones WHERE bActivo = 1");
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
@@ -1111,82 +1099,6 @@
 					  </div>';
 			}
 		}
-
-		public function registrarOpcion($Clave, $Opcion){
-			try {
-				$SQL = $this->CONNECTION->PREPARE("INSERT INTO opciones (vOpcion,vClave) VALUES (:Opcion, :Clave);");
-				$SQL->bindParam(":Opcion",$Clave);
-				$SQL->bindParam(":Clave",$Opcion);
-				$SQL->execute();
-
-				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido registrada exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
-			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-					<button type="button" class="close" data-dismiss="alert">x</button>
-				  </div>';
-			}
-		}
-		public function actualizarOpcion($idOpcion, $Opcion, $Clave){
-			try {
-				$SQL = $this->CONNECTION->PREPARE("
-						UPDATE
-							opciones
-							SET
-								vOpcion = :vOpcion,
-								vClave = :vClave
-						WHERE idOpcion = :idOpcion
-					");
-				$SQL->bindParam(":idOpcion",$idOpcion);
-				$SQL->bindParam(":vOpcion",$Opcion);
-				$SQL->bindParam(":vClave",$Clave);
-				$SQL->execute();
-
-				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido actualizada exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
-			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-					<button type="button" class="close" data-dismiss="alert">x</button>
-				  </div>';
-			}
-		}
-
-		public function changeStatusOpcion($idOpcion, $status) {
-			try {
-				$STATUSNEW = "";
-				switch ($status) {
-					case '1':
-						$STATUSNEW = 0;
-						break;
-
-					case '0':
-						$STATUSNEW = 1;
-						break;
-				}
-				$SQL = $this->CONNECTION->PREPARE("UPDATE opciones SET bActivo = :status WHERE idOpcion = :idOpcion");
-				$SQL->bindParam(":status",$STATUSNEW);
-				$SQL->bindParam(":idOpcion",$idOpcion);
-				$SQL->execute();
-
-				if($STATUSNEW == 0) {
-					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
-				} else {
-					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
-				}
-			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
-			}
-		}
-
-
 
 		public function changeStatusPeriodo($idPeriodo, $status) {
 			try {
@@ -1790,142 +1702,6 @@
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
 			}
-		}
-
-		/*APARTADO PARA LAS ESTADISTICAS*/
-		public function graficaOpcionElegida(){
-			$StatementSQL = $this->CONNECTION->PREPARE(
-				"SELECT carr.vClave as 'Carrera', 
-						op.vOpcion as 'Opcion',
-						op.vClave AS vClaveOpcion,
-						COUNT(ps.idOpcion) as 'Total' FROM proyectoseleccionado as ps 
-				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
-				INNER JOIN opciones as op ON ps.idOpcion = op.idOpcion 
-				GROUP BY 
-								ps.idOpcion,
-								carr.vCarrera,
-								op.vClave
-				HAVING COUNT(ps.idOpcion)");
-			$StatementSQL->execute();
-			return $StatementSQL->fetchAll();
-		}
-
-		public function graficaTotalGiro($idCarrera){
-			if(isset($idCarrera['idCarrera']))
-			{
-				$Buscar = $idCarrera['idCarrera'];
-			}
-			else
-			{
-				$Buscar = $idCarrera;
-			}
-			$StatementSQL = $this->CONNECTION->PREPARE(
-				"SELECT carr.vClave AS 'Carrera', 
-						gir.vGiro AS 'Giro',
-						carr.idCarrera AS 'idCarrera',
-           				gir.vClave AS 'vClaveGiro',
-						COUNT(ps.idGiro) as 'Total' FROM proyectoseleccionado as ps 
-				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
-				INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
-				WHERE carr.idCarrera = :idCarrera
-				GROUP BY 
-								ps.idGiro,
-								carr.vCarrera,
-								gir.vGiro
-				HAVING COUNT(ps.idGiro)");
-			$StatementSQL->bindParam(":idCarrera",$Buscar);
-			$StatementSQL->execute();
-			return $StatementSQL->fetchAll();
-		}
-
-		public function graficaGiroMujeryHombre($idCarrera){
-			if(isset($idCarrera['idCarrera']))
-			{
-				$Buscar = $idCarrera['idCarrera'];
-			}
-			else
-			{
-				$Buscar = $idCarrera;
-			}
-			$StatementSQL = $this->CONNECTION->PREPARE(
-				"SELECT gir.vGiro as 'Giro',
-			   carr.vCarrera as 'Carrera',
-			   gir.vClave as 'vClaveGiro',
-		       IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
-		       COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
-		       INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-		       INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
-		       INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
-		       WHERE carr.idCarrera = :idCarrera
-		       GROUP BY 
-						ps.idGiro,
-						carr.vCarrera,
-						gir.vGiro,
-		                al.bSexo
-		HAVING COUNT(al.bSexo)");
-			$StatementSQL->bindParam(":idCarrera",$Buscar);
-			$StatementSQL->execute();
-			return $StatementSQL->fetchAll();
-		}
-
-		public function graficaSector($idCarrera){
-			if(isset($idCarrera['idCarrera']))
-			{
-				$Buscar = $idCarrera['idCarrera'];
-			}
-			else
-			{
-				$Buscar = $idCarrera;
-			}
-			$StatementSQL = $this->CONNECTION->PREPARE(
-				"SELECT carr.vClave as 'Carrera2', 
-						sec.vSector as 'Sector',
-						sec.vClaveSector as 'vClaveSector',
-						COUNT(ps.idSector) as 'Total' FROM proyectoseleccionado as ps 
-				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
-				INNER JOIN sectores as sec ON ps.idSector = sec.idSector
-                 WHERE carr.idCarrera = :idCarrera
-				GROUP BY 
-								ps.idSector,
-								carr.vCarrera,
-								sec.idSector
-				HAVING COUNT(ps.idSector)");
-			$StatementSQL->bindParam(":idCarrera",$Buscar);
-			$StatementSQL->execute();
-			return $StatementSQL->fetchAll();
-		}
-
-		public function graficaSectorMujeryHombre($idCarrera){
-			if(isset($idCarrera['idCarrera']))
-			{
-				$Buscar = $idCarrera['idCarrera'];
-			}
-			else
-			{
-				$Buscar = $idCarrera;
-			}
-			$StatementSQL = $this->CONNECTION->PREPARE(
-				"SELECT sec.vSector as 'Sector',
-			   carr.vCarrera as 'Carrera',
-			   sec.vClaveSector as 'Clave',
-		       IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
-		       COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
-		       INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-		       INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
-		       INNER JOIN sectores as sec ON ps.idSector = sec.idSector
-		       WHERE carr.idCarrera = :idCarrera
-		       GROUP BY 
-						ps.idSector,
-						carr.vCarrera,
-						sec.idSector,
-		                al.bSexo
-		HAVING COUNT(al.bSexo)");
-			$StatementSQL->bindParam(":idCarrera",$Buscar);
-			$StatementSQL->execute();
-			return $StatementSQL->fetchAll();
 		}
 	}
 ?>

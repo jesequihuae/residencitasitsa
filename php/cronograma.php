@@ -80,12 +80,12 @@
 					$i++;
 			}
 
+
 			$sql = trim($sql);
 			$sql = substr($sql,0,-1);
 			$db = $this->handler->prepare($sql);
-			//echo $sql;
-			if($db->execute()){
 
+			if($db->execute()){
 				$proceso = 0;
 				if($idTipoDeDocumento == 5){
 					$proceso = 5;
@@ -100,7 +100,6 @@
 									SET iProceso = $proceso
 									WHERE idAlumno = $idAlumno;
 							";
-				echo $sql;
 
 				if($proceso != 0){
 					$db = $this->handler->prepare($sql);
