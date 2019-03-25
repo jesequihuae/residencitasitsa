@@ -2,9 +2,6 @@
 	include '../php/connection.php';
 	$carreras = $ObjectITSAFiles->getCarreras();
 	$periodos = $ObjectITSAFiles->getPeriodos();
-
-
-
 ?>
 
 <div class="col-md-2">

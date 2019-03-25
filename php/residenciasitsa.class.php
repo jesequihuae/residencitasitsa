@@ -554,7 +554,9 @@
 													  A.dFechaNacimiento
 													FROM alumnos A
 													INNER JOIN carreras C
-													ON A.idCarrera = C.idCarrera");
+													ON A.idCarrera = C.idCarrera
+													ORDER BY A.idAlumno DESC
+													");
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
@@ -567,6 +569,7 @@
 		public function getCarreras() {
 			try {
 				$SQL = $this->CONNECTION->PREPARE("SELECT idCarrera, vCarrera, vClave FROM carreras WHERE bActivo = 1");
+
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
@@ -623,7 +626,7 @@
 
 		public function getAllEmpresas(){
 			try {
-				$SQL = $this->CONNECTION->PREPARE("SELECT idEmpresa, vNombreEmpresa, vCorreoElectronico, vDireccion, vTitular, vContacto FROM empresas");
+				$SQL = $this->CONNECTION->PREPARE("SELECT idEmpresa, vNombreEmpresa,vGradoEstudios,vCorreoElectronico, vDireccion, vTitular, vContacto FROM empresas");
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
@@ -652,6 +655,89 @@
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
 						</div>';
+			}
+		}
+		public function getOpciones(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion, vClave, bActivo FROM opciones");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+						</div>';
+			}
+		}
+		public function actualizarOpcion($idOpcion, $Opcion, $Clave){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("
+						UPDATE
+							opciones
+							SET
+								vOpcion = :vOpcion,
+								vClave = :vClave
+						WHERE idOpcion = :idOpcion
+					");
+				$SQL->bindParam(":idOpcion",$idOpcion);
+				$SQL->bindParam(":vOpcion",$Opcion);
+				$SQL->bindParam(":vClave",$Clave);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido actualizada exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+					<button type="button" class="close" data-dismiss="alert">x</button>
+				  </div>';
+			}
+		}
+		public function changeStatusOpcion($idOpcion, $status) {
+			try {
+				$STATUSNEW = "";
+				switch ($status) {
+					case '1':
+						$STATUSNEW = 0;
+						break;
+
+					case '0':
+						$STATUSNEW = 1;
+						break;
+				}
+				$SQL = $this->CONNECTION->PREPARE("UPDATE opciones SET bActivo = :status WHERE idOpcion = :idOpcion");
+				$SQL->bindParam(":status",$STATUSNEW);
+				$SQL->bindParam(":idOpcion",$idOpcion);
+				$SQL->execute();
+
+				if($STATUSNEW == 0) {
+					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				} else {
+					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				}
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+		public function registrarOpcion($Clave, $Opcion){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("INSERT INTO opciones (vOpcion,vClave) VALUES (:Opcion, :Clave);");
+				$SQL->bindParam(":Opcion",$Clave);
+				$SQL->bindParam(":Clave",$Opcion);
+				$SQL->execute();
+
+				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido registrada exitosamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+					<button type="button" class="close" data-dismiss="alert">x</button>
+				  </div>';
 			}
 		}
 		public function getAllSectores(){
@@ -730,7 +816,7 @@
 				$CreditosTotales,
 				$CreditosAcumulados,
 				$Porcentaje,
-				$Periodo,
+				$idPeriodo,
 				$Promedio,
 				$Situacion,
 				$ServicioSocial,
@@ -774,7 +860,7 @@
 								iCreditosTotales,
 								iCreditosAcumulados,
 								fPorcentaje,
-								iPeriodo,
+								idPeriodo,
 								fPromedio,
 								vSituacion,
 								bServicioSocial,
@@ -799,7 +885,7 @@
 								:iCreditosTotales,
 								:iCreditosAcumulados,
 								:fPorcentaje,
-								:iPeriodo,
+								:idPeriodo,
 								:fPromedio,
 								:vSituacion,
 								:bServicioSocial,
@@ -824,7 +910,7 @@
 					$SQL->bindParam(":iCreditosTotales",$CreditosTotales);
 					$SQL->bindParam(":iCreditosAcumulados",$CreditosAcumulados);
 					$SQL->bindParam(":fPorcentaje",$Porcentaje);
-					$SQL->bindParam(":iPeriodo",$Periodo);
+					$SQL->bindParam(":idPeriodo",$idPeriodo);
 					$SQL->bindParam(":fPromedio",$Promedio);
 					$SQL->bindParam(":vSituacion",$Situacion);
 					$SQL->bindParam(":bServicioSocial",$ServicioSocial);
@@ -866,7 +952,7 @@
 				$CreditosTotales,
 				$CreditosAcumulados,
 				$Porcentaje,
-				$Periodo,
+				$idPeriodo,
 				$Promedio,
 				$Situacion,
 				$ServicioSocial,
@@ -893,7 +979,7 @@
 								iCreditosTotales = :iCreditosTotales,
 								iCreditosAcumulados = :iCreditosAcumulados,
 								fPorcentaje = :fPorcentaje,
-								iPeriodo = :iPeriodo,
+								idPeriodo = :idPeriodo,
 								fPromedio = :fPromedio,
 								vSituacion = :vSituacion,
 								bServicioSocial = :bServicioSocial,
@@ -917,7 +1003,7 @@
 				$SQL->bindParam(":iCreditosTotales", $CreditosTotales);
 				$SQL->bindParam(":iCreditosAcumulados", $CreditosAcumulados);
 				$SQL->bindParam(":fPorcentaje", $Porcentaje);
-				$SQL->bindParam(":iPeriodo", $Periodo);
+				$SQL->bindParam(":idPeriodo", $idPeriodo);
 				$SQL->bindParam(":fPromedio", $Promedio);
 				$SQL->bindParam(":vSituacion", $Situacion);
 				$SQL->bindParam(":bServicioSocial", $ServicioSocial);
@@ -1155,7 +1241,7 @@
 			}
 		}
 
-		public function registrarEmpresa($Nombre, $Correo, $Direccion, $Titular, $Contacto){
+		public function registrarEmpresa($Nombre, $Correo, $Direccion, $Titular, $Contacto,$vGradoEstudios){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("
 						INSERT INTO empresas (
@@ -1163,13 +1249,15 @@
 							vCorreoElectronico,
 							vDireccion,
 							vTitular,
-							vContacto
+							vContacto,
+							vGradoEstudios
 						) VALUES (
 							:Nombre,
 							:Correo,
 							:Direccion,
 							:Titular,
-							:Contacto
+							:Contacto,
+							:vGradoEstudios
 						)
 					");
 				$SQL->bindParam(":Nombre",$Nombre);
@@ -1177,6 +1265,7 @@
 				$SQL->bindParam(":Direccion", $Direccion);
 				$SQL->bindParam(":Titular", $Titular);
 				$SQL->bindParam(":Contacto", $Contacto);
+				$SQL->bindParam(":vGradoEstudios", $vGradoEstudios);
 				$SQL->execute();
 
 				echo '<div class="alert alert-dismissable alert-success">¡La empresa '.$Nombre.' ha sido registrada exitosamente!
@@ -1189,7 +1278,7 @@
 			}
 		}
 
-		public function actualizarEmpresa($idEmpresa, $Nombre, $Correo, $Direccion, $Titular, $Contacto){
+		public function actualizarEmpresa($idEmpresa, $Nombre, $Correo, $Direccion, $Titular, $Contacto,$vGradoEstudios){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("
 						UPDATE
@@ -1199,7 +1288,8 @@
 								vCorreoElectronico = :Correo,
 								vDireccion = :Direccion,
 								vTitular = :Titular,
-								vContacto = :Contacto
+								vContacto = :Contacto,
+								vGradoEstudios = :vGradoEstudios
 						WHERE idEmpresa = :idEmpresa
 					");
 				$SQL->bindParam(":idEmpresa", $idEmpresa);
@@ -1208,6 +1298,7 @@
 				$SQL->bindParam(":Direccion", $Direccion);
 				$SQL->bindParam(":Titular", $Titular);
 				$SQL->bindParam(":Contacto", $Contacto);
+				$SQL->bindParam(":vGradoEstudios", $vGradoEstudios);
 				$SQL->execute();
 
 				echo '<div class="alert alert-dismissable alert-success">¡La empresa ha sido actualizada exitosamente!
@@ -1486,6 +1577,126 @@
 				echo '<div class="alert alert-dismissable alert-success">Se ha rechazado correctamente la solicitud.
 						<button type="button" class="close" data-dismiss="alert">x</button>
 					  </div>';
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function getAllODT(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idOdt, vNombreOdt, vRuta FROM odt");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function actualizarODT($idOdt, $NombreOdt, $Ruta, $Archivo) {
+			try {
+				$RutaArchivo = "../pages/exportFilesTbsOdt/filesOdt/";
+				$RutaSQL = $Ruta;
+				$SQL = $this->CONNECTION->PREPARE("UPDATE odt SET vNombreOdt = :Nombre, vRuta = :Ruta WHERE idOdt = :idODT");
+				$this->CONNECTION->beginTransaction();
+
+				if($Archivo['name'] != "") {
+					try {
+						move_uploaded_file($Archivo['tmp_name'], $RutaArchivo.$Archivo['name']);
+						@unlink($RutaArchivo.$Ruta);
+						$RutaSQL = $Archivo['name'];
+					} catch (Exception $ex) {
+						@unlink($RutaArchivo.$Archivo['name']);
+						$this->CONNECTION->rollback();
+						exit('<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$ex->getMessage().'
+								<button type="button" class="close" data-dismiss="alert">x</button>
+							  </div>');
+					}
+				}
+
+				$SQL->bindParam(":idODT",$idOdt);
+				$SQL->bindParam(":Nombre", $NombreOdt);
+				$SQL->bindParam(":Ruta", $RutaSQL);
+				$SQL->execute();
+
+				$this->CONNECTION->commit();
+				echo '<div class="alert alert-dismissable alert-success">Se ha realizado la actualización correctamente.
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			} catch (PDOException $e) {
+				$this->CONNECTION->rollback();
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function getDictamenAceptados(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT
+														PS.idProyectoSeleccionado,
+													    A.idAlumno,
+													    A.vNumeroControl,
+													    A.vNombre,
+													    A.vApellidoPaterno,
+													    A.vApellidoMaterno,
+													    A.vCorreoInstitucional,
+													    A.telefono,
+													    A.bSexo,
+													    PS.idbancoProyecto,
+													    BP.vNombreProyecto,
+													    E.vNombreEmpresa,
+													   	PS.asesorInterno,
+													    PS.asesorExterno
+													FROM proyectoseleccionado PS
+													INNER JOIN alumnos A
+													ON PS.idAlumno = A.idAlumno
+													INNER JOIN bancoproyectos BP
+													ON BP.idbancoProyecto = PS.idbancoProyecto
+													INNER JOIN empresas E
+													ON E.idEmpresa = BP.idEmpresa
+													WHERE PS.idEstado = 5
+													ORDER BY PS.idProyectoSeleccionado DESC");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function getDictamenRechazados(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT
+														PS.idProyectoSeleccionado,
+													    A.idAlumno,
+													    A.vNumeroControl,
+													    A.vNombre,
+													    A.vApellidoPaterno,
+													    A.vApellidoMaterno,
+													    A.vCorreoInstitucional,
+													    A.telefono,
+													    A.bSexo,
+													    PS.idbancoProyecto,
+													    BP.vNombreProyecto,
+													    E.vNombreEmpresa,
+													   	PS.asesorInterno,
+													    PS.asesorExterno
+													FROM proyectoseleccionado PS
+													INNER JOIN alumnos A
+													ON PS.idAlumno = A.idAlumno
+													INNER JOIN bancoproyectos BP
+													ON BP.idbancoProyecto = PS.idbancoProyecto
+													INNER JOIN empresas E
+													ON E.idEmpresa = BP.idEmpresa
+													WHERE PS.idEstado = 6
+													ORDER BY PS.idProyectoSeleccionado DESC");
+				$SQL->execute();
+				return $SQL;
 			} catch (PDOException $e) {
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>

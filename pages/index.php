@@ -54,6 +54,7 @@
             <!-- <input type="hidden" id="idUsuario" value="<?php @session_start(); echo $_SESSION['idUsuario']; ?>"> -->
             <div class="row">
             <?php
+            
               include '../php/connection.php';
               if(!$ObjectITSA->checkSession()){
                  echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';

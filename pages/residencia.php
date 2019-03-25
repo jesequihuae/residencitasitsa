@@ -495,7 +495,7 @@
                                         if($numSeg == 5)
                                         {
                                           //$_SESSION["idTipoDocumento"] = 6;
-                                          require "cronograma/CronogramaPronosticado.php";
+                                          require "cronograma/cronogramaPronosticado.php";
                                         }
                                     ?>
                                 </div>
@@ -536,7 +536,7 @@
                                         if($numSeg == 6)
                                         {
                                           //$_SESSION["idTipoDocumento"] = 7;
-                                          require "cronograma/CronogramaPronosticado.php";
+                                          require "cronograma/cronogramaPronosticado.php";
                                         }
                                     ?>
                               <p>Tercer seguimiento</p>
@@ -606,6 +606,7 @@
   function descagarSeguimiento(idSeg,vaSeg){
     if(idSeg <= vaSeg){
         window.open('http://localhost:8080/residencitasitsa/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
+        //window.open('http://residenciasitsa.diplomadosdelasep.com.mx/pages/exportFilesTbsOdt/exportFileSeguimiento.php?idSeg='+idSeg,'_blank');
     }else{
       alertify.alert('ITSA', 'No disponible aun!', function(){ alertify.success('Ok'); });
 
@@ -638,7 +639,6 @@
     $.ajax({
       url:'../php/cronograma.php',
       type:'POST',
-      dataType: "json",
       data:
             {
               "operacion":"3",
@@ -647,49 +647,56 @@
       beforeSend: function(e){
 
       },
-      success: function(json){
+      success: function(e){
+        var res           = $.parseJSON(e);
+        var json          = res.cronograma;
+        var semanaInicio  = res.semanaInicio;
+        var semanaFin     = res.semanaFin;
         $(".rowsAdded").remove();
         var nombreActual = "",nombreAnterior;
         contador = 0;
         for(var i in json){
-          nombreActual = json[i]["vNombre"];
-          var semanas  = "";
-          if(nombreActual != nombreAnterior){
+          if(contador>=(semanaInicio-1) && contador<semanaFin){
+            nombreActual = json[i]["vNombre"];
+            var semanas  = "";
+            if(nombreActual != nombreAnterior){
 
-              if(isReal){
-                 for(j = 0;j<24;j++){
+                if(isReal){
+                   for(j = 0;j<24;j++){
 
-                //  if(json[i]["i"] == i && json[i]["j"] == j){
-                  //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
-                  //}else{
-                    semanas += '<td><input disabled type="checkbox" name="checkbox1" id="'+contador+''+j+'" /></td>';
-                  //}
+                  //  if(json[i]["i"] == i && json[i]["j"] == j){
+                    //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
+                    //}else{
+                      semanas += '<td><input disabled type="checkbox" name="checkbox1" id="'+contador+''+j+'" /></td>';
+                    //}
+                  }
+                  $("#CronogramaPronosticado").append(
+                            "<tr class='rowsAdded'>"+
+                              "<td><input placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='actividad"+contador+"'>"+json[i]["vNombre"]+"</input></td>"+semanas+
+                            "</tr>"
+                          );
+                }else{
+                  for(j = 0;j<24;j++){
+
+                  //  if(json[i]["i"] == i && json[i]["j"] == j){
+                    //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
+                    //}else{
+                      semanas += '<td><input disabled type="checkbox" name="checkbox1" id="pro'+contador+''+j+'" /></td>';
+                    //}
+                  }
+                  $("#CronogramaPronosticado").append(
+                            "<tr class='rowsAdded'>"+
+                              "<td><label placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='proactividad"+contador+"'>"+json[i]["vNombre"]+"</label></td>"+semanas+
+                            "</tr>"
+                          );
                 }
-                $("#CronogramaPronosticado").append(
-                          "<tr class='rowsAdded'>"+
-                            "<td><input placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='actividad"+contador+"'>"+json[i]["vNombre"]+"</input></td>"+semanas+
-                          "</tr>"
-                        );
-              }else{
-                for(j = 0;j<24;j++){
-
-                //  if(json[i]["i"] == i && json[i]["j"] == j){
-                  //  semanas += '<td><input type="checkbox" checked name="checkbox1" id="'+contador+''+j+'" /></td>';
-                  //}else{
-                    semanas += '<td><input disabled type="checkbox" name="checkbox1" id="pro'+contador+''+j+'" /></td>';
-                  //}
-                }
-                $("#CronogramaPronosticado").append(
-                          "<tr class='rowsAdded'>"+
-                            "<td><label placeholder='Actividad' value='"+json[i]["vNombre"]+"' id='proactividad"+contador+"'>"+json[i]["vNombre"]+"</label></td>"+semanas+
-                          "</tr>"
-                        );
-              }
 
 
-              contador++;
+
+            }
+            nombreAnterior = nombreActual;
           }
-          nombreAnterior = nombreActual;
+          contador++;
         }
 
 
@@ -700,7 +707,7 @@
             $("#pro"+json[i]["i"]+json[i]["j"]).prop("checked",true);
           }
         }
-
+        contador = 0;
         console.log(json);
       },
       error: function(e){
@@ -727,7 +734,7 @@
   }
 
   function agregarActividad(){
-     var semanas;
+    var semanas;
     for($j = 0;$j<24;$j++){
       semanas += '<td><input type="checkbox" name="checkbox1" id="'+contador+''+$j+'" /></td>';
     }
@@ -745,7 +752,6 @@
     var cronograma = "[";
 
     var idTipoDeDocumento = <?php echo (isset($_SESSION["idTipoDocumento"])?$_SESSION["idTipoDocumento"]:0); ?>;
-
     var rowCount = 0;
     for(i = 0;i < contador;i++){
       cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",\"i"+i+"\":"+i+",";
@@ -759,7 +765,11 @@
     //QUITAMOS LA ULTIMA COMA PARA QUE NO TRUENE AL ENVIAR AL SERVIDOR
     cronograma = cronograma.slice(0,-1);
     cronograma+=']';
-
+    if(contador < 6){
+      alertify.set('notifier','position', 'top-center');
+      alertify.error("Al menos debes de llenar 6 actividades");
+      return;
+    }
     console.log(cronograma);
     if(contador > 0){
         $.ajax({
@@ -776,6 +786,7 @@
 
           },
           success: function(e){
+            console.log(e);
             $("#salida").html(e);
             mostrarMensaje("Cronograma guardado con exito ",1);
             console.log(e);
@@ -787,6 +798,7 @@
 
           },
           error: function(e){
+            console.log();
             $("#salida").html(e);
             //mostrarMensaje("Algo salio mal...",2);
             response = -1;

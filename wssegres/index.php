@@ -34,6 +34,15 @@
             return new PDO($dsn, 'u276604013_itsa', 'jesus_321', $options);
     };
 
+    $app->post("/ConvertWeight",function(Request $request, Response $response, $args){
+        $data       = $request->getParsedBody();
+        $weight     = $data["Weight"];
+        $FromUnit   = $data["FromUnit"];
+        $ToUnit     = $data["ToUnit"];
+        $res        = ($weight/0.0157);
+        return sendOkResponse("{\"response\":200,\"body\":".$res."}",$response);
+    });
+
     $app->get('/',function(Request $request, Response $response, $args){
        $sql =
         "
@@ -55,8 +64,6 @@
         INNER JOIN tiposdocumento td ON(td.idTipoDocumento = d.idTipoDocumento)
         WHERE d.idAlumno = 42
         ORDER BY
-        	idTipoDocumento,
-        	vNombre,
         	iOrden
         ";
         $pdo = $this->get('pdo');
@@ -87,8 +94,6 @@
        INNER JOIN tiposdocumento td ON(td.idTipoDocumento = d.idTipoDocumento)
        WHERE d.idAlumno = $idAlumno
        ORDER BY
-         idTipoDocumento,
-         vNombre,
          iOrden
        ";
        $pdo = $this->get('pdo');

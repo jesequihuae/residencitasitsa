@@ -5,6 +5,20 @@
       $this->connection = $handler;
     }
 
+    public function getDocumentosDescargar(){
+      $idAlumno = $_SESSION["idUsuario"];
+      $sql = "
+          SELECT 
+            idTipoDocumento,
+            vNombre
+          FROM tiposdocumento
+          WHERE bActivo = 1
+      ";
+      $con = $this->connection->prepare($sql);
+      $con->execute();
+      return $con->fetchAll();
+    }
+
     public function getInfoSolicitud(){
       $idAlumno = $_SESSION["idUsuario"];
       $sql =
@@ -81,10 +95,12 @@
       $sql =
         "
           SELECT
-          	vNombre,
+            vNombre,
             iSemana
           FROM cronograma
           WHERE idAlumno = $idAlumno AND idDocumento = $idTipoDocumento
+          GROUP BY
+                  iSemana
         ";
         $con = $this->connection->prepare($sql);
         $con->execute();
