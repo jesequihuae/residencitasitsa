@@ -34,9 +34,9 @@
 
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
-    <?php 
+    <?php
         include '../php/connection.php';
-        if($ObjectITSA->checkSession()){  
+        if($ObjectITSA->checkSession()){
             if(!$ObjectITSA->checkPermission("controlcarreras")) {
                 echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                 exit;
@@ -55,7 +55,7 @@
 
                 <div class="col-lg-12">
                     <h1 class="page-header"><i class="fa fa-briefcase"></i> Opciones </h1>
-                    <?php 
+                    <?php
                         if(isset($_POST) && isset($_POST['guardarCarrera'])){
                             if($_POST['idOpcion'] == 0) {
                                 $ObjectITSA->registrarOpcion(
@@ -69,7 +69,7 @@
                                     $_POST['vClave']
                                 );
                             }
-                        } 
+                        }
                         else if(isset($_POST['activarDesactivar'])) {
                                 $ObjectITSA->changeStatusOpcion(
                                     $_POST['idActividadCambiarEstado'],
@@ -80,7 +80,7 @@
                 </div>
             </div>
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <section id="panelRegistroEdicion">
                 <div class="row">
                     <div class="col-lg-6 col-lg-offset-3">
@@ -97,13 +97,13 @@
                                        <label class="control-label col-lg-3">Clave:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vClave" id="vClave" placeholder="Clave" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <div class="form-group">
                                        <label class="control-label col-lg-3">Opcion:</label>
                                        <div class="col-lg-9">
                                            <input type="text" class="form-control" name="vOpcion" id="vOpcion" placeholder="Opcion" required>
-                                       </div>                                    
+                                       </div>
                                     </div>
                                     <button type="button" class="btn btn-default" id="cancelarRegistro"><i class="fa fa-times-circle"></i> Cancelar</button>
                                     <button type="submit" class="btn btn-info pull-right" name="guardarCarrera"><i class="fa fa-paper-plane"></i> Guardar</button>
@@ -111,7 +111,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
             </section>
 
             <div class="row">
@@ -135,7 +135,7 @@
                                       <th>Estado</th>
                                       <th colspan="2"><center>Operaciones</center></th>
                                   </thead>
-                                  <?php 
+                                  <?php
                                     $CARRERAS_QUERY = $ObjectITSA->getOpciones();
                                     while($CARRERAS_ = $CARRERAS_QUERY->FETCH(PDO::FETCH_ASSOC))  {
                                   ?>
@@ -144,13 +144,13 @@
                                       <td><?php echo $CARRERAS_['vOpcion']; ?></td>
                                       <td><?php echo $CARRERAS_['vClave']; ?></td>
                                       <td>
-                                          <?php 
+                                          <?php
                                             echo ($CARRERAS_['bActivo'] == 1 ? '<span class="label label-success">Activa</span>' : '<span class="label label-danger">Inactiva</span>');
                                           ?>
                                       </td>
                                       <td>
                                             <center>
-                                                  <button 
+                                                  <button
                                                       type="button"
                                                       data-idcarrera="<?php echo $CARRERAS_['idOpcion']; ?>"
                                                       data-vclave="<?php echo $CARRERAS_['vClave']; ?>"
@@ -161,11 +161,11 @@
                                                   </button>
                                               </center>
                                       </td>
-                                      <td>  
+                                      <td>
                                           <center>
-                                          <?php 
-                                            echo ($CARRERAS_['bActivo'] == 1 ? '<button type="button" data-status="1" data-id="'.$CARRERAS_['idOpcion'].'" class="cambiarStatus btn btn-danger btn-sm" title="Desactivar"><i class="fa fa-close"></i></button>' : '<button type="button" data-status="0" data-id="'.$CARRERAS_['idOpcion'].'" class="cambiarStatus btn btn-success btn-sm" title="Activar"><i class="fa fa-check"></i></button>'); 
-                                          ?>                                              
+                                          <?php
+                                            echo ($CARRERAS_['bActivo'] == 1 ? '<button type="button" data-status="1" data-id="'.$CARRERAS_['idOpcion'].'" class="cambiarStatus btn btn-danger btn-sm" title="Desactivar"><i class="fa fa-close"></i></button>' : '<button type="button" data-status="0" data-id="'.$CARRERAS_['idOpcion'].'" class="cambiarStatus btn btn-success btn-sm" title="Activar"><i class="fa fa-check"></i></button>');
+                                          ?>
                                           </center>
                                       </td>
                                   </tr>
@@ -243,7 +243,7 @@
               var status = $(this).data("status");
               var id = $(this).data("id");
               $("#idActividadCambiarEstado").val(id);
-              if(status==1) { 
+              if(status==1) {
                 $("#hdrActDes").text("¿Está seguro de desactivar?");
               } else {
                 $("#hdrActDes").text("¿Está seguro de activar?");

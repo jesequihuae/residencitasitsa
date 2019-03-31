@@ -798,6 +798,7 @@
 
           },
           error: function(e){
+            console.log();
             $("#salida").html(e);
             //mostrarMensaje("Algo salio mal...",2);
             response = -1;
