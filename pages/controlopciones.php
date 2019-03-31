@@ -58,7 +58,6 @@
                     <?php 
                         if(isset($_POST) && isset($_POST['guardarCarrera'])){
                             if($_POST['idOpcion'] == 0) {
-                            if($_POST['idCarrera'] == 0) {
                                 $ObjectITSA->registrarOpcion(
                                     $_POST['vOpcion'],
                                     $_POST['vClave']
