@@ -1706,5 +1706,342 @@
 					  </div>';
 			}
 		}
+
+		/*APARTADO PARA LAS ESTADISTICAS*/
+		public function graficaOpcionElegida(){
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT carr.vClave as 'Carrera', 
+				op.vOpcion as 'Opcion',
+				op.vClave AS vClaveOpcion,
+				COUNT(ps.idOpcion) as 'Total' FROM proyectoseleccionado as ps 
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				INNER JOIN opciones as op ON ps.idOpcion = op.idOpcion 
+				GROUP BY 
+				ps.idOpcion,
+				carr.vCarrera,
+				op.vClave
+				HAVING COUNT(ps.idOpcion)");
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaTotalGiro($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT carr.vClave AS 'Carrera', 
+				gir.vGiro AS 'Giro',
+				carr.idCarrera AS 'idCarrera',
+				gir.vClave AS 'vClaveGiro',
+				COUNT(ps.idGiro) as 'Total' FROM proyectoseleccionado as ps 
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
+				WHERE carr.idCarrera = :idCarrera
+				GROUP BY 
+				ps.idGiro,
+				carr.vCarrera,
+				gir.vGiro
+				HAVING COUNT(ps.idGiro)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaGiroMujeryHombre($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT gir.vGiro as 'Giro',
+				  carr.vCarrera as 'Carrera',
+				  gir.vClave as 'vClaveGiro',
+				      IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
+				      COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
+				      INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				      INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				      INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
+				      WHERE carr.idCarrera = :idCarrera
+				      GROUP BY 
+				ps.idGiro,
+				carr.vCarrera,
+				gir.vGiro,
+				               al.bSexo
+				HAVING COUNT(al.bSexo)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaSector($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT carr.vClave as 'Carrera2', 
+				sec.vSector as 'Sector',
+				sec.vClaveSector as 'vClaveSector',
+				COUNT(ps.idSector) as 'Total' FROM proyectoseleccionado as ps 
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				INNER JOIN sectores as sec ON ps.idSector = sec.idSector
+				                 WHERE carr.idCarrera = :idCarrera
+				GROUP BY 
+				ps.idSector,
+				carr.vCarrera,
+				sec.idSector
+				HAVING COUNT(ps.idSector)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaSectorMujeryHombre($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT sec.vSector as 'Sector',
+				  carr.vCarrera as 'Carrera',
+				  sec.vClaveSector as 'Clave',
+				      IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
+				      COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
+				      INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				      INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				      INNER JOIN sectores as sec ON ps.idSector = sec.idSector
+				      WHERE carr.idCarrera = :idCarrera
+				      GROUP BY 
+				ps.idSector,
+				carr.vCarrera,
+				sec.idSector,
+				               al.bSexo
+				HAVING COUNT(al.bSexo)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function SubirExcelBancoProyectos($FileExcel){
+			//Creamos la Ruta para la carpeta(si esta no ha sido creada) que almanecenara los archivos
+			$ruta = "../files/";
+	          try {
+		            if (!file_exists($ruta)) {
+		              mkdir($ruta,0777,true);
+		            }
+		          } catch (Exception $e) {
+		            echo $e->getMessage();
+		          }
+		    //Creamos el directorio dentro de la carpeta principal
+		    $carpetaAdmin = '../files/Admin Residencias';
+		        try {
+		            if (!file_exists($carpetaAdmin)) {
+		              mkdir($carpetaAdmin,0777,true);
+		            }
+		          } catch (Exception $e) {
+		            echo $e->getMessage();
+		          }
+
+		    //Creamos la ruta donde se guardara el archivo
+		    //Lo guardamos con el nombre Banco de Proyectos y le concatenamos la fecha
+		    //en la cual fue subido dicho archivo      
+		    $ArchivoExcel = explode('.', $FileExcel['name']);
+			$RutaExcel = '../files/Admin Residencias/Banco de Proyectos '.date("Y-m-d").'.'.$ArchivoExcel[1];
+			$SuccessExcel = move_uploaded_file($FileExcel['tmp_name'], $RutaExcel);
+
+			if($SuccessExcel) {
+				include_once '../PHPExcel/Classes/PHPExcel.php';
+				$DirectoryExcel = '../files/Admin Residencias/Banco de Proyectos '.date("Y-m-d").'.'.$ArchivoExcel[1];
+				$inputFileType = PHPExcel_IOFactory::identify($DirectoryExcel);
+				$objReader = PHPExcel_IOFactory::createReader($inputFileType);
+              	$objPHPExcel = $objReader->load($DirectoryExcel);
+              	$sheet = $objPHPExcel->getSheet(0); 
+              	$highestRow = $sheet->getHighestRow(); 
+              	$highestColumn = $sheet->getHighestColumn();
+              
+
+              	for ($row = 2; $row <= $highestRow; $row++) {
+              		$vNombreEmpresa = $sheet->getCell("A".$row)->getValue();
+              		$vCarrera = $sheet->getCell("B".$row)->getValue();
+	                $vPeriodo = $sheet->getCell("C".$row)->getValue();
+	                $vNombreProyecto = $sheet->getCell("D".$row)->getValue();
+	                $vDescripcion = $sheet->getCell("E".$row)->getValue();
+	                $vArea = $sheet->getCell("F".$row)->getValue();
+	                $vPropuestaDe = $sheet->getCell("G".$row)->getValue();
+	                $iTotalResidentes = $sheet->getCell("H".$row)->getValue();
+
+	                /**********************************************************
+	                * Si la empresa no Existe Tomar los valores y registrarla *
+	                ***********************************************************/
+
+	                $vContacto = $sheet->getCell("I".$row)->getValue();
+	                $vCorreoElectronico = $sheet->getCell("J".$row)->getValue();
+	                $vDireccion = $sheet->getCell("K".$row)->getValue();
+
+
+	                /*echo $vNombreEmpresa;
+	                echo "<br>";
+	                echo $vCarrera;
+	                echo "<br>";
+	                echo $vPeriodo;
+	                echo "<br>";
+	                echo $vNombreEmpresa;
+	                echo "<br>";
+	                echo $vContacto;
+	                echo "<br>";
+	                echo $vCorreoElectronico;
+	                echo "<br>";*/
+
+	                try {
+	                	//Validar que la Carrera Exista
+		                $SQLValidarCarrera = $this->CONNECTION->PREPARE("SELECT COUNT(idCarrera) AS Total FROM carreras WHERE vCarrera = :vCarrera");
+		                $SQLValidarCarrera->bindParam(":vCarrera",$vCarrera);
+		                $SQLValidarCarrera->execute();
+		                $SuccessCarrera = $SQLValidarCarrera->FETCH(PDO::FETCH_ASSOC);
+
+		                //Validar que la Empresa este registrada
+		                $SQLValidarEmpresa = $this->CONNECTION->PREPARE("SELECT COUNT(idEmpresa) AS Total FROM empresas WHERE vNombreEmpresa = :vNombreEmpresa");
+		                $SQLValidarEmpresa->bindParam(":vNombreEmpresa",$vNombreEmpresa);
+		                $SQLValidarEmpresa->execute();
+		                $SuccessEmpresa = $SQLValidarEmpresa->FETCH(PDO::FETCH_ASSOC);
+
+		                //Validar que el periodo actual
+		                $SQLValidarPeriodo = $this->CONNECTION->PREPARE("SELECT COUNT(idPeriodo) AS Total FROM periodos WHERE vPeriodo = :vPeriodo AND bActivo = 1");
+		                $SQLValidarPeriodo->bindParam(":vPeriodo",$vPeriodo);
+		                $SQLValidarPeriodo->execute();
+		                $SuccessPeriodo = $SQLValidarPeriodo->FETCH(PDO::FETCH_ASSOC);
+
+		                /*echo "Carrera = ".$SuccessCarrera['Total'];
+		                echo "<br>";
+		                echo "Empresa = ".$SuccessEmpresa['Total'];
+		                echo "<br>";
+		                echo "Periodo = ".$SuccessPeriodo['Total'];*/
+
+		                if ($SuccessEmpresa['Total'] == 0) {
+		                	//Registramos Primero si la Empresa no Existe para no perder el Dato
+		                	$SQLInsertEmpresa = $this->CONNECTION->PREPARE(
+		                		"INSERT INTO empresas (
+		                			vNombreEmpresa,
+		                			vCorreoElectronico,
+		                			vDireccion,
+		                			vTitular,
+		                			vContacto
+		                			)
+		                		VALUES (
+		                			:vNombreEmpresa,
+		                			:vCorreoElectronico,
+		                			:vDireccion,
+		                			:vTitular,
+		                			:vContacto);
+		                	");
+		                	$SQLInsertEmpresa->bindParam(":vNombreEmpresa",$vNombreEmpresa);
+		                	$SQLInsertEmpresa->bindParam(":vCorreoElectronico",$vCorreoElectronico);
+		                	$SQLInsertEmpresa->bindParam(":vDireccion",$vDireccion);
+		                	$SQLInsertEmpresa->bindParam(":vTitular",$vPropuestaDe);
+		                	$SQLInsertEmpresa->bindParam(":vContacto",$vContacto);
+		                	$SQLInsertEmpresa->execute();
+
+		                	echo '<div class="alert alert-dismissable alert-success">Nueva Empresa Registrada!!!
+									<button type="button" class="close" data-dismiss="alert">x</button>
+								  </div>';
+		                }//Fin del if que registra la empresa en caso de que no exista
+		                $SQLValidarEmpresa->execute();
+		                $SuccessEmpresa = $SQLValidarEmpresa->FETCH(PDO::FETCH_ASSOC);
+
+	                	if ($SuccessCarrera['Total'] == 1 && $SuccessEmpresa['Total'] == 1 && $SuccessPeriodo['Total'] == 1) {
+	                		
+	                		//Obtener el id de la Carrera
+	                		$SQLidCarrera = $this->CONNECTION->PREPARE("SELECT idCarrera AS idCar FROM carreras WHERE vCarrera = :vCarrera");
+	                		$SQLidCarrera->bindParam(":vCarrera",$vCarrera);
+	                		$SQLidCarrera->execute();
+	                		$IDCARRERA = $SQLidCarrera->FETCH(PDO::FETCH_ASSOC);
+
+							//Obtener el id de la Empresa
+	                		$SQLidEmpresa = $this->CONNECTION->PREPARE("SELECT idEmpresa AS idEmpre FROM empresas WHERE vNombreEmpresa = :vNombreEmpresa");
+	                		$SQLidEmpresa->bindParam(":vNombreEmpresa",$vNombreEmpresa);
+	                		$SQLidEmpresa->execute();
+	                		$IDEMPRESA = $SQLidEmpresa->FETCH(PDO::FETCH_ASSOC);
+
+	                		//Obtener el id del Periodo
+	                		$SQLidPeriodo = $this->CONNECTION->PREPARE("SELECT idPeriodo AS idPer FROM periodos WHERE vPeriodo = :vPeriodo");
+	                		$SQLidPeriodo->bindParam(":vPeriodo",$vPeriodo);
+	                		$SQLidPeriodo->execute();
+	                		$IDPERIODO = $SQLidPeriodo->FETCH(PDO::FETCH_ASSOC);
+
+	                		$SQLInsertByExcel = $this->CONNECTION->PREPARE(	
+								"INSERT INTO bancoproyectos (
+									idEmpresa,
+									idCarrera,
+									idEstado,
+									idPeriodo,
+									vNombreProyecto,
+									vDescripcion,
+									vArea,
+									vPropuestaDe,
+									dFechaPropuesta,
+									iTotalResidentes,
+									bActive
+								) 
+								SELECT
+									:idEmpresa,
+									:idCarrera,
+									1,
+									:idPeriodo,
+									:vNombreProyecto,
+									:vDescripcion,
+									:vArea,
+									:vPropuestaDe,
+									CURRENT_DATE,
+									:iTotalResidentes,
+									1 FROM bancoproyectos WHERE NOT EXISTS (SELECT * FROM bancoproyectos WHERE vNombreProyecto = :vNombreProyecto) LIMIT 1");
+
+			                $SQLInsertByExcel->bindParam(":idEmpresa", $IDEMPRESA['idEmpre']);
+							$SQLInsertByExcel->bindParam(":idCarrera", $IDCARRERA['idCar']);
+							$SQLInsertByExcel->bindParam(":idPeriodo", $IDPERIODO['idPer']);
+							$SQLInsertByExcel->bindParam(":vNombreProyecto", $vNombreProyecto);
+							$SQLInsertByExcel->bindParam(":vDescripcion", $vDescripcion);
+							$SQLInsertByExcel->bindParam(":vArea", $vArea);
+							$SQLInsertByExcel->bindParam(":vPropuestaDe", $vPropuestaDe);
+							$SQLInsertByExcel->bindParam(":iTotalResidentes", $iTotalResidentes);
+							$SQLInsertByExcel->execute();
+
+		                	echo '<div class="alert alert-dismissable alert-success">Todo Correcto!!!
+									<button type="button" class="close" data-dismiss="alert">x</button>
+								  </div>';
+		                }//Fin del IF que compruba la existencia de los datos del Excel 
+		                else{
+		                	echo '<div class="alert alert-dismissable alert-warning">Los Datos estan mal!!:
+									<button type="button" class="close" data-dismiss="alert">x</button>
+								  </div>';
+	                	}//Fin del ELSE
+	                } catch (Exception $e) {
+	                	echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+	                }
+              	}
+			}
+	    }
 	}
 ?>
