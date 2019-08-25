@@ -10,7 +10,12 @@
 
 		public function login($Datos) {
 			try {
-				$SQL = $this->CONNECTION->prepare("SELECT idTipoUsuario, idUsuario FROM usuarios WHERE vUsuario = :usuario AND vContrasena = :contrasena AND bActivo = 1");
+				$SQL = $this->CONNECTION->prepare(
+					"SELECT
+						idTipoUsuario,
+						idUsuario
+					 FROM usuarios
+					 WHERE vUsuario = :usuario AND vContrasena = :contrasena AND bActivo = 1");
 				$SQL->bindParam(":usuario", $Datos['usuario']);
 				$SQL->bindParam(":contrasena", $Datos['contrasena']);
 				$SQL->execute();
@@ -51,7 +56,6 @@
 
 					$NAVBAR_ = "";
 					$PERMISOS = array();
-
 					while($Modulos = $SQLMODULOS->fetch(PDO::FETCH_ASSOC)) {
 						$arraySubmodulos = array(
 							':idTipoUsuario'=>$Usuario['idTipoUsuario'],
@@ -69,7 +73,6 @@
 					}
 					$_SESSION['navbar'] = $NAVBAR_;
 					$_SESSION['permisos'] = $PERMISOS;
-
 					header('Location: pages/');
 				} else {
 					echo '<div class="alert alert-dismissable alert-danger">Lo sentimos, usuario y/o contraseña no coinciden!

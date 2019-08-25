@@ -33,7 +33,16 @@
             ];
             return new PDO($dsn, 'u276604013_itsa', 'jesus_321', $options);
     };
-
+    $app->post('/getData',function(Request $request, Response $response, $args){
+        $data = $request->getParsedBody();
+        return sendOkResponse("{\"response\":200,\"body\":\"".$data["name2"]."\"}",$response);
+    });
+    $app->get('/getData/{name}',function(Request $request, Response $response, $args){
+        return sendOkResponse("{\"response\":200,\"body\":\"".$args['name']."\"}",$response);
+    });
+    $app->head('/getData/{name}',function(Request $request, Response $response, $args){
+        return sendOkResponse("{\"response\":200,\"body\":\"".$args['name']."\"}",$response);
+    });
     $app->post("/ConvertWeight",function(Request $request, Response $response, $args){
         $data       = $request->getParsedBody();
         $weight     = $data["Weight"];
