@@ -34,7 +34,7 @@
 		public function guardarCronograma($cronograma,$size,$idAlumno,$idTipoDeDocumento){
 
 			$array = json_decode($cronograma,true);
-			echo $idTipoDeDocumento;
+
 			/*if(is_array($array)){
 				echo "si";
 			}else{
@@ -84,7 +84,6 @@
 			$sql = trim($sql);
 			$sql = substr($sql,0,-1);
 			$db = $this->handler->prepare($sql);
-
 			if($db->execute()){
 				$proceso = 0;
 				if($idTipoDeDocumento == 5){
@@ -94,17 +93,17 @@
 				}else if($idTipoDeDocumento == 7){
 					$proceso = 7;
 				}
-
+				
 				$sql = "
 									UPDATE alumnos
 									SET iProceso = $proceso
 									WHERE idAlumno = $idAlumno;
 							";
-
+				
 				if($proceso != 0){
 					$db = $this->handler->prepare($sql);
  				 if($db->execute()){
- 					 echo "Save";
+ 					 echo $proceso;
  				 }else{
  					 echo $db->errorCode();
  				 }

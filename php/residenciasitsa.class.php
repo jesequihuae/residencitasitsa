@@ -234,126 +234,89 @@
 				 	  </div>';
 			}
 		}
-
-		public function saveFirstReport($idAlumno, $NumeroControl, $Reporte) {
+		/**
+		 * MODIFICACION HECHA POR MAICKOL RODRIGUEZ,
+		 * SE MODIFICO PARA LA NUEVA FORMA DE LAS RESIDENCIAS 
+		 * Y LOS CAMBIOS QUE PIDIO 
+		 */
+		public function saveReports($idAlumno, $NumeroControl,$fileEvaluacion,$fileFormatoAsesoria,$idEstadoDocumento,$idTipoDocumento,$vNumeroReporte) {
 			try {
-				$NombreReporte = explode('.', $Reporte['name']);
-				$RutaReporte = '../files/'.$NumeroControl.'/PrimerReporte.'. $NombreReporte[1];
-				$SuccessReporte = move_uploaded_file($Reporte['tmp_name'], $RutaReporte);
-
-				$SQLIdProyecto = $this->CONNECTION->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
-				$this->CONNECTION->beginTransaction();
-
-				if($SuccessReporte) {
-					$SQLIdProyecto->bindParam(":idAlumno",$idAlumno);
-					$SQLIdProyecto->execute();
-					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
-
-					$UNA = "asdadsda";
-
-					$SQLReporte = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,5,4,:vNombre,:vRuta)");
-
-					$SQLReporte->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
-					$SQLReporte->bindParam(":vNombre",$UNA);
-					$SQLReporte->bindParam(":vRuta",$RutaReporte);
-					$SQLReporte->bindParam(":idAlumno",$idAlumno);
-					$SQLReporte->execute();
-
-					$SQLINTPROCESS = $this->CONNECTION->PREPARE("UPDATE alumnos SET iProceso = 5 WHERE idAlumno = :idAlumno");
-					$SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
-					$SQLINTPROCESS->execute();
-
-					$this->CONNECTION->commit();
-					echo '<div class="alert alert-dismissable alert-success">Archivos registrados correctamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
-				} else {
-					$this->CONNECTION->rollback();
-					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: al subir los documentos. Intentalo nuevamente
-							<button type="button" class="close" data-dismiss="alert">x</button>
-					 	  </div>';
+			
+			
+				$RutaArchivoEvaluacion	     	 = '../files/'.$NumeroControl.'/'.$vNumeroReporte;
+				if(!file_exists($RutaArchivoEvaluacion)){
+					mkdir($RutaArchivoEvaluacion,777,true);
 				}
 
-			} catch (PDOException $e) {
-				$this->CONNECTION->rollback();
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
-			}
-		}
+				$RutaArchivoEvaluacion .=  "/".$fileEvaluacion['name'];
+				$SuccessEvaluacion 			 	 = move_uploaded_file($fileEvaluacion['tmp_name'], $RutaArchivoEvaluacion);
+				
+			
 
-		public function saveSecondReport($idAlumno, $NumeroControl, $Reporte) {
-			try {
-				$NombreReporte = explode('.', $Reporte['name']);
-				$RutaReporte = '../files/'.$NumeroControl.'/SegundoReporte.'. $NombreReporte[1];
-				$SuccessReporte = move_uploaded_file($Reporte['tmp_name'], $RutaReporte);
-
-				$SQLIdProyecto = $this->CONNECTION->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
-				$this->CONNECTION->beginTransaction();
-
-				if($SuccessReporte) {
-					$SQLIdProyecto->bindParam(":idAlumno",$idAlumno);
-					$SQLIdProyecto->execute();
-					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
-
-					$UNA = "asdadsda";
-
-					$SQLReporte = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,6,4,:vNombre,:vRuta)");
-
-					$SQLReporte->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
-					$SQLReporte->bindParam(":vNombre",$UNA);
-					$SQLReporte->bindParam(":vRuta",$RutaReporte);
-					$SQLReporte->bindParam(":idAlumno",$idAlumno);
-					$SQLReporte->execute();
-
-					$SQLINTPROCESS = $this->CONNECTION->PREPARE("UPDATE alumnos SET iProceso = 6 WHERE idAlumno = :idAlumno");
-					$SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
-					$SQLINTPROCESS->execute();
-
-					$this->CONNECTION->commit();
-					echo '<div class="alert alert-dismissable alert-success">Archivos registrados correctamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
-				} else {
-					$this->CONNECTION->rollback();
-					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: al subir los documentos. Intentalo nuevamente
-							<button type="button" class="close" data-dismiss="alert">x</button>
-					 	  </div>';
+				$RutaArchivoFormatoAsesoria   	 = '../files/'.$NumeroControl.'/'.$vNumeroReporte;
+				if(!file_exists($RutaArchivoFormatoAsesoria)){
+					mkdir($RutaArchivoFormatoAsesoria,777,true);
 				}
+				$RutaArchivoFormatoAsesoria .= "/".$fileFormatoAsesoria['name'];
+				$SuccessFormatoAsesoria		 	 = move_uploaded_file($fileFormatoAsesoria['tmp_name'], $RutaArchivoFormatoAsesoria);
 
-			} catch (PDOException $e) {
-				$this->CONNECTION->rollback();
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
-			}
-		}
 
-		public function saveThirdReport($idAlumno, $NumeroControl, $Reporte) {
-			try {
-				$NombreReporte = explode('.', $Reporte['name']);
-				$RutaReporte = '../files/'.$NumeroControl.'/TercerReporte.'. $NombreReporte[1];
-				$SuccessReporte = move_uploaded_file($Reporte['tmp_name'], $RutaReporte);
-
-				$SQLIdProyecto = $this->CONNECTION->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
+				$SQLIdProyecto = $this->CONNECTION->PREPARE(
+					"SELECT 
+						idProyectoSeleccionado 
+					 FROM proyectoseleccionado 
+					 WHERE idAlumno = :idAlumno");
 				$this->CONNECTION->beginTransaction();
+				
+				$jsonRutas = "[{
+							\"evaluacionNombre\":\"".$RutaArchivoEvaluacion."\",
+							\"formatpAsesoriaNombre\":\"".$RutaArchivoFormatoAsesoria."\"
+						}]";
+				$jsonNombre = "[{
+							\"evaluacionNombre\":\"".$fileEvaluacion['name']."\",
+							\"formatpAsesoriaNombre\":\"".$fileFormatoAsesoria['name']."\"
+						}]";
 
-				if($SuccessReporte) {
+				if($SuccessEvaluacion && $SuccessFormatoAsesoria) {
 					$SQLIdProyecto->bindParam(":idAlumno",$idAlumno);
 					$SQLIdProyecto->execute();
 					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
 
-					$UNA = "asdadsda";
 
-					$SQLReporte = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,7,4,:vNombre,:vRuta)");
+					$SQLReporte = $this->CONNECTION->PREPARE(
+						"INSERT INTO documentos
+							(
+								idProyectoSeleccionado,
+								idAlumno,
+								idTipoDocumento,
+								idEstado,
+								vNombre,
+								vRuta
+							) 
+							VALUES 
+							(
+								:idProyectoSeleccionado,
+								:idAlumno,
+								:idTipoDocumento,
+								:idEstado,
+								:vNombre,
+								:vRuta
+							)");
 
 					$SQLReporte->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
-					$SQLReporte->bindParam(":vNombre",$UNA);
-					$SQLReporte->bindParam(":vRuta",$RutaReporte);
+					$SQLReporte->bindParam(":vNombre",$jsonNombre);
+					$SQLReporte->bindParam(":idTipoDocumento",$idTipoDocumento);
+					$SQLReporte->bindParam(":idEstado",$idEstadoDocumento);
+					$SQLReporte->bindParam(":vRuta",$jsonRutas); // SE METIO UN JSON PARA PODER TENER LOS ARCHIVOS QUE SE GUARDAN
+															// EN LA NUEVA EVALUACION, Y PARA NO MODIFICAR LA BASE DE DATOS SE METIO EL JSON
 					$SQLReporte->bindParam(":idAlumno",$idAlumno);
 					$SQLReporte->execute();
 
-					$SQLINTPROCESS = $this->CONNECTION->PREPARE("UPDATE alumnos SET iProceso = 7 WHERE idAlumno = :idAlumno");
+					$SQLINTPROCESS = $this->CONNECTION->PREPARE(
+						"UPDATE alumnos 
+						 	SET iProceso = ".$idTipoDocumento."
+						 WHERE idAlumno = :idAlumno"
+						 );
 					$SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
 					$SQLINTPROCESS->execute();
 

@@ -131,7 +131,7 @@
         $con->bindParam(":idAlumno",$idAlumno);
         $con->execute();
 
-        if($con->rowCount()){
+        if(true){
 
             //  $this->connection->beginTransaction();
               $sql =
