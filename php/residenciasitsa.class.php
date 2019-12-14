@@ -2038,5 +2038,17 @@
 					  </div>';
 			}
 		}
+
+		public function actualizarNotificacionesVistas($idAlumno) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE notificaciones SET bVista = 0 WHERE idAlumno = :idAlumno AND bActivo = 1");
+				$SQL->bindParam(":idAlumno",$idAlumno);
+				$SQL->execute();
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
 	}
 ?>

@@ -69,7 +69,7 @@
                         $NOTIFICACIONES_QUERY = $ObjectITSA->obtenerNotificacionesAlumno($_SESSION['idUsuario']);
                         while($NOTIFICACIONES_ = $NOTIFICACIONES_QUERY->fetch(PDO::FETCH_ASSOC)) {
                     ?>
-                        <?php if($NOTIFICACIONES_['bVista'] == 0) { ?>
+                        <?php if($NOTIFICACIONES_['bVista'] == 1) { ?>
                             <div class="panel panel-primary">
                                 <div class="panel-heading">                                    
                                     <i class="fa fa-bell"></i> <?php echo $NOTIFICACIONES_['dFecha']; ?>
@@ -89,7 +89,7 @@
                             </div>
                         <?php } ?>
                     <?php } ?>
-                    <!-- <?php $ObjectITSA->actualizarNotificacionesVistas($_SESSION['idUsuario']); ?> -->
+                    <?php $ObjectITSA->actualizarNotificacionesVistas($_SESSION['idUsuario']); ?> 
                 </div>
             </div>
 
