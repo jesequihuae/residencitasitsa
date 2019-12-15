@@ -60,6 +60,58 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <!-- <div class="col-lg-3">
+                                    <div class="form-group">
+                                      <select class="form-control">
+                                        <option>Sistemas</option>
+                                      </select>
+                                    </div>
+                                </div> -->
+                                <div class="col-lg-4">                                    
+                                    <div class="form-group">
+                                      <label class="control-label col-lg-3"># Control</label>
+                                      <input class="form-control" type="" name="">
+                                    </div>
+                                </div>
+                            </div>  
+
+                            <form class="form-horizontal" method="POST">
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">Notificación:</label>
+                                    <div class="col-lg-9">
+                                        <textarea class="form-control" name="vAviso" id="vAviso" placeholder="Mensaje" required></textarea>
+                                    </div>                                    
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-lg-3">¿Generar alerta?:</label>
+                                    <div class="col-lg-9">
+                                        <input type="checkbox" value="">
+                                    </div>
+                                </div>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-default" 
+                                    id="cancelarRegistro">
+                                        <i class="fa fa-times-circle"></i> Cancelar
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    class="btn btn-info pull-right" 
+                                    name="guardarRegistro">
+                                        <i class="fa fa-paper-plane"></i> Guardar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+
             <!-- ... Your content goes here ... -->
 
         </div>
