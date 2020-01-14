@@ -73,7 +73,9 @@
 					}
 					$_SESSION['navbar'] = $NAVBAR_;
 					$_SESSION['permisos'] = $PERMISOS;
+					$_SESSION['tipoUsuario'] = $Usuario['idTipoUsuario'];
 					header('Location: pages/');
+					// print_r($_SESSION);
 				} else {
 					echo '<div class="alert alert-dismissable alert-danger">Lo sentimos, usuario y/o contraseña no coinciden!
 							<button type="button" class="close" data-dismiss="alert">x</button>
@@ -522,6 +524,7 @@
 			@session_unset($_SESSION['numeroControl']);
 			@session_unset($_SESSION['navbar']);
 			@session_unset($_SESSION['permisos']);
+			@session_unset($_SESSION['tipoUsuario']);
 			@session_destroy();
 			header('Location: ../index.php');
 		}
@@ -2052,5 +2055,46 @@
               	}
 			}
 	    }
+
+	    /***************NOTIFICACIONES*****************/
+	    public function obtenerNumeroNotificaciones($idAlumno) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT COUNT(idNotificacion) AS total FROM notificaciones WHERE idAlumno = :idAlumno AND bVista = 1 AND bActivo = 1");
+				$SQL->bindParam(":idAlumno", $idAlumno);
+				$SQL->execute();
+
+				$TOTAL = $SQL->FETCH(PDO::FETCH_ASSOC);
+				return $TOTAL['total'];
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function obtenerNotificacionesAlumno($idAlumno) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT tTexto, dFecha, bVista FROM notificaciones WHERE idAlumno = :idAlumno AND bActivo = 1 ORDER BY idNotificacion DESC");
+				$SQL->bindParam(":idAlumno", $idAlumno);
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function actualizarNotificacionesVistas($idAlumno) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE notificaciones SET bVista = 0 WHERE idAlumno = :idAlumno AND bActivo = 1");
+				$SQL->bindParam(":idAlumno",$idAlumno);
+				$SQL->execute();
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
 	}
 ?>

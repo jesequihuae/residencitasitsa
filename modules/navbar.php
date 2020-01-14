@@ -1,7 +1,9 @@
+<?php include_once '../php/connection.php'; ?>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">ITSA</a>
         </div>
+        <?php @session_start(); ?>
 
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -9,44 +11,32 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <!--<ul class="nav navbar-left navbar-top-links">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i> Admin <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    </li>
-                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li> 
-                    <li><a href="../pages?opt=1"><i class="fa fa-sign-out fa-fw"></i> Mostrar Archivos</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>-->
-         <!--<ul class="nav navbar-left navbar-top-links">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i> Cronograma <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li><a href="../pages?opt=2"><i class="fa fa-sign-out fa-fw"></i> Generar Cronograma</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>-->
-        <!--<ul class="nav navbar-left navbar-top-links">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-bell fa-fw"></i> Alertas <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li><a href="../pages?opt=3"><i class="fa fa-bell fa-fw"></i> Administrar alertas</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>-->
         <!-- Top Navigation: Right Menu -->
         <ul class="nav navbar-right navbar-top-links">
+            <?php 
+                if($_SESSION['tipoUsuario'] == 1) {
+            ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="../pages/notificaciones.php">
+                        <?php 
+                            $Notificaciones = $ObjectITSA->obtenerNumeroNotificaciones($_SESSION['idUsuario']);
+                            if($Notificaciones > 0) {  
+                        ?>
+                        <i class="fa fa-bell">
+                            <span class="badge badge-danger" style="background-color: red;">
+                                <?php echo $Notificaciones; ?>
+                            </span>
+                        </i>
+                        <?php 
+                            } else { 
+                        ?>
+                            <i class="fa fa-bell-o"></i>
+                        <?php } ?>
+                    </a>
+                  </li>
+            <?php
+                }
+            ?>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-user fa-fw"></i><?php @session_start(); echo 'Hola '.@$_SESSION['nombre']; ?><b class="caret"></b>
