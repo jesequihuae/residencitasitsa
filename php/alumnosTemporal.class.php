@@ -299,7 +299,8 @@
                   vNombre,
                   vRuta,
                   bAceptadoAI,
-                  bAceptadoAE
+                  bAceptadoAE,
+                  UUID
                 )
                 VALUES
                 (
@@ -310,7 +311,8 @@
                   :vNombre,
                   :vRuta,
                   0,
-                  0
+                  0,
+                  :UUID
                 )
               ";
 
@@ -320,6 +322,7 @@
               $SQLINTPROCESS->bindParam(":idAlumno",$idAlumno);
               $SQLINTPROCESS->bindParam(":vNombre",$name);
               $SQLINTPROCESS->bindParam(":vRuta",$url);
+              $SQLINTPROCESS->bindParam(":UUID",$name);
 
               $SQLINTPROCESS->execute();
 
@@ -400,11 +403,11 @@
 
 
 
-				$RutaPresentacion = $url.$namePress.".".$extPress;
-				$RutaAceptacion =   $url.$nameAccep.".".$extAccep;
+				$RutaPresentacion = $url;
+				$RutaAceptacion =   $url;
 
-				$SuccessPresentacion = move_uploaded_file($cartaPresentacion['tmp_name'], $RutaPresentacion);
-				$SuccessAceptacion = move_uploaded_file($cartaAceptacion['tmp_name'], $RutaAceptacion);
+				$SuccessPresentacion = move_uploaded_file($cartaPresentacion['tmp_name'], $RutaPresentacion.$namePress.".".$extPress);
+				$SuccessAceptacion = move_uploaded_file($cartaAceptacion['tmp_name'],     $RutaAceptacion.$nameAccep.".".$extAccep);
 
 
 				$SQLIdProyecto = $this->connection->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
@@ -415,7 +418,7 @@
 					$SQLIdProyecto->execute();
 					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
 
-					$UNA = "asdadsda";
+
 
 					$SQLPresentacion = $this->connection->PREPARE(
             "INSERT INTO documentos 
@@ -425,7 +428,8 @@
                 idTipoDocumento,
                 idEstado,
                 vNombre,
-                vRuta
+                vRuta,
+                UUID
               )
               VALUES
               (
@@ -434,15 +438,18 @@
                 4,
                 4,
                 :vNombre,
-                :vRuta
+                :vRuta,
+                :UUID
               )");
 
+          $namePress .= ".".$extPress;
 					$SQLPresentacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
-					$SQLPresentacion->bindParam(":vNombre",$UNA);
+					$SQLPresentacion->bindParam(":vNombre",$namePress);
 					$SQLPresentacion->bindParam(":vRuta",$RutaPresentacion);
-					$SQLPresentacion->bindParam(":idAlumno",$idAlumno);
+          $SQLPresentacion->bindParam(":idAlumno",$idAlumno);
+          $SQLPresentacion->bindParam(":UUID",$namePress);
 					$SQLPresentacion->execute();
-
+            
 					$SQLAceptacion = $this->connection->PREPARE(
             "INSERT INTO documentos
             (
@@ -451,7 +458,8 @@
               idTipoDocumento,
               idEstado,
               vNombre,
-              vRuta
+              vRuta,
+              UUID
             )
             VALUES(
               :idProyectoSeleccionado,
@@ -459,13 +467,15 @@
               9,
               4,
               :vNombre,
-              :vRuta
+              :vRuta,
+              :UUID
               )");
-
+          $nameAccep .= ".".$extAccep;
 					$SQLAceptacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
-					$SQLAceptacion->bindParam(":vNombre",$UNA);
+					$SQLAceptacion->bindParam(":vNombre",$nameAccep);
 					$SQLAceptacion->bindParam(":vRuta",$RutaAceptacion);
-					$SQLAceptacion->bindParam(":idAlumno", $idAlumno);
+          $SQLAceptacion->bindParam(":idAlumno", $idAlumno);
+          $SQLAceptacion->bindParam(":UUID", $nameAccep);
 					$SQLAceptacion->execute();
 
 					$SQLINTPROCESS = $this->connection->PREPARE("UPDATE alumnos SET iProceso = 4 WHERE idAlumno = :idAlumno");
@@ -513,7 +523,7 @@
         $SQLINTPROCESS->execute();
         $row = $SQLINTPROCESS->fetch();
 
-        $url .= $row["vPeriodo"]."/";
+        @$url .= $row["vPeriodo"]."/";
 
         $sql =
               "
@@ -585,7 +595,7 @@
                 :UUID
               )");
       
-              
+          $fileUUIDEvaluacion .= ".".$fileExtensionEvaluacion;
 					$SQLReporte->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
 					$SQLReporte->bindParam(":vNombre",$fileNameEvaluacion);
 					$SQLReporte->bindParam(":idTipoDocumento",$idTipoDocumento);
@@ -617,7 +627,8 @@
 								:vNombre,
 								:vRuta,
                 :UUID
-							)");
+              )");
+          $fileUUIDAsesoria .= ".".$fileExtensionAsosoria;
 					$SQLAsesoria->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
 					$SQLAsesoria->bindParam(":vNombre",$fileNameAsosoria);
 					$SQLAsesoria->bindParam(":idTipoDocumento",$idTipoDocumento);
