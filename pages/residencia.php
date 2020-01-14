@@ -95,18 +95,17 @@
                             $_FILES['aceptacion']
                           );
                         } else if (isset($_POST['primerReporteForm'])) {
-                        
-                          $ObjectITSA->saveFirstReport(
+                          $ObjectITSA1->saveReports(
                             $_SESSION['idUsuario'],
                             $_SESSION['numeroControl'],
                             $_FILES['fileEvaluacion'],
                             $_FILES['fileFormatoAsesoria'],
                             4, 
                             5,
-                            'SegundoReporte'
+                            'PrimerReporte'
                           );
                         } else if (isset($_POST['segundoReporteForm'])) {
-                          $ObjectITSA->saveReports(
+                          $ObjectITSA1->saveReports(
                             $_SESSION['idUsuario'],
                             $_SESSION['numeroControl'],
                             $_FILES['fileEvaluacion'],
@@ -502,58 +501,35 @@
 
   function guardar(){
     var response = 1;
-    var cronograma = "[";
-
+  
     var idTipoDeDocumento = <?php echo (isset($_SESSION["idTipoDocumento"])?$_SESSION["idTipoDocumento"]:0); ?>;
-    var rowCount = 0;
-    for(i = 0;i < contador;i++){
-      cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",\"i"+i+"\":"+i+",";
-      for(j = 0; j<24;j++){
-          cronograma += "\"valor"+i+""+j+"\":\""+$("#"+i+""+j).is(":checked")+"\",\"iSemana"+i+""+j+"\":\""+$("#semana"+j).text().trim()+"\",\"j"+i+""+j+"\":"+j+",";
-      }
-      //QUITAMOS LA ULTIMA COMA PARA QUE NO TRUENE AL ENVIAR AL SERVIDOR
-      cronograma = cronograma.slice(0,-1);
-      cronograma += "},";
-    }
-    //QUITAMOS LA ULTIMA COMA PARA QUE NO TRUENE AL ENVIAR AL SERVIDOR
-    cronograma = cronograma.slice(0,-1);
-    cronograma+=']';
-    if(contador < 6){
-      alertify.set('notifier','position', 'top-center');
-      alertify.error("Al menos debes de llenar 6 actividades");
-      return;
-    }
-
-    if(contador > 0){
-        $.ajax({
-          url: '../php/cronograma.php',
-          type:'POST',
-          data:
-              {
-                "cronograma":cronograma,
-                "operacion":1,
-                "size":24,
-                "idTipoDeDocumento":idTipoDeDocumento
-              },
-          beforeSend: function(e){
-
+  
+    $.ajax({
+      url: '../php/cronograma.php',
+      type:'POST',
+      data:
+          {
+            "cronograma":cronograma,
+            "operacion":1,
+            "size":24,
+            "idTipoDeDocumento":idTipoDeDocumento
           },
-          success: function(e){
-            $("#salida").html(e);
-            mostrarMensaje("Cronograma guardado con exito ",1);
-            location.href = "residencia.php";
-          },
-          error: function(e){
-            $("#salida").html(e);
-            
-            response = -1;
-          }
-        });
-      }else{
-        //mostrarMensaje("No hay ninguna actividad por guardar...",2);
-        response = 0;
+      beforeSend: function(e){
+
+      },
+      success: function(e){
+        $("#salida").html(e);
+        mostrarMensaje("Cronograma guardado con exito ",1);
+        location.href = "residencia.php";
+      },
+      error: function(e){
+        $("#salida").html(e);
+        
+        response = -1;
       }
-      return response;
+    });
+
+    return response;
   }
 
   function validacionGuardar(){

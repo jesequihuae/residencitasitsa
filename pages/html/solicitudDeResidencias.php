@@ -234,33 +234,9 @@
               </div>
             </div>
       </div>  
-      <div class="panel panel-default" id="panel4">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                  <a data-toggle="collapse" data-target="#collapseFour" 
-                    href="#collapseFour">
-                    Cronograma
-                  </a>
-                </h4>
-            </div>
-            <div id="collapseFour" class="panel-collapse collapse in">
-              <div class="panel-body">
-                <div>
-                      <h3 class="semi-bold">Cronograma</h3>
-                      <?php
-                        if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 1)
-                        {
-                            $_SESSION["idTipoDocumento"] = 3;
-                            require "cronograma/cronogramaSeg.php";
-                        }
-                      ?>
-                    </div>
-              </div>
-            </div>
-      </div>  
   </div>
   
-  <button type="submit" name="registrarProyecto" id="guardarSolicitud" class="btn btn-lg btn-success" >Guardar</button>
+  <button type="submit" name="registrarProyecto" id="guardarSolicitud" onclick="return validacionGuardar()" class="btn btn-lg btn-success">Guardar</button>
   <button class="btn btn-lg btn-warning">Limpiar</button>
   </form>
   <div id="salida">

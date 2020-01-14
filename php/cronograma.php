@@ -35,18 +35,14 @@
 
 			$array = json_decode($cronograma,true);
 
-			/*if(is_array($array)){
-				echo "si";
-			}else{
-				echo "no";
-			}*/
 			$sql = "
 						DELETE FROM cronograma
 						WHERE idAlumno = $idAlumno AND idDocumento = $idTipoDeDocumento
 			";
 			$db = $this->handler->prepare($sql);
 			$db->execute();
-
+	
+			
 
 			$sql = "
 					 	INSERT INTO cronograma(
@@ -85,6 +81,7 @@
 			$sql = substr($sql,0,-1);
 			$db = $this->handler->prepare($sql);
 			if($db->execute()){
+			
 				$proceso = 0;
 				if($idTipoDeDocumento == 5){
 					$proceso = 5;
@@ -182,10 +179,10 @@
 			$size 				= $_POST["size"];
 			$idAlumno 		= $_SESSION['idUsuario'];
 			$idDocumento 	= $_POST["idTipoDeDocumento"];
-
+	
 			$cronograma->abrirConexion();
-
 			$cronograma->guardarCronograma($info,$size,$idAlumno,$idDocumento);
+		
 
 
 		break;
@@ -209,16 +206,16 @@
 
 		$semanaInicio = 0;
 		$semanaFin 	  = 0;
-		if(isset($_SESSION["idTipoDocumento"])){
+		/*if(isset($idDocumento)){
 
-			$array = $cronograma->obtenerSemanaInicioFin($_SESSION["idTipoDocumento"]);
+			$array = $cronograma->obtenerSemanaInicioFin($idDocumento);
 			$semanaInicio = $array["inicio"];
 			$semanaFin    = $array["fin"];
-		}
+		}*/
 
 
 
-		echo json_encode(array("cronograma"=>$resultado,"semanaInicio"=>$semanaInicio,"semanaFin"=>$semanaFin));
+		echo json_encode($resultado);
 		break;
 		case 4:
 		$cronograma->abrirConexion();

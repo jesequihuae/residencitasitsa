@@ -1,4 +1,7 @@
 <?php 
+
+	print_r($_POST);
+	exit();
   include 'connection.php';
   $opcion = $_POST['opcion'];
   $idCarrera = $_POST['idCarrera'];

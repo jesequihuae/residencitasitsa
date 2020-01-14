@@ -175,17 +175,26 @@
 
 		public function saveLetters($idAlumno, $NumeroControl ,$cartaPresentacion, $cartaAceptacion) {
 			try {
-				$NombrePresentacion = explode('.', $cartaPresentacion['name']);
-				$NombreAceptacion = explode('.', $cartaAceptacion['name']);
 
-				$RutaPresentacion = '../files/'.$NumeroControl.'/Presentacion.'. $NombrePresentacion[1];
-				$RutaAceptacion = '../files/'.$NumeroControl.'/Aceptacion.'. $NombreAceptacion[1];
+
+				$NombrePresentacion = explode('.', $cartaPresentacion['name']);
+				$UUIDPresentacion   = uniqid();
+
+				$NombreAceptacion   = explode('.', $cartaAceptacion['name']);
+				$UUIDAceptacion		= uniqid();
+
+				$RutaPresentacion = '../files/'.$NumeroControl.'/Presentacion.'. $UUIDPresentacion;
+				$RutaAceptacion = '../files/'.$NumeroControl.'/Aceptacion.'. $UUIDAceptacion;
 
 				$SuccessPresentacion = move_uploaded_file($cartaPresentacion['tmp_name'], $RutaPresentacion);
 				$SuccessAceptacion = move_uploaded_file($cartaAceptacion['tmp_name'], $RutaAceptacion);
 
 
-				$SQLIdProyecto = $this->CONNECTION->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
+				$SQLIdProyecto = $this->CONNECTION->PREPARE(
+					"SELECT 
+						idProyectoSeleccionado 
+					FROM proyectoseleccionado 
+					WHERE idAlumno = :idAlumno");
 				$this->CONNECTION->beginTransaction();
 
 				if($SuccessAceptacion && $RutaPresentacion) {
@@ -195,20 +204,58 @@
 
 					$UNA = "asdadsda";
 
-					$SQLPresentacion = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,4,4,:vNombre,:vRuta)");
+					$SQLPresentacion = $this->CONNECTION->PREPARE(
+						"INSERT INTO documentos (
+							idProyectoSeleccionado,
+							idAlumno,
+							idTipoDocumento,
+							idEstado,
+							vNombre,
+							vRuta,
+							UUID
+							)
+							VALUES
+							(:idProyectoSeleccionado,
+							:idAlumno,
+							4,
+							4,
+							:vNombre,
+							:vRuta,
+							:UUID
+							)");
 
 					$SQLPresentacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
 					$SQLPresentacion->bindParam(":vNombre",$UNA);
 					$SQLPresentacion->bindParam(":vRuta",$RutaPresentacion);
 					$SQLPresentacion->bindParam(":idAlumno",$idAlumno);
+					$SQLPresentacion->bindParam(":UUID",$UUIDPresentacion);
 					$SQLPresentacion->execute();
 
-					$SQLAceptacion = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,9,4,:vNombre,:vRuta)");
+					$SQLAceptacion = $this->CONNECTION->PREPARE(
+						"INSERT INTO documentos (
+							idProyectoSeleccionado,
+							idAlumno,
+							idTipoDocumento,
+							idEstado,
+							vNombre,
+							vRuta,
+							UUID
+							)
+							VALUES
+							(:idProyectoSeleccionado,
+							:idAlumno,
+							9,
+							4,
+							:vNombre,
+							:vRuta,
+							:UUID
+							)");
 
 					$SQLAceptacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
 					$SQLAceptacion->bindParam(":vNombre",$UNA);
 					$SQLAceptacion->bindParam(":vRuta",$RutaAceptacion);
 					$SQLAceptacion->bindParam(":idAlumno", $idAlumno);
+					$SQLAceptacion->bindParam(":UUID", $UUIDAceptacion);
 					$SQLAceptacion->execute();
 
 					$SQLINTPROCESS = $this->CONNECTION->PREPARE("UPDATE alumnos SET iProceso = 4 WHERE idAlumno = :idAlumno");
@@ -241,7 +288,12 @@
 		 */
 		public function saveReports($idAlumno, $NumeroControl,$fileEvaluacion,$fileFormatoAsesoria,$idEstadoDocumento,$idTipoDocumento,$vNumeroReporte) {
 			try {
-			
+				
+				$folder = '../files/'.$NumeroControl;
+				
+				if(!file_exists($folder)){
+					mkdir($folder,777,true);
+				}
 			
 				$RutaArchivoEvaluacion	     	 = '../files/'.$NumeroControl.'/'.$vNumeroReporte;
 				if(!file_exists($RutaArchivoEvaluacion)){
@@ -268,14 +320,8 @@
 					 WHERE idAlumno = :idAlumno");
 				$this->CONNECTION->beginTransaction();
 				
-				$jsonRutas = "[{
-							\"evaluacionNombre\":\"".$RutaArchivoEvaluacion."\",
-							\"formatpAsesoriaNombre\":\"".$RutaArchivoFormatoAsesoria."\"
-						}]";
-				$jsonNombre = "[{
-							\"evaluacionNombre\":\"".$fileEvaluacion['name']."\",
-							\"formatpAsesoriaNombre\":\"".$fileFormatoAsesoria['name']."\"
-						}]";
+				$jsonRutas = "[{\"evaluacionNombre\":\"".$RutaArchivoEvaluacion."\",\"formatpAsesoriaNombre\":\"".$RutaArchivoFormatoAsesoria."\"}]";
+				$jsonNombre = "[{\"evaluacionNombre\":\"".$fileEvaluacion['name']."\",\"formatpAsesoriaNombre\":\"".$fileFormatoAsesoria['name']."\"}]";
 
 				if($SuccessEvaluacion && $SuccessFormatoAsesoria) {
 					$SQLIdProyecto->bindParam(":idAlumno",$idAlumno);

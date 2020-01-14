@@ -356,9 +356,7 @@
     }
     public function saveLetters($idAlumno, $NumeroControl ,$cartaPresentacion, $cartaAceptacion) {
 			try {
-
         $url = "../documentos/";
-
         $sql =
               "
               SELECT
@@ -373,8 +371,6 @@
         $row = $SQLINTPROCESS->fetch();
 
         $url .= $row["vPeriodo"]."/";
-
-
 
         $sql =
               "
@@ -421,7 +417,25 @@
 
 					$UNA = "asdadsda";
 
-					$SQLPresentacion = $this->connection->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,4,4,:vNombre,:vRuta)");
+					$SQLPresentacion = $this->connection->PREPARE(
+            "INSERT INTO documentos 
+              (
+                idProyectoSeleccionado,
+                idAlumno,
+                idTipoDocumento,
+                idEstado,
+                vNombre,
+                vRuta
+              )
+              VALUES
+              (
+                :idProyectoSeleccionado,
+                :idAlumno,
+                4,
+                4,
+                :vNombre,
+                :vRuta
+              )");
 
 					$SQLPresentacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
 					$SQLPresentacion->bindParam(":vNombre",$UNA);
@@ -429,7 +443,24 @@
 					$SQLPresentacion->bindParam(":idAlumno",$idAlumno);
 					$SQLPresentacion->execute();
 
-					$SQLAceptacion = $this->connection->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,9,4,:vNombre,:vRuta)");
+					$SQLAceptacion = $this->connection->PREPARE(
+            "INSERT INTO documentos
+            (
+              idProyectoSeleccionado,
+              idAlumno,
+              idTipoDocumento,
+              idEstado,
+              vNombre,
+              vRuta
+            )
+            VALUES(
+              :idProyectoSeleccionado,
+              :idAlumno,
+              9,
+              4,
+              :vNombre,
+              :vRuta
+              )");
 
 					$SQLAceptacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
 					$SQLAceptacion->bindParam(":vNombre",$UNA);
@@ -455,6 +486,169 @@
 				}
 			} catch (PDOException $e) {
 				$this->CONNECTION->rollback();
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+				 	  </div>';
+			}
+    }
+    /**
+		 * MODIFICACION HECHA POR MAICKOL RODRIGUEZ,
+		 * SE MODIFICO PARA LA NUEVA FORMA DE LAS RESIDENCIAS 
+		 * Y LOS CAMBIOS QUE PIDIO 
+		 */
+		public function saveReports($idAlumno, $NumeroControl,$fileEvaluacion,$fileFormatoAsesoria,$idEstadoDocumento,$idTipoDocumento,$vNumeroReporte) {
+			try {
+			
+        $folder = '../documentos/';
+        $sql =
+              "
+              SELECT
+                  p.vPeriodo
+              FROM proyectoseleccionado ps
+              INNER JOIN periodos p ON(ps.idPeriodo = p.idPeriodo)
+              WHERE ps.idAlumno = :idAlumno
+              ";
+        $SQLINTPROCESS = $this->connection->PREPARE($sql);
+        $SQLINTPROCESS->bindParam(":idAlumno",$idAlumno);
+        $SQLINTPROCESS->execute();
+        $row = $SQLINTPROCESS->fetch();
+
+        $url .= $row["vPeriodo"]."/";
+
+        $sql =
+              "
+              SELECT
+                c.vClave
+              FROM alumnos a
+              INNER JOIN carreras c ON(c.idCarrera = a.idCarrera)
+              WHERE a.idAlumno = :idAlumno
+              ";
+        $SQLINTPROCESS = $this->connection->PREPARE($sql);
+        $SQLINTPROCESS->bindParam(":idAlumno",$idAlumno);
+        $SQLINTPROCESS->execute();
+        $row = $SQLINTPROCESS->fetch();
+        $carrera = $row["vClave"];
+
+        $url .= $carrera."/";
+        $url = $folder.$url;
+      
+
+				if(!file_exists($folder)){
+					mkdir($folder,777,true);
+				}
+			
+        $fileNameEvaluacion       = pathinfo($fileEvaluacion['name'], PATHINFO_BASENAME);
+        $fileExtensionEvaluacion  = pathinfo($fileEvaluacion['name'], PATHINFO_EXTENSION);
+        $fileUUIDEvaluacion = uniqid();
+
+
+        $fileNameAsosoria        = pathinfo($fileFormatoAsesoria['name'], PATHINFO_BASENAME);
+        $fileExtensionAsosoria   = pathinfo($fileFormatoAsesoria['name'], PATHINFO_EXTENSION);
+        $fileUUIDAsesoria        = uniqid();
+ 
+ 
+				$SuccessEvaluacion 			 	 = move_uploaded_file($fileEvaluacion['tmp_name'], $url.$fileUUIDEvaluacion.".".$fileExtensionEvaluacion);
+		  	$SuccessFormatoAsesoria		 = move_uploaded_file($fileFormatoAsesoria['tmp_name'], $url.$fileUUIDAsesoria.".".$fileExtensionAsosoria);
+
+    
+				
+
+				$this->connection->beginTransaction();			
+        
+				if($SuccessEvaluacion == 1 && $SuccessFormatoAsesoria == 1) {
+        
+          $SQLIdProyecto = $this->connection->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
+					$SQLIdProyecto->bindParam(":idAlumno",$idAlumno);
+					$SQLIdProyecto->execute();
+					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
+
+          // GUARDAMOS EVALUACION
+					$SQLReporte = $this->connection->PREPARE(
+						"INSERT INTO documentos
+							(
+								idProyectoSeleccionado,
+								idAlumno,
+								idTipoDocumento,
+								idEstado,
+								vNombre,
+								vRuta,
+                UUID
+							) 
+							VALUES 
+							(
+								:idProyectoSeleccionado,
+								:idAlumno,
+								:idTipoDocumento,
+								:idEstado,
+								:vNombre,
+								:vRuta,
+                :UUID
+              )");
+      
+              
+					$SQLReporte->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
+					$SQLReporte->bindParam(":vNombre",$fileNameEvaluacion);
+					$SQLReporte->bindParam(":idTipoDocumento",$idTipoDocumento);
+					$SQLReporte->bindParam(":idEstado",$idEstadoDocumento);
+					$SQLReporte->bindParam(":vRuta",$url); 
+          $SQLReporte->bindParam(":idAlumno",$idAlumno);
+          $SQLReporte->bindParam(":UUID",$fileUUIDEvaluacion);
+          $SQLReporte->execute();
+
+          
+          // GUARDAMOS ASESORIA
+					$SQLAsesoria = $this->connection->PREPARE(
+						"INSERT INTO documentos
+							(
+								idProyectoSeleccionado,
+								idAlumno,
+								idTipoDocumento,
+								idEstado,
+								vNombre,
+								vRuta,
+                UUID
+							) 
+							VALUES 
+							(
+								:idProyectoSeleccionado,
+								:idAlumno,
+								:idTipoDocumento,
+								:idEstado,
+								:vNombre,
+								:vRuta,
+                :UUID
+							)");
+					$SQLAsesoria->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
+					$SQLAsesoria->bindParam(":vNombre",$fileNameAsosoria);
+					$SQLAsesoria->bindParam(":idTipoDocumento",$idTipoDocumento);
+					$SQLAsesoria->bindParam(":idEstado",$idEstadoDocumento);
+					$SQLAsesoria->bindParam(":vRuta",$url); 
+          $SQLAsesoria->bindParam(":idAlumno",$idAlumno);
+          $SQLAsesoria->bindParam(":UUID",$fileUUIDAsesoria);
+					$SQLAsesoria->execute();
+
+					$SQLINTPROCESS = $this->connection->PREPARE(
+						"UPDATE alumnos 
+						 	SET iProceso = ".$idTipoDocumento."
+						 WHERE idAlumno = :idAlumno"
+						 );
+					$SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
+					$SQLINTPROCESS->execute();
+
+					$this->connection->commit();
+					echo '<div class="alert alert-dismissable alert-success">Archivos registrados correctamente!
+							<button type="button" class="close" data-dismiss="alert">x</button>
+						  </div>';
+				} else {
+     
+					$this->connection->rollback();
+					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: al subir los documentos. Intentalo nuevamente
+							<button type="button" class="close" data-dismiss="alert">x</button>
+					 	  </div>';
+				}
+
+			} catch (PDOException $e) {
+				$this->connection->rollback();
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>
 				 	  </div>';
