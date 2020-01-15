@@ -318,8 +318,22 @@
                           <!-- FINAL -->
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 7 ? 'active' : '') ?>" id="final">
                             <div class="design-process-content">
-                              <h3>Documento final</h3>
-                              <p>Documento final</p>
+                              <table class="table table-bordered">
+                                <tr>
+                                  <th>Documento</th>
+                                  <th>Estado (AI)</th>
+                                  <th>Estado (AE)</th>
+                                  <th>Descargar</th>
+                                </tr>
+                                <?php foreach($ObjectITSA1->getAllDocumentsByAlumno($_SESSION['idUsuario']) as $row){?>
+                                  <tr>
+                                    <td><?php echo $row["vNombre"]; ?></td>
+                                    <td><?php echo ($row["bAceptadoAI"] == 0)?"NO":"SI"; ?></td>
+                                    <td><?php echo ($row["bAceptadoAE"] == 0)?"NO":"SI"; ?></td>
+                                    <td><a target="_blank" href="<?php echo $row["vRuta"];?>"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+                                  </tr>
+                                <?php } ?>
+                              </table>
                             </div>
                           </div>
 

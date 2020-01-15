@@ -501,6 +501,22 @@
 				 	  </div>';
 			}
     }
+    public function getAllDocumentsByAlumno($idAlumno){
+      $sql = "
+        SELECT 
+          b.vNombre,
+          a.bAceptadoAI,
+          a.bAceptadoAE,
+          CONCAT(a.vRuta,a.UUID) AS vRuta
+        FROM documentos a
+        INNER JOIN tiposdocumento b ON(a.idTipoDocumento = b.idTipoDocumento)
+        WHERE a.idAlumno = :idAlumno;
+      ";
+      $SQLINTPROCESS = $this->connection->PREPARE($sql);
+      $SQLINTPROCESS->bindParam(":idAlumno",$idAlumno);
+      $SQLINTPROCESS->execute();
+      return $SQLINTPROCESS->fetchAll();
+    }
     /**
 		 * MODIFICACION HECHA POR MAICKOL RODRIGUEZ,
 		 * SE MODIFICO PARA LA NUEVA FORMA DE LAS RESIDENCIAS 
@@ -664,7 +680,8 @@
 						<button type="button" class="close" data-dismiss="alert">x</button>
 				 	  </div>';
 			}
-		}
+    }
+    
 
   }
 
