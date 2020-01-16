@@ -501,6 +501,37 @@
 				 	  </div>';
 			}
     }
+    /**
+     * GUARDA EL DOCUMENTO DE LA EVALUACION
+     */
+    public function saveEvaluacion($idTipoDocumento,$file,$idAlumno){
+      $folder = '../documentos/seguimientos/';
+
+      if(!file_exists($folder)){
+        mkdir($folder,777,true);
+      }
+    
+      
+      $fileNameEvaluacion       = pathinfo($file['name'], PATHINFO_EXTENSION);
+      $fileUUIDEvaluacion       = uniqid();
+  
+      $SuccessEvaluacion 			 	 = move_uploaded_file($file['tmp_name'], $folder.$fileUUIDEvaluacion.".".$fileNameEvaluacion);
+
+    }
+    /**
+     * METODO QUE REGRESE LOS SEGUIMIENTOS DE LA BASE DE DATOS
+     */
+    public function getSeguimientos(){
+      $sql = "
+        SELECT 
+          idTipoDocumento,
+          vNombre
+        FROM tiposdocumento WHERE idTipoDocumento IN(5,6,7) AND bActivo = 1
+      ";
+      $DB = $this->connection->prepare($sql);
+      $DB->execute();
+      return $DB->fetchAll();
+    }
     public function getAllDocumentsByAlumno($idAlumno){
       $sql = "
         SELECT 
