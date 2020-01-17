@@ -581,6 +581,22 @@
 
     }
     /**
+     * OBTIENE LA RUTA DEL ARCHIVO POR SEGUIMIENTO
+     */
+    public function getSeguimientoById($idSeguimiento){
+      $sql = "
+        SELECT  
+          UUID,
+          vRuta
+        FROM evaluacionPorSeguimiento WHERE idTipoDocumento = :idTipoDocumento AND bActive = 1
+      ";
+      $DB = $this->connection->prepare($sql);
+      $DB->bindParam(":idTipoDocumento",$idSeguimiento);
+      $DB->execute();
+      $data = $DB->fetch();
+      return $data["vRuta"].$data["UUID"];
+    }
+    /**
      * METODO QUE REGRESE LOS SEGUIMIENTOS DE LA BASE DE DATOS
      */
     public function getSeguimientos(){

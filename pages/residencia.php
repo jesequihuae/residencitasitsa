@@ -250,7 +250,7 @@
                                             <div class="col-md-3 col-md-offset-3">
                                               <div class="col-md-12">
                                                   <strong>
-                                                    Evaluación
+                                                    <a href="<?php echo $ObjectITSA1->getSeguimientoById(5); ?>" target="_blank">Evaluación</a>
                                                   </strong>
                                               </div>
                                               <div class="col-md-12">
@@ -289,8 +289,8 @@
                                         <div class="col-md-12">
                                             <div class="col-md-3 col-md-offset-3">
                                               <div class="col-md-12">
-                                                  <strong>
-                                                    Evaluación
+                                                 <strong>
+                                                    <a href="<?php echo $ObjectITSA1->getSeguimientoById(6); ?>" target="_blank">Evaluación</a>
                                                   </strong>
                                               </div>
                                               <div class="col-md-12">
