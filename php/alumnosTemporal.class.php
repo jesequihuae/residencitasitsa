@@ -513,9 +513,71 @@
     
       
       $fileNameEvaluacion       = pathinfo($file['name'], PATHINFO_EXTENSION);
-      $fileUUIDEvaluacion       = uniqid();
+      $fileName                 = pathinfo($file['name'], PATHINFO_BASENAME);
+      $fileUUIDEvaluacion       = uniqid().".".$fileNameEvaluacion;
   
-      $SuccessEvaluacion 			 	 = move_uploaded_file($file['tmp_name'], $folder.$fileUUIDEvaluacion.".".$fileNameEvaluacion);
+      $SuccessEvaluacion 			 	 = move_uploaded_file($file['tmp_name'], $folder.$fileUUIDEvaluacion);
+
+      if($SuccessEvaluacion){
+        try{
+            $sql = "
+              SELECT  
+                UUID,
+                vRuta
+              FROM evaluacionPorSeguimiento
+              WHERE idTipoDocumento = :idTipoDocumento AND bActive = 1
+            ";
+            $SQLINT = $this->connection->PREPARE($sql);
+            $this->connection->beginTransaction();  
+            $SQLINT->bindParam(":idTipoDocumento",$idTipoDocumento);
+            $SQLINT->execute();
+
+            $data = $SQLINT->fetch();
+
+            $UUID  = $data["UUID"];
+            $RUTA  = $data["vRuta"];
+            $RUTA .= $UUID;
+            if(file_exists($RUTA)){
+              unlink($RUTA);
+            }
+
+            $sql = "
+              UPDATE evaluacionPorSeguimiento SET bActive = 0
+              WHERE idTipoDocumento = :idTipoDocumento
+            ";
+            $SQLINT = $this->connection->PREPARE($sql);
+       
+            $SQLINT->bindParam(":idTipoDocumento",$idTipoDocumento);
+            $SQLINT->execute();
+
+            $sql = "
+              INSERT INTO evaluacionPorSeguimiento
+              (
+                vFileName,
+                UUID,
+                vRuta,
+                idTipoDocumento
+              )
+              VALUES
+              (
+                :vFileName,
+                :UUID,
+                :vRuta,
+                :idTipoDocumento
+              )
+            ";
+            $SQLINT = $this->connection->PREPARE($sql);
+           
+            $SQLINT->bindParam(":vFileName",$fileName);
+            $SQLINT->bindParam(":UUID",$fileUUIDEvaluacion);
+            $SQLINT->bindParam(":vRuta",$folder);
+            $SQLINT->bindParam(":idTipoDocumento",$idTipoDocumento);
+            $SQLINT->execute();
+            $this->connection->commit();
+          }catch(PDOException $e){
+            $this->connection->rollback();
+          }
+      }
 
     }
     /**
