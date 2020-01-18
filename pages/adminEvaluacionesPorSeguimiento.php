@@ -53,6 +53,7 @@
                         <th>ID Documento</th>
                         <th>Nombre</th>
                         <th>Evaluación</th>
+                        <th>Cargado</th>
                     </tr>
                     <?php foreach($ObjectITSA1->getSeguimientos() as $row){ ?>
                         <tr>
@@ -64,6 +65,13 @@
                                     <input type="hidden" name="idTipoDeDocumento" value="<?php echo $row["idTipoDocumento"]; ?>" />
                                     <input type="submit" class="btn btn-primary" value="Guardar" name="guardarSeguimiento" />
                                 </form>
+                            </td>
+                            <td>
+                                <?php if($row["cargado"] == 1){ ?>
+                                    <i class="fa fa-check-circle-o fa-4x" aria-hidden="true"></i>
+                                <?php }else{ ?>
+                                    <i class="fa fa-exclamation-triangle fa-4x" aria-hidden="true"></i>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>
@@ -81,4 +89,5 @@
 <script src="../js/metisMenu.min.js"></script>
 <!-- Custom Theme JavaScript -->
 <script src="../js/startmin.js"></script>
+
 

@@ -601,10 +601,13 @@
      */
     public function getSeguimientos(){
       $sql = "
-        SELECT 
-          idTipoDocumento,
-          vNombre
-        FROM tiposdocumento WHERE idTipoDocumento IN(5,6,7) AND bActivo = 1
+      SELECT DISTINCT
+        a.idTipoDocumento,
+        a.vNombre,
+        IFNULL(b.idTipoDocumento,0) > 0 AS cargado
+      FROM tiposdocumento a
+      LEFT JOIN evaluacionPorSeguimiento b ON(a.idTipoDocumento = b.idTipoDocumento)
+      WHERE a.idTipoDocumento IN(5,6,7) AND bActivo = 1;
       ";
       $DB = $this->connection->prepare($sql);
       $DB->execute();
