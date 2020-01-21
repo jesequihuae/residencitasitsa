@@ -10,7 +10,12 @@
 
 		public function login($Datos) {
 			try {
-				$SQL = $this->CONNECTION->prepare("SELECT idTipoUsuario, idUsuario FROM usuarios WHERE vUsuario = :usuario AND vContrasena = :contrasena AND bActivo = 1");
+				$SQL = $this->CONNECTION->prepare(
+					"SELECT
+						idTipoUsuario,
+						idUsuario
+					 FROM usuarios
+					 WHERE vUsuario = :usuario AND vContrasena = :contrasena AND bActivo = 1");
 				$SQL->bindParam(":usuario", $Datos['usuario']);
 				$SQL->bindParam(":contrasena", $Datos['contrasena']);
 				$SQL->execute();
@@ -51,7 +56,6 @@
 
 					$NAVBAR_ = "";
 					$PERMISOS = array();
-
 					while($Modulos = $SQLMODULOS->fetch(PDO::FETCH_ASSOC)) {
 						$arraySubmodulos = array(
 							':idTipoUsuario'=>$Usuario['idTipoUsuario'],
@@ -69,8 +73,9 @@
 					}
 					$_SESSION['navbar'] = $NAVBAR_;
 					$_SESSION['permisos'] = $PERMISOS;
-
+					$_SESSION['tipoUsuario'] = $Usuario['idTipoUsuario'];
 					header('Location: pages/');
+					// print_r($_SESSION);
 				} else {
 					echo '<div class="alert alert-dismissable alert-danger">Lo sentimos, usuario y/o contraseña no coinciden!
 							<button type="button" class="close" data-dismiss="alert">x</button>
@@ -172,17 +177,26 @@
 
 		public function saveLetters($idAlumno, $NumeroControl ,$cartaPresentacion, $cartaAceptacion) {
 			try {
-				$NombrePresentacion = explode('.', $cartaPresentacion['name']);
-				$NombreAceptacion = explode('.', $cartaAceptacion['name']);
 
-				$RutaPresentacion = '../files/'.$NumeroControl.'/Presentacion.'. $NombrePresentacion[1];
-				$RutaAceptacion = '../files/'.$NumeroControl.'/Aceptacion.'. $NombreAceptacion[1];
+
+				$NombrePresentacion = explode('.', $cartaPresentacion['name']);
+				$UUIDPresentacion   = uniqid();
+
+				$NombreAceptacion   = explode('.', $cartaAceptacion['name']);
+				$UUIDAceptacion		= uniqid();
+
+				$RutaPresentacion = '../files/'.$NumeroControl.'/Presentacion.'. $UUIDPresentacion;
+				$RutaAceptacion = '../files/'.$NumeroControl.'/Aceptacion.'. $UUIDAceptacion;
 
 				$SuccessPresentacion = move_uploaded_file($cartaPresentacion['tmp_name'], $RutaPresentacion);
 				$SuccessAceptacion = move_uploaded_file($cartaAceptacion['tmp_name'], $RutaAceptacion);
 
 
-				$SQLIdProyecto = $this->CONNECTION->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
+				$SQLIdProyecto = $this->CONNECTION->PREPARE(
+					"SELECT 
+						idProyectoSeleccionado 
+					FROM proyectoseleccionado 
+					WHERE idAlumno = :idAlumno");
 				$this->CONNECTION->beginTransaction();
 
 				if($SuccessAceptacion && $RutaPresentacion) {
@@ -192,20 +206,58 @@
 
 					$UNA = "asdadsda";
 
-					$SQLPresentacion = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,4,4,:vNombre,:vRuta)");
+					$SQLPresentacion = $this->CONNECTION->PREPARE(
+						"INSERT INTO documentos (
+							idProyectoSeleccionado,
+							idAlumno,
+							idTipoDocumento,
+							idEstado,
+							vNombre,
+							vRuta,
+							UUID
+							)
+							VALUES
+							(:idProyectoSeleccionado,
+							:idAlumno,
+							4,
+							4,
+							:vNombre,
+							:vRuta,
+							:UUID
+							)");
 
 					$SQLPresentacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
 					$SQLPresentacion->bindParam(":vNombre",$UNA);
 					$SQLPresentacion->bindParam(":vRuta",$RutaPresentacion);
 					$SQLPresentacion->bindParam(":idAlumno",$idAlumno);
+					$SQLPresentacion->bindParam(":UUID",$UUIDPresentacion);
 					$SQLPresentacion->execute();
 
-					$SQLAceptacion = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,9,4,:vNombre,:vRuta)");
+					$SQLAceptacion = $this->CONNECTION->PREPARE(
+						"INSERT INTO documentos (
+							idProyectoSeleccionado,
+							idAlumno,
+							idTipoDocumento,
+							idEstado,
+							vNombre,
+							vRuta,
+							UUID
+							)
+							VALUES
+							(:idProyectoSeleccionado,
+							:idAlumno,
+							9,
+							4,
+							:vNombre,
+							:vRuta,
+							:UUID
+							)");
 
 					$SQLAceptacion->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
 					$SQLAceptacion->bindParam(":vNombre",$UNA);
 					$SQLAceptacion->bindParam(":vRuta",$RutaAceptacion);
 					$SQLAceptacion->bindParam(":idAlumno", $idAlumno);
+					$SQLAceptacion->bindParam(":UUID", $UUIDAceptacion);
 					$SQLAceptacion->execute();
 
 					$SQLINTPROCESS = $this->CONNECTION->PREPARE("UPDATE alumnos SET iProceso = 4 WHERE idAlumno = :idAlumno");
@@ -231,126 +283,88 @@
 				 	  </div>';
 			}
 		}
-
-		public function saveFirstReport($idAlumno, $NumeroControl, $Reporte) {
+		/**
+		 * MODIFICACION HECHA POR MAICKOL RODRIGUEZ,
+		 * SE MODIFICO PARA LA NUEVA FORMA DE LAS RESIDENCIAS 
+		 * Y LOS CAMBIOS QUE PIDIO 
+		 */
+		public function saveReports($idAlumno, $NumeroControl,$fileEvaluacion,$fileFormatoAsesoria,$idEstadoDocumento,$idTipoDocumento,$vNumeroReporte) {
 			try {
-				$NombreReporte = explode('.', $Reporte['name']);
-				$RutaReporte = '../files/'.$NumeroControl.'/PrimerReporte.'. $NombreReporte[1];
-				$SuccessReporte = move_uploaded_file($Reporte['tmp_name'], $RutaReporte);
-
-				$SQLIdProyecto = $this->CONNECTION->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
-				$this->CONNECTION->beginTransaction();
-
-				if($SuccessReporte) {
-					$SQLIdProyecto->bindParam(":idAlumno",$idAlumno);
-					$SQLIdProyecto->execute();
-					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
-
-					$UNA = "asdadsda";
-
-					$SQLReporte = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,5,4,:vNombre,:vRuta)");
-
-					$SQLReporte->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
-					$SQLReporte->bindParam(":vNombre",$UNA);
-					$SQLReporte->bindParam(":vRuta",$RutaReporte);
-					$SQLReporte->bindParam(":idAlumno",$idAlumno);
-					$SQLReporte->execute();
-
-					$SQLINTPROCESS = $this->CONNECTION->PREPARE("UPDATE alumnos SET iProceso = 5 WHERE idAlumno = :idAlumno");
-					$SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
-					$SQLINTPROCESS->execute();
-
-					$this->CONNECTION->commit();
-					echo '<div class="alert alert-dismissable alert-success">Archivos registrados correctamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
-				} else {
-					$this->CONNECTION->rollback();
-					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: al subir los documentos. Intentalo nuevamente
-							<button type="button" class="close" data-dismiss="alert">x</button>
-					 	  </div>';
+				
+				$folder = '../files/'.$NumeroControl;
+				
+				if(!file_exists($folder)){
+					mkdir($folder,777,true);
+				}
+			
+				$RutaArchivoEvaluacion	     	 = '../files/'.$NumeroControl.'/'.$vNumeroReporte;
+				if(!file_exists($RutaArchivoEvaluacion)){
+					mkdir($RutaArchivoEvaluacion,777,true);
 				}
 
-			} catch (PDOException $e) {
-				$this->CONNECTION->rollback();
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
-			}
-		}
+				$RutaArchivoEvaluacion .=  "/".$fileEvaluacion['name'];
+				$SuccessEvaluacion 			 	 = move_uploaded_file($fileEvaluacion['tmp_name'], $RutaArchivoEvaluacion);
+				
+			
 
-		public function saveSecondReport($idAlumno, $NumeroControl, $Reporte) {
-			try {
-				$NombreReporte = explode('.', $Reporte['name']);
-				$RutaReporte = '../files/'.$NumeroControl.'/SegundoReporte.'. $NombreReporte[1];
-				$SuccessReporte = move_uploaded_file($Reporte['tmp_name'], $RutaReporte);
-
-				$SQLIdProyecto = $this->CONNECTION->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
-				$this->CONNECTION->beginTransaction();
-
-				if($SuccessReporte) {
-					$SQLIdProyecto->bindParam(":idAlumno",$idAlumno);
-					$SQLIdProyecto->execute();
-					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
-
-					$UNA = "asdadsda";
-
-					$SQLReporte = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,6,4,:vNombre,:vRuta)");
-
-					$SQLReporte->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
-					$SQLReporte->bindParam(":vNombre",$UNA);
-					$SQLReporte->bindParam(":vRuta",$RutaReporte);
-					$SQLReporte->bindParam(":idAlumno",$idAlumno);
-					$SQLReporte->execute();
-
-					$SQLINTPROCESS = $this->CONNECTION->PREPARE("UPDATE alumnos SET iProceso = 6 WHERE idAlumno = :idAlumno");
-					$SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
-					$SQLINTPROCESS->execute();
-
-					$this->CONNECTION->commit();
-					echo '<div class="alert alert-dismissable alert-success">Archivos registrados correctamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
-				} else {
-					$this->CONNECTION->rollback();
-					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: al subir los documentos. Intentalo nuevamente
-							<button type="button" class="close" data-dismiss="alert">x</button>
-					 	  </div>';
+				$RutaArchivoFormatoAsesoria   	 = '../files/'.$NumeroControl.'/'.$vNumeroReporte;
+				if(!file_exists($RutaArchivoFormatoAsesoria)){
+					mkdir($RutaArchivoFormatoAsesoria,777,true);
 				}
+				$RutaArchivoFormatoAsesoria .= "/".$fileFormatoAsesoria['name'];
+				$SuccessFormatoAsesoria		 	 = move_uploaded_file($fileFormatoAsesoria['tmp_name'], $RutaArchivoFormatoAsesoria);
 
-			} catch (PDOException $e) {
-				$this->CONNECTION->rollback();
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
-			}
-		}
 
-		public function saveThirdReport($idAlumno, $NumeroControl, $Reporte) {
-			try {
-				$NombreReporte = explode('.', $Reporte['name']);
-				$RutaReporte = '../files/'.$NumeroControl.'/TercerReporte.'. $NombreReporte[1];
-				$SuccessReporte = move_uploaded_file($Reporte['tmp_name'], $RutaReporte);
-
-				$SQLIdProyecto = $this->CONNECTION->PREPARE("SELECT idProyectoSeleccionado FROM proyectoseleccionado WHERE idAlumno = :idAlumno");
+				$SQLIdProyecto = $this->CONNECTION->PREPARE(
+					"SELECT 
+						idProyectoSeleccionado 
+					 FROM proyectoseleccionado 
+					 WHERE idAlumno = :idAlumno");
 				$this->CONNECTION->beginTransaction();
+				
+				$jsonRutas = "[{\"evaluacionNombre\":\"".$RutaArchivoEvaluacion."\",\"formatpAsesoriaNombre\":\"".$RutaArchivoFormatoAsesoria."\"}]";
+				$jsonNombre = "[{\"evaluacionNombre\":\"".$fileEvaluacion['name']."\",\"formatpAsesoriaNombre\":\"".$fileFormatoAsesoria['name']."\"}]";
 
-				if($SuccessReporte) {
+				if($SuccessEvaluacion && $SuccessFormatoAsesoria) {
 					$SQLIdProyecto->bindParam(":idAlumno",$idAlumno);
 					$SQLIdProyecto->execute();
 					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
 
-					$UNA = "asdadsda";
 
-					$SQLReporte = $this->CONNECTION->PREPARE("INSERT INTO documentos (idProyectoSeleccionado,idAlumno,idTipoDocumento,idEstado,vNombre,vRuta) VALUES (:idProyectoSeleccionado,:idAlumno,7,4,:vNombre,:vRuta)");
+					$SQLReporte = $this->CONNECTION->PREPARE(
+						"INSERT INTO documentos
+							(
+								idProyectoSeleccionado,
+								idAlumno,
+								idTipoDocumento,
+								idEstado,
+								vNombre,
+								vRuta
+							) 
+							VALUES 
+							(
+								:idProyectoSeleccionado,
+								:idAlumno,
+								:idTipoDocumento,
+								:idEstado,
+								:vNombre,
+								:vRuta
+							)");
 
 					$SQLReporte->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);
-					$SQLReporte->bindParam(":vNombre",$UNA);
-					$SQLReporte->bindParam(":vRuta",$RutaReporte);
+					$SQLReporte->bindParam(":vNombre",$jsonNombre);
+					$SQLReporte->bindParam(":idTipoDocumento",$idTipoDocumento);
+					$SQLReporte->bindParam(":idEstado",$idEstadoDocumento);
+					$SQLReporte->bindParam(":vRuta",$jsonRutas); // SE METIO UN JSON PARA PODER TENER LOS ARCHIVOS QUE SE GUARDAN
+															// EN LA NUEVA EVALUACION, Y PARA NO MODIFICAR LA BASE DE DATOS SE METIO EL JSON
 					$SQLReporte->bindParam(":idAlumno",$idAlumno);
 					$SQLReporte->execute();
 
-					$SQLINTPROCESS = $this->CONNECTION->PREPARE("UPDATE alumnos SET iProceso = 7 WHERE idAlumno = :idAlumno");
+					$SQLINTPROCESS = $this->CONNECTION->PREPARE(
+						"UPDATE alumnos 
+						 	SET iProceso = ".$idTipoDocumento."
+						 WHERE idAlumno = :idAlumno"
+						 );
 					$SQLINTPROCESS->bindParam(":idAlumno", $idAlumno);
 					$SQLINTPROCESS->execute();
 
@@ -510,6 +524,7 @@
 			@session_unset($_SESSION['numeroControl']);
 			@session_unset($_SESSION['navbar']);
 			@session_unset($_SESSION['permisos']);
+			@session_unset($_SESSION['tipoUsuario']);
 			@session_destroy();
 			header('Location: ../index.php');
 		}
@@ -1697,6 +1712,384 @@
 													ORDER BY PS.idProyectoSeleccionado DESC");
 				$SQL->execute();
 				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		/*APARTADO PARA LAS ESTADISTICAS*/
+		public function graficaOpcionElegida(){
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT carr.vClave as 'Carrera', 
+				op.vOpcion as 'Opcion',
+				op.vClave AS vClaveOpcion,
+				COUNT(ps.idOpcion) as 'Total' FROM proyectoseleccionado as ps 
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				INNER JOIN opciones as op ON ps.idOpcion = op.idOpcion 
+				GROUP BY 
+				ps.idOpcion,
+				carr.vCarrera,
+				op.vClave
+				HAVING COUNT(ps.idOpcion)");
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaTotalGiro($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT carr.vClave AS 'Carrera', 
+				gir.vGiro AS 'Giro',
+				carr.idCarrera AS 'idCarrera',
+				gir.vClave AS 'vClaveGiro',
+				COUNT(ps.idGiro) as 'Total' FROM proyectoseleccionado as ps 
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
+				WHERE carr.idCarrera = :idCarrera
+				GROUP BY 
+				ps.idGiro,
+				carr.vCarrera,
+				gir.vGiro
+				HAVING COUNT(ps.idGiro)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaGiroMujeryHombre($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT gir.vGiro as 'Giro',
+				  carr.vCarrera as 'Carrera',
+				  gir.vClave as 'vClaveGiro',
+				      IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
+				      COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
+				      INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				      INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				      INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
+				      WHERE carr.idCarrera = :idCarrera
+				      GROUP BY 
+				ps.idGiro,
+				carr.vCarrera,
+				gir.vGiro,
+				               al.bSexo
+				HAVING COUNT(al.bSexo)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaSector($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT carr.vClave as 'Carrera2', 
+				sec.vSector as 'Sector',
+				sec.vClaveSector as 'vClaveSector',
+				COUNT(ps.idSector) as 'Total' FROM proyectoseleccionado as ps 
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				INNER JOIN sectores as sec ON ps.idSector = sec.idSector
+				                 WHERE carr.idCarrera = :idCarrera
+				GROUP BY 
+				ps.idSector,
+				carr.vCarrera,
+				sec.idSector
+				HAVING COUNT(ps.idSector)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function graficaSectorMujeryHombre($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+				"SELECT sec.vSector as 'Sector',
+				  carr.vCarrera as 'Carrera',
+				  sec.vClaveSector as 'Clave',
+				      IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
+				      COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
+				      INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+				      INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				      INNER JOIN sectores as sec ON ps.idSector = sec.idSector
+				      WHERE carr.idCarrera = :idCarrera
+				      GROUP BY 
+				ps.idSector,
+				carr.vCarrera,
+				sec.idSector,
+				               al.bSexo
+				HAVING COUNT(al.bSexo)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
+		public function SubirExcelBancoProyectos($FileExcel){
+			//Creamos la Ruta para la carpeta(si esta no ha sido creada) que almanecenara los archivos
+			$ruta = "../files/";
+	          try {
+		            if (!file_exists($ruta)) {
+		              mkdir($ruta,0777,true);
+		            }
+		          } catch (Exception $e) {
+		            echo $e->getMessage();
+		          }
+		    //Creamos el directorio dentro de la carpeta principal
+		    $carpetaAdmin = '../files/Admin Residencias';
+		        try {
+		            if (!file_exists($carpetaAdmin)) {
+		              mkdir($carpetaAdmin,0777,true);
+		            }
+		          } catch (Exception $e) {
+		            echo $e->getMessage();
+		          }
+
+		    //Creamos la ruta donde se guardara el archivo
+		    //Lo guardamos con el nombre Banco de Proyectos y le concatenamos la fecha
+		    //en la cual fue subido dicho archivo      
+		    $ArchivoExcel = explode('.', $FileExcel['name']);
+			$RutaExcel = '../files/Admin Residencias/Banco de Proyectos '.date("Y-m-d").'.'.$ArchivoExcel[1];
+			$SuccessExcel = move_uploaded_file($FileExcel['tmp_name'], $RutaExcel);
+
+			if($SuccessExcel) {
+				include_once '../PHPExcel/Classes/PHPExcel.php';
+				$DirectoryExcel = '../files/Admin Residencias/Banco de Proyectos '.date("Y-m-d").'.'.$ArchivoExcel[1];
+				$inputFileType = PHPExcel_IOFactory::identify($DirectoryExcel);
+				$objReader = PHPExcel_IOFactory::createReader($inputFileType);
+              	$objPHPExcel = $objReader->load($DirectoryExcel);
+              	$sheet = $objPHPExcel->getSheet(0); 
+              	$highestRow = $sheet->getHighestRow(); 
+              	$highestColumn = $sheet->getHighestColumn();
+              
+
+              	for ($row = 2; $row <= $highestRow; $row++) {
+              		$vNombreEmpresa = $sheet->getCell("A".$row)->getValue();
+              		$vCarrera = $sheet->getCell("B".$row)->getValue();
+	                $vPeriodo = $sheet->getCell("C".$row)->getValue();
+	                $vNombreProyecto = $sheet->getCell("D".$row)->getValue();
+	                $vDescripcion = $sheet->getCell("E".$row)->getValue();
+	                $vArea = $sheet->getCell("F".$row)->getValue();
+	                $vPropuestaDe = $sheet->getCell("G".$row)->getValue();
+	                $iTotalResidentes = $sheet->getCell("H".$row)->getValue();
+
+	                /**********************************************************
+	                * Si la empresa no Existe Tomar los valores y registrarla *
+	                ***********************************************************/
+
+	                $vContacto = $sheet->getCell("I".$row)->getValue();
+	                $vCorreoElectronico = $sheet->getCell("J".$row)->getValue();
+	                $vDireccion = $sheet->getCell("K".$row)->getValue();
+
+
+	                /*echo $vNombreEmpresa;
+	                echo "<br>";
+	                echo $vCarrera;
+	                echo "<br>";
+	                echo $vPeriodo;
+	                echo "<br>";
+	                echo $vNombreEmpresa;
+	                echo "<br>";
+	                echo $vContacto;
+	                echo "<br>";
+	                echo $vCorreoElectronico;
+	                echo "<br>";*/
+
+	                try {
+	                	//Validar que la Carrera Exista
+		                $SQLValidarCarrera = $this->CONNECTION->PREPARE("SELECT COUNT(idCarrera) AS Total FROM carreras WHERE vCarrera = :vCarrera");
+		                $SQLValidarCarrera->bindParam(":vCarrera",$vCarrera);
+		                $SQLValidarCarrera->execute();
+		                $SuccessCarrera = $SQLValidarCarrera->FETCH(PDO::FETCH_ASSOC);
+
+		                //Validar que la Empresa este registrada
+		                $SQLValidarEmpresa = $this->CONNECTION->PREPARE("SELECT COUNT(idEmpresa) AS Total FROM empresas WHERE vNombreEmpresa = :vNombreEmpresa");
+		                $SQLValidarEmpresa->bindParam(":vNombreEmpresa",$vNombreEmpresa);
+		                $SQLValidarEmpresa->execute();
+		                $SuccessEmpresa = $SQLValidarEmpresa->FETCH(PDO::FETCH_ASSOC);
+
+		                //Validar que el periodo actual
+		                $SQLValidarPeriodo = $this->CONNECTION->PREPARE("SELECT COUNT(idPeriodo) AS Total FROM periodos WHERE vPeriodo = :vPeriodo AND bActivo = 1");
+		                $SQLValidarPeriodo->bindParam(":vPeriodo",$vPeriodo);
+		                $SQLValidarPeriodo->execute();
+		                $SuccessPeriodo = $SQLValidarPeriodo->FETCH(PDO::FETCH_ASSOC);
+
+		                /*echo "Carrera = ".$SuccessCarrera['Total'];
+		                echo "<br>";
+		                echo "Empresa = ".$SuccessEmpresa['Total'];
+		                echo "<br>";
+		                echo "Periodo = ".$SuccessPeriodo['Total'];*/
+
+		                if ($SuccessEmpresa['Total'] == 0) {
+		                	//Registramos Primero si la Empresa no Existe para no perder el Dato
+		                	$SQLInsertEmpresa = $this->CONNECTION->PREPARE(
+		                		"INSERT INTO empresas (
+		                			vNombreEmpresa,
+		                			vCorreoElectronico,
+		                			vDireccion,
+		                			vTitular,
+		                			vContacto
+		                			)
+		                		VALUES (
+		                			:vNombreEmpresa,
+		                			:vCorreoElectronico,
+		                			:vDireccion,
+		                			:vTitular,
+		                			:vContacto);
+		                	");
+		                	$SQLInsertEmpresa->bindParam(":vNombreEmpresa",$vNombreEmpresa);
+		                	$SQLInsertEmpresa->bindParam(":vCorreoElectronico",$vCorreoElectronico);
+		                	$SQLInsertEmpresa->bindParam(":vDireccion",$vDireccion);
+		                	$SQLInsertEmpresa->bindParam(":vTitular",$vPropuestaDe);
+		                	$SQLInsertEmpresa->bindParam(":vContacto",$vContacto);
+		                	$SQLInsertEmpresa->execute();
+
+		                	echo '<div class="alert alert-dismissable alert-success">Nueva Empresa Registrada!!!
+									<button type="button" class="close" data-dismiss="alert">x</button>
+								  </div>';
+		                }//Fin del if que registra la empresa en caso de que no exista
+		                $SQLValidarEmpresa->execute();
+		                $SuccessEmpresa = $SQLValidarEmpresa->FETCH(PDO::FETCH_ASSOC);
+
+	                	if ($SuccessCarrera['Total'] == 1 && $SuccessEmpresa['Total'] == 1 && $SuccessPeriodo['Total'] == 1) {
+	                		
+	                		//Obtener el id de la Carrera
+	                		$SQLidCarrera = $this->CONNECTION->PREPARE("SELECT idCarrera AS idCar FROM carreras WHERE vCarrera = :vCarrera");
+	                		$SQLidCarrera->bindParam(":vCarrera",$vCarrera);
+	                		$SQLidCarrera->execute();
+	                		$IDCARRERA = $SQLidCarrera->FETCH(PDO::FETCH_ASSOC);
+
+							//Obtener el id de la Empresa
+	                		$SQLidEmpresa = $this->CONNECTION->PREPARE("SELECT idEmpresa AS idEmpre FROM empresas WHERE vNombreEmpresa = :vNombreEmpresa");
+	                		$SQLidEmpresa->bindParam(":vNombreEmpresa",$vNombreEmpresa);
+	                		$SQLidEmpresa->execute();
+	                		$IDEMPRESA = $SQLidEmpresa->FETCH(PDO::FETCH_ASSOC);
+
+	                		//Obtener el id del Periodo
+	                		$SQLidPeriodo = $this->CONNECTION->PREPARE("SELECT idPeriodo AS idPer FROM periodos WHERE vPeriodo = :vPeriodo");
+	                		$SQLidPeriodo->bindParam(":vPeriodo",$vPeriodo);
+	                		$SQLidPeriodo->execute();
+	                		$IDPERIODO = $SQLidPeriodo->FETCH(PDO::FETCH_ASSOC);
+
+	                		$SQLInsertByExcel = $this->CONNECTION->PREPARE(	
+								"INSERT INTO bancoproyectos (
+									idEmpresa,
+									idCarrera,
+									idEstado,
+									idPeriodo,
+									vNombreProyecto,
+									vDescripcion,
+									vArea,
+									vPropuestaDe,
+									dFechaPropuesta,
+									iTotalResidentes,
+									bActive
+								) 
+								SELECT
+									:idEmpresa,
+									:idCarrera,
+									1,
+									:idPeriodo,
+									:vNombreProyecto,
+									:vDescripcion,
+									:vArea,
+									:vPropuestaDe,
+									CURRENT_DATE,
+									:iTotalResidentes,
+									1 FROM bancoproyectos WHERE NOT EXISTS (SELECT * FROM bancoproyectos WHERE vNombreProyecto = :vNombreProyecto) LIMIT 1");
+
+			                $SQLInsertByExcel->bindParam(":idEmpresa", $IDEMPRESA['idEmpre']);
+							$SQLInsertByExcel->bindParam(":idCarrera", $IDCARRERA['idCar']);
+							$SQLInsertByExcel->bindParam(":idPeriodo", $IDPERIODO['idPer']);
+							$SQLInsertByExcel->bindParam(":vNombreProyecto", $vNombreProyecto);
+							$SQLInsertByExcel->bindParam(":vDescripcion", $vDescripcion);
+							$SQLInsertByExcel->bindParam(":vArea", $vArea);
+							$SQLInsertByExcel->bindParam(":vPropuestaDe", $vPropuestaDe);
+							$SQLInsertByExcel->bindParam(":iTotalResidentes", $iTotalResidentes);
+							$SQLInsertByExcel->execute();
+
+		                	echo '<div class="alert alert-dismissable alert-success">Todo Correcto!!!
+									<button type="button" class="close" data-dismiss="alert">x</button>
+								  </div>';
+		                }//Fin del IF que compruba la existencia de los datos del Excel 
+		                else{
+		                	echo '<div class="alert alert-dismissable alert-warning">Los Datos estan mal!!:
+									<button type="button" class="close" data-dismiss="alert">x</button>
+								  </div>';
+	                	}//Fin del ELSE
+	                } catch (Exception $e) {
+	                	echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+	                }
+              	}
+			}
+	    }
+
+	    /***************NOTIFICACIONES*****************/
+	    public function obtenerNumeroNotificaciones($idAlumno) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT COUNT(idNotificacion) AS total FROM notificaciones WHERE idAlumno = :idAlumno AND bVista = 1 AND bActivo = 1");
+				$SQL->bindParam(":idAlumno", $idAlumno);
+				$SQL->execute();
+
+				$TOTAL = $SQL->FETCH(PDO::FETCH_ASSOC);
+				return $TOTAL['total'];
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function obtenerNotificacionesAlumno($idAlumno) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT tTexto, dFecha, bVista FROM notificaciones WHERE idAlumno = :idAlumno AND bActivo = 1 ORDER BY idNotificacion DESC");
+				$SQL->bindParam(":idAlumno", $idAlumno);
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function actualizarNotificacionesVistas($idAlumno) {
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE notificaciones SET bVista = 0 WHERE idAlumno = :idAlumno AND bActivo = 1");
+				$SQL->bindParam(":idAlumno",$idAlumno);
+				$SQL->execute();
 			} catch (PDOException $e) {
 				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
 						<button type="button" class="close" data-dismiss="alert">x</button>

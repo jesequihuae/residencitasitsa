@@ -64,6 +64,7 @@
                     <h1 class="page-header">
                     </h1>
                     <?php
+
                         if(isset($_POST['registrarProyecto'])) {
                           /*$ObjectITSA->registerProject(
                             $_SESSION['idUsuario'],
@@ -77,6 +78,7 @@
                             $_FILES['Anteproyecto'],
                             $_FILES['Constancia']
                           );*/
+                    
                           $ObjectITSA1->saveSolicitud(
                                                             $_POST,
                                                             $_FILES['Constancia'],
@@ -93,17 +95,25 @@
                             $_FILES['aceptacion']
                           );
                         } else if (isset($_POST['primerReporteForm'])) {
-                          /*$ObjectITSA->saveFirstReport(
+                          $ObjectITSA1->saveReports(
                             $_SESSION['idUsuario'],
                             $_SESSION['numeroControl'],
-                            $_FILES['primerReporte']
-                          );*/
+                            $_FILES['fileEvaluacion'],
+                            $_FILES['fileFormatoAsesoria'],
+                            4, 
+                            5,
+                            'PrimerReporte'
+                          );
                         } else if (isset($_POST['segundoReporteForm'])) {
-                          /*$ObjectITSA->saveSecondReport(
+                          $ObjectITSA1->saveReports(
                             $_SESSION['idUsuario'],
                             $_SESSION['numeroControl'],
-                            $_FILES['segundoReporte']
-                          );*/
+                            $_FILES['fileEvaluacion'],
+                            $_FILES['fileFormatoAsesoria'],
+                            4, 
+                            6,
+                            'SegundoReporte'
+                          );
                         } else if (isset($_POST['tercerReporteForm'])) {
                           /*$ObjectITSA->saveThirdReport(
                             $_SESSION['idUsuario'],
@@ -164,12 +174,12 @@
                             </a>
                           </li>
 
-                          <li title="reporte 3" role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 6 ? 'visited' : '') ?>">
+                          <!--<li title="reporte 3" role="presentation" class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 6 ? 'visited' : '') ?>">
                             <a href="#3seguimiento" class="opcionHdr" onclick="descagarSeguimiento(7,<?php echo $ObjectITSA->getIntProcess($_SESSION['idUsuario']) ?>)" aria-controls="3seguimiento" role="tab" data-toggle="tab">
                              <i class="fa fa-folder-open"></i>
                               <p>Tercer</p>
                             </a>
-                          </li>
+                          </li>-->
 
                           <li role="presentation class="<?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 7 ? 'active' : $ObjectITSA->getIntProcess($_SESSION['idUsuario']) > 7 ? 'visited' : '') ?>">
                             <a href="#final" class="opcionHdr" aria-controls="final" role="tab" data-toggle="tab">
@@ -183,225 +193,12 @@
                         <div class="tab-content">
                           <!-- REGISTRAR PROYECTO -->
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 1 ? 'active' : '') ?>" id="registrarProyecto">
-                            <div class="design-process-content">
-                              <h3 class="semi-bold">Registra tu proyecto</h3>
-                              <p>Bienvenido al sistema de Residencias del Instituto Tecnológico Superior de Apatzingán</p>
-                              <form method="post" enctype="multipart/form-data">
-                                <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label">Proyecto:</label>
-                                  <div class="col-lg-8">
-                                    <select class="form-control selectpicker" data-live-search="true" name="idProyecto" id="idProyecto" required>
-                                      <?php foreach ($ObjectITSA->getAllProyectos() as $r) { ?>
-                                          <option value="<?php echo $r["idBancoProyecto"]; ?>"><?php echo $r["vNombreProyecto"]; ?></option>
-                                      <?php  } ?>
-                                    </select>
-                                  </div>
-                                </div>
-                                <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label">Periodo:</label>
-                                  <div class="col-lg-8">
-                                    <select class="form-control"  name="idPeriodo" id="idPeriodo" required>
-                                      <?php foreach ($ObjectITSA->getAllPeriodos() as $r) { ?>
-                                          <option value="<?php echo $r["idPeriodo"]; ?>"><?php echo $r["vPeriodo"]; ?></option>
-                                      <?php  } ?>
-                                    </select>
-                                  </div>
-                                </div>
-                                <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label" >Opción:</label>
-                                  <div class="col-lg-8">
-                                    <select class="form-control" data-live-search="true"  id="idOpcion" name="idOpcion" required>
-                                      <?php foreach ($ObjectITSA->getAllOpciones() as $r) { ?>
-                                          <option value="<?php echo $r["idOpcion"]; ?>"><?php echo $r["vOpcion"]; ?></option>
-                                      <?php  } ?>
-                                    </select>
-                                  </div>
-                                </div>
-                                 <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label"   >Giro:</label>
-                                  <div class="col-lg-8">
-                                    <select class="form-control" name="idGiro" id="idGiro" required>
-                                      <?php foreach ($ObjectITSA->getAllGiros() as $r) { ?>
-                                          <option value="<?php echo $r["idGiro"]; ?>"><?php echo $r["vGiro"]; ?></option>
-                                      <?php  } ?>
-                                    </select>
-                                  </div>
-                                </div>
-                                 <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label"  >Sector:</label>
-                                  <div class="col-lg-8">
-                                    <select class="form-control" name="idSector" id="idSector" required>
-                                      <?php foreach ($ObjectITSA->getAllSectores() as $r) { ?>
-                                          <option value="<?php echo $r["idSector"]; ?>"><?php echo $r["vSector"]; ?></option>
-                                      <?php  } ?>
-                                    </select>
-                                  </div>
-                                </div>
-                                <div class="form-group row">
-                                 <label for="asesorInterno" class="col-lg-2 col-form-label" >ASESOR(A) INTERNO(A):</label>
-                                 <div class="col-lg-8">
-                                   <input type="text" name="asesorInterno" id="asesorInterno" class="form-control" />
-                                 </div>
-                               </div>
-                               <div class="form-group row">
-                                <label for="inputEmail3" class="col-lg-2 col-form-label" >ASESOR(A) EXTERNO(A):</label>
-                                <div class="col-lg-8">
-                                  <input type="text" name="asesorExterno" id="asesorExterno" class="form-control" />
-                                </div>
-                              </div>
-                               <div class="form-group row">
-                                <label for="inputEmail3" class="col-lg-2 col-form-label" >PERSONA QUE FIRMARÁ DOCUMENTOS OFICIALES DE LA RESIDENCIA:</label>
-                                <div class="col-lg-8">
-                                  <input type="text" name="personasQueFirmaran" id="personasQueFirmaran" class="form-control" />
-                                </div>
-                              </div>
-                              <hr>
-                              <h3 class="semi-bold">Información del alumno</h3>
-                              <div class="form-group row">
-                               <label for="inputEmail3" class="col-lg-2 col-form-label" >Nombre:</label>
-                               <div class="col-lg-8">
-                                 <input type="text" name="nombreAlumno" id="nombreAlumno" value="<?php echo $_SESSION['nombre']; ?>" class="form-control" />
-                               </div>
-                             </div>
-                             <div class="form-group row">
-                              <label for="inputEmail3" class="col-lg-2 col-form-label" >Numero de control:</label>
-                              <div class="col-lg-8">
-                                <input type="text" name="numeroDeControl" id="numeroDeControl" value="<?php echo $_SESSION['numeroControl']; ?>" class="form-control" />
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Domicilio:</label>
-                             <div class="col-lg-8">
-                               <input type="text" name="domicilioAlumno" id="domicilioAlumno" class="form-control" />
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Colonia:</label>
-                             <div class="col-lg-8">
-                               <input type="text" name="coloniaAlumno" id="coloniaAlumno" class="form-control" />
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Ciudad y estado:</label>
-                             <div class="col-lg-8">
-                               <input type="text" name="ciudadEstado" id="ciudadEstado" class="form-control" />
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >CP:</label>
-                             <div class="col-lg-8">
-                               <input type="text" name="cp" id="cp" class="form-control" />
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Telefono:</label>
-                             <div class="col-lg-8">
-                               <input type="text" name="telefono" id="telefono" class="form-control" />
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3"  class="col-lg-2 col-form-label" >Email:</label>
-                             <div class="col-lg-8">
-                               <input type="email" id="correo" name="correo" class="form-control" />
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Seguro social:</label>
-                             <div class="col-lg-4">
-                               <select name="idSeguroSocial" id="idSeguroSocial" class="form-control">
-                                 <option value="1">IMSS</option>
-                                 <option value="2">ISSTE</option>
-                                 <option value="3">OTROS</option>
-                               </select>
-                             </div>
-                             <div class="col-lg-4">
-                               <input type="text" name="numeroSeguro" id="numeroSeguro" class="form-control"  placeholder="numeroSeguro" />
-                             </div>
-                            </div>
-                            <hr>
-                            <h3 class="semi-bold">Estructura del anteproyecto</h3>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Título del anteproyecto:</label>
-                             <div class="col-lg-8">
-                              <input class="form-control" type="text" id="tituloAnteproyecto" name="tituloAnteproyecto" placeholder="Título del anteproyecto"></input>
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Objectivos General y Específicos:</label>
-                             <div class="col-lg-4">
-                              <textarea class="form-control" type="text" id="objectivoGeneral" name="objectivoGeneral" placeholder="Objectivo general"></textarea>
-                             </div>
-                             <div class="col-lg-4">
-                              <textarea class="form-control" type="text" id="objectivoEspecifico" name="objectivoEspecifico" placeholder="Objectivo especifico"></textarea>
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Alcances y delimitaciónes:</label>
-                             <div class="col-lg-8">
-                              <textarea class="form-control" type="text" id="alcancesDelimitaciones" name="alcancesDelimitaciones" placeholder="Alcances o delimitaciónes"></textarea>
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Descripción de las actividades:</label>
-                             <div class="col-lg-8">
-                              <textarea class="form-control" type="text" id="descripcionActividades" name="descripcionActividades" placeholder="Descripcion de las actividades"></textarea>
-                             </div>
-                            </div>
-                            <div class="form-group row">
-                             <label for="inputEmail3" class="col-lg-2 col-form-label" >Area o lugar de implementación:</label>
-                             <div class="col-lg-8">
-                              <textarea class="form-control" type="text" id="areaOLugarImplementacion" name="areaOLugarImplementacion" placeholder="Lugar de la implementación"></textarea>
-                             </div>
-                            </div>
-                                <!--<div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label">Solicitud:</label>
-                                  <div class="col-lg-10">
-                                    <input type="file" name="Solicitud" required>
-                                  </div>
-                                </div>-->
-                                <!--<div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label">Anteproyecto:</label>
-                                  <div class="col-lg-10">
-                                    <input type="file" name="Anteproyecto" required>
-                                  </div>
-                                </div>-->
-                                <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-2 col-form-label">Constancia:</label>
-                                  <div class="col-lg-10">
-                                    <input type="file" name="Constancia" required>
-                                  </div>
-                                </div>
-                                <hr>
-                                <!--CRONOGRAMA-->
-                                <h3 class="semi-bold">Cronograma</h3>
-                                <?php
-                                  if($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 1)
-                                  {
-                                      $_SESSION["idTipoDocumento"] = 3;
-                                      require "cronograma/cronogramaSeg.php";
-                                  }
-                                 ?>
-                                 <br>
-                                <div>
-                                   <!--FIN CRONOGRAMA-->
-                                  <button type="submit" name="registrarProyecto" id="guardarSolicitud" class="btn btn-lg btn-success" onclick="return validacionGuardar()">Guardar</button>
-                                  <button class="btn btn-lg btn-warning">Limpiar</button>
-                                  <br><br>
-                                </div>
-                              </form>
-                              <div class="form-group" style="padding:10px;">
-
-
-
-                                <div id="salida">
-
-                                </div>
-
-                              </div>
-                             </div>
+                          <form method="post" enctype="multipart/form-data" >
+                            <?php include_once("html/solicitudDeResidencias.php"); ?>
+                          </form>
                           </div>
-
                           <!-- ESPERA DE STATUS DE PROYECTO -->
+                          
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 2 ? 'active' : '') ?>" id="solicitudStatus">
                             <div class="design-process-content">
                               <h3 class="semi-bold">Estado de Solicitud</h3>
@@ -418,70 +215,66 @@
                             <div class="design-process-content">
                               <h3 class="semi-bold">Documentos</h3>
                               <p>Carta de presentación y Carta de aceptación</p>
-                              <form method="post" enctype="multipart/form-data">
-                                <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-4 col-form-label">Carta de presentación:</label>
-                                  <div class="col-lg-8">
-                                    <input type="file" name="presentacion" required>
+                                <form method="post" enctype="multipart/form-data">
+                                  <div class="form-group row">
+                                    <label for="inputEmail3" class="col-lg-4 col-form-label">Carta de presentación:</label>
+                                    <div class="col-lg-8">
+                                      <input type="file" name="presentacion" required>
+                                    </div>
                                   </div>
-                                </div>
-                                <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-4 col-form-label">Carta de aceptación:</label>
-                                  <div class="col-lg-8">
-                                    <input type="file" name="aceptacion" required>
+                                  <div class="form-group row">
+                                    <label for="inputEmail3" class="col-lg-4 col-form-label">Carta de aceptación:</label>
+                                    <div class="col-lg-8">
+                                      <input type="file" name="aceptacion" required>
+                                    </div>
                                   </div>
-                                </div>
-                                <div align="center">
-                                  <button class="btn btn-success" type="submit" name="aceptacionPresentacion">Guardar</button>
-                                  <button class="btn btn-warning">Limpiar</button>
-                                </div>
-                              </form>
+                                  <div align="center">
+                                    <button class="btn btn-success" type="submit" name="aceptacionPresentacion">Guardar</button>
+                                    <button class="btn btn-warning">Limpiar</button>
+                                  </div>
+                                </form>
                               <!-- <a href="#1seguimiento" aria-controls="1seguimiento" role="tab" data-toggle="tab">Siguiente</a> -->
                             </div>
                           </div>
 
                           <!-- PRIMER SEGUIMIENTO -->
-                          <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4 ? 'active' : '') ?>" id="1seguimiento">
-                             <?php $numSeg = $ObjectITSA->getIntProcess($_SESSION['idUsuario']); ?>
+                          <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4 ? 'active' : '') ?>" id="1seguimiento"> 
                             <div class="design-process-content">
                                 <div class="row">
                                   <div class="col-md-12">
-                                    <h3 class="semi-bold">Primer seguimiento, Lo pronosticado</h3>
-                                     <?php
-                                        if($numSeg == 4)
-                                        {
-                                          //$_SESSION["idTipoDocumento"] = 5;
-                                          require "cronograma/cronogramaPronosticado.php";
-                                        }
-                                      ?>
-                                  </div>
-                                  <div class="col-md-12">
-
-                                      <h3 class="semi-bold">Primer seguimiento Lo Real</h3>
-                                      <p>Primer seguimiento</p>
-                                      <!--<form method="post" enctype="multipart/form-data">
-                                        <div class="form-group row">
-                                          <label for="inputEmail3" class="col-lg-4 col-form-label">Primer Reporte:</label>
-                                          <div class="col-lg-8">
-                                            <input type="file" name="primerReporte" required>
-                                          </div>
+                                      <div class="col-md-12">
+                                        <p>Primer seguimiento</p>
+                                      </div>
+                                      <form method="post" enctype="multipart/form-data">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3 col-md-offset-3">
+                                              <div class="col-md-12">
+                                                  <strong>
+                                                    <a href="<?php echo $ObjectITSA1->getSeguimientoById(5); ?>" target="_blank">Evaluación</a>
+                                                  </strong>
+                                              </div>
+                                              <div class="col-md-12">
+                                                <input type="file" name="fileEvaluacion" />
+                                              </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="col-md-12">
+                                                    <strong>
+                                                    Formato de asesoria
+                                                    </strong>
+                                                </div>
+                                                <div class="col-md-12">
+                                                  <input type="file" name="fileFormatoAsesoria" />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div align="center">
-                                          <button class="btn btn-success" type="submit" name="primerReporteForm">Guardar</button>
-
-                                        </div><br>
-                                      </form>-->
-                                      <?php
-                                        if($numSeg == 4)
-                                        {
-                                          $_SESSION["idTipoDocumento"] = 5;
-                                          require "cronograma/cronogramaSeg.php";
-                                        }
-                                      ?>
+                                        <div class="col-md-12" style="margin-top:20px;">
+                                          <button class="btn btn-primary" name="primerReporteForm">Guardar</button>
+                                        </div>
+                                      </form>
                                   </div>
                                 </div>
                             </div>
-                            <a href="#2seguimiento" aria-controls="2seguimiento" role="tab" data-toggle="tab">Siguiente</a>
                           </div>
 
                           <!-- SEGUNDO SEGUIMIENTO -->
@@ -489,85 +282,58 @@
                             <?php $numSeg = $ObjectITSA->getIntProcess($_SESSION['idUsuario']); ?>
                             <div class="design-process-content">
                               <div class="row">
-                                <div class="col-md-12">
-                                  <h3 class="semi-bold">Segundo seguimiento Lo Pronosticado</h3>
-                                   <?php
-                                        if($numSeg == 5)
-                                        {
-                                          //$_SESSION["idTipoDocumento"] = 6;
-                                          require "cronograma/cronogramaPronosticado.php";
-                                        }
-                                    ?>
-                                </div>
-                                <div class="col-md-12">
-                                  <h3 class="semi-bold">Segundo seguimiento Lo Pronosticado</h3>
-                                    <p>Segundo seguimiento</p>
-                                    <!--<form method="post" enctype="multipart/form-data">
-                                      <div class="form-group row">
-                                        <label for="inputEmail3" class="col-lg-4 col-form-label">Segundo Reporte:</label>
-                                        <div class="col-lg-8">
-                                          <input type="file" name="segundoReporte" required>
-                                        </div>
-                                      </div>
-                                      <div align="center">
-                                        <button class="btn btn-success" type="submit"  name="segundoReporteForm">Guardar</button>
-
-                                      </div><br>
-                                    </form>-->
-                                    <?php
-                                      if($numSeg == 5)
-                                      {
-                                        $_SESSION["idTipoDocumento"] = 6;
-                                          require "cronograma/cronogramaSeg.php";
-                                      }
-                                    ?>
-                             </div>
-                            <!--<a href="#3seguimiento" aria-controls="3seguimiento" role="tab" data-toggle="tab">Siguiente</a>-->
-                                </div>
-                              </div>
-                          </div>
-
-                          <!-- TERCER SEGUIMIENTO -->
-                          <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 6 ? 'active' : '') ?>" id="3seguimiento">
-                            <?php $numSeg = $ObjectITSA->getIntProcess($_SESSION['idUsuario']); ?>
-                            <div class="design-process-content">
-                              <h3 class="semi-bold">Tercer seguimiento Lo Pronosticado</h3>
-                               <?php
-                                        if($numSeg == 6)
-                                        {
-                                          //$_SESSION["idTipoDocumento"] = 7;
-                                          require "cronograma/cronogramaPronosticado.php";
-                                        }
-                                    ?>
-                              <p>Tercer seguimiento</p>
-                              <!--<form method="post" enctype="multipart/form-data">
-                                <div class="form-group row">
-                                  <label for="inputEmail3" class="col-lg-4 col-form-label">Tercer Reporte:</label>
-                                  <div class="col-lg-8">
-                                    <input type="file" name="tercerReporte" required>
+                                  <div class="col-md-12">
+                                      <p>Segundo seguimiento</p>
                                   </div>
-                                </div>
-                                <div align="center">
-                                  <button class="btn btn-success" type="submit" name="tercerReporteForm">Guardar</button>
-
-                                </div><br>
-                              </form>-->
-                            </div>
-                            <?php
-                              if($numSeg == 6)
-                              {
-                                $_SESSION["idTipoDocumento"] = 7;
-                                  require "cronograma/cronogramaSeg.php";
-                              }
-                            ?>
-                            <a href="#final" aria-controls="final" role="tab" data-toggle="tab">Siguiente</a>
+                                  <form method="post" enctype="multipart/form-data">
+                                        <div class="col-md-12">
+                                            <div class="col-md-3 col-md-offset-3">
+                                              <div class="col-md-12">
+                                                 <strong>
+                                                    <a href="<?php echo $ObjectITSA1->getSeguimientoById(6); ?>" target="_blank">Evaluación</a>
+                                                  </strong>
+                                              </div>
+                                              <div class="col-md-12">
+                                                <input type="file" name="fileEvaluacion" />
+                                              </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="col-md-12">
+                                                    <strong>
+                                                    Formato de asesoria
+                                                    </strong>
+                                                </div>
+                                                <div class="col-md-12">
+                                                  <input type="file" name="fileFormatoAsesoria" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top:20px;">
+                                          <button class="btn btn-primary" name="segundoReporteForm">Guardar</button>
+                                        </div>
+                                    </form>
+                              </div>
+                             </div>
                           </div>
-
                           <!-- FINAL -->
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 7 ? 'active' : '') ?>" id="final">
                             <div class="design-process-content">
-                              <h3>Documento final</h3>
-                              <p>Documento final</p>
+                              <table class="table table-bordered">
+                                <tr>
+                                  <th>Documento</th>
+                                  <th>Estado (AI)</th>
+                                  <th>Estado (AE)</th>
+                                  <th>Descargar</th>
+                                </tr>
+                                <?php foreach($ObjectITSA1->getAllDocumentsByAlumno($_SESSION['idUsuario']) as $row){?>
+                                  <tr>
+                                    <td><?php echo $row["vNombre"]; ?></td>
+                                    <td><?php echo ($row["bAceptadoAI"] == 0)?"NO":"SI"; ?></td>
+                                    <td><?php echo ($row["bAceptadoAE"] == 0)?"NO":"SI"; ?></td>
+                                    <td><a target="_blank" href="<?php echo $row["vRuta"];?>"><i class="fa fa-download" aria-hidden="true"></i></a></td>
+                                  </tr>
+                                <?php } ?>
+                              </table>
                             </div>
                           </div>
 
@@ -749,66 +515,35 @@
 
   function guardar(){
     var response = 1;
-    var cronograma = "[";
-
+  
     var idTipoDeDocumento = <?php echo (isset($_SESSION["idTipoDocumento"])?$_SESSION["idTipoDocumento"]:0); ?>;
-    var rowCount = 0;
-    for(i = 0;i < contador;i++){
-      cronograma += "{\"actividad"+i+"\":\""+$("#actividad"+i).val()+"\",\"idTipoDeDocumento\":\""+idTipoDeDocumento+"\",\"i"+i+"\":"+i+",";
-      for(j = 0; j<24;j++){
-          cronograma += "\"valor"+i+""+j+"\":\""+$("#"+i+""+j).is(":checked")+"\",\"iSemana"+i+""+j+"\":\""+$("#semana"+j).text().trim()+"\",\"j"+i+""+j+"\":"+j+",";
-      }
-      //QUITAMOS LA ULTIMA COMA PARA QUE NO TRUENE AL ENVIAR AL SERVIDOR
-      cronograma = cronograma.slice(0,-1);
-      cronograma += "},";
-    }
-    //QUITAMOS LA ULTIMA COMA PARA QUE NO TRUENE AL ENVIAR AL SERVIDOR
-    cronograma = cronograma.slice(0,-1);
-    cronograma+=']';
-    if(contador < 6){
-      alertify.set('notifier','position', 'top-center');
-      alertify.error("Al menos debes de llenar 6 actividades");
-      return;
-    }
-    console.log(cronograma);
-    if(contador > 0){
-        $.ajax({
-          url: '../php/cronograma.php',
-          type:'POST',
-          data:
-              {
-                "cronograma":cronograma,
-                "operacion":1,
-                "size":24,
-                "idTipoDeDocumento":idTipoDeDocumento
-              },
-          beforeSend: function(e){
-
+  
+    $.ajax({
+      url: '../php/cronograma.php',
+      type:'POST',
+      data:
+          {
+            "cronograma":cronograma,
+            "operacion":1,
+            "size":24,
+            "idTipoDeDocumento":idTipoDeDocumento
           },
-          success: function(e){
-            console.log(e);
-            $("#salida").html(e);
-            mostrarMensaje("Cronograma guardado con exito ",1);
-            console.log(e);
-            if(idTipoDeDocumento != 3){
-              location.href = "residencia.php";
-            }else{
-              response = 1;
-            }
+      beforeSend: function(e){
 
-          },
-          error: function(e){
-            console.log();
-            $("#salida").html(e);
-            //mostrarMensaje("Algo salio mal...",2);
-            response = -1;
-          }
-        });
-      }else{
-        //mostrarMensaje("No hay ninguna actividad por guardar...",2);
-        response = 0;
+      },
+      success: function(e){
+        $("#salida").html(e);
+        mostrarMensaje("Cronograma guardado con exito ",1);
+        location.href = "residencia.php";
+      },
+      error: function(e){
+        $("#salida").html(e);
+        
+        response = -1;
       }
-      return response;
+    });
+
+    return response;
   }
 
   function validacionGuardar(){

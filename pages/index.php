@@ -27,7 +27,7 @@
     <link  href="../css/alertify.min.css" rel="stylesheet" type="text/css">
 
     <!-- Default theme -->
-    <link rel="stylesheet" href="../css/themes/default.min.css"/>
+    <!-- <link rel="stylesheet" href="../css/themes/default.min.css"/> -->
 
 
 
@@ -47,20 +47,19 @@
 
     <!-- Navigation -->
     <?php include('../modules/navbar.php'); ?>
+    <?php
+      include '../php/connection.php';
+      if(!$ObjectITSA->checkSession()){
+         // echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
+         // exit;
+      }
+    ?>
 
     <!-- Page Content -->
     <div id="page-wrapper">
         <div class="container-fluid">
-            <!-- <input type="hidden" id="idUsuario" value="<?php @session_start(); echo $_SESSION['idUsuario']; ?>"> -->
             <div class="row">
-            <?php
             
-              include '../php/connection.php';
-              if(!$ObjectITSA->checkSession()){
-                 echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
-                 exit;
-              }
-            ?>
                 <div class="col-lg-12">
                     <h1 class="page-header"></h1>
                 </div>
