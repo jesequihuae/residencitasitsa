@@ -580,6 +580,27 @@
       }
 
     }
+
+    /**
+     * RETORNA UN ARREGLO DE ALUMNOS POR ID ASESOR EXTERNO
+     */
+    public function getAlumnosByIdAsesor($idAsesorExterno){
+      $sql = "
+        SELECT 
+          b.vNombre,
+          b.vApellidoPaterno,
+          b.vApellidoMaterno,
+          b.vNumeroControl,
+          b.vCorreoInstitucional
+        FROM proyectoseleccionado a 
+        INNER JOIN alumnos b ON(a.idAlumno = b.idAlumno)
+        WHERE a.idAsesorExterno = :idAsesorExterno;";
+        $db = $this->connection->prepare($sql);
+        $db->bindParam(":idAsesorExterno",$idAsesorExterno);
+        $db->execute();
+        return $db->fetchAll();
+    }
+
     /**
      * OBTIENE LA RUTA DEL ARCHIVO POR SEGUIMIENTO
      */

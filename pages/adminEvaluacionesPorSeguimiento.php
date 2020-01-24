@@ -32,7 +32,7 @@
         <?php
             include '../php/connection.php';
             if($ObjectITSA->checkSession()){
-                if(!$ObjectITSA->checkPermission("fileManager")) {
+                if(!$ObjectITSA->checkPermission("adminEvaluacionesPorSeguimiento")) {
                     echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                     exit;
                 }

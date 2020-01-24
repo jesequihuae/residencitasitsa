@@ -14,7 +14,8 @@
         <!-- Top Navigation: Right Menu -->
         <ul class="nav navbar-right navbar-top-links">
             <?php 
-                if($_SESSION['tipoUsuario'] == 1) {
+                
+                if(@$_SESSION['tipoUsuario'] == 1) {
             ?>
                 <li class="nav-item">
                     <a class="nav-link" href="../pages/notificaciones.php">
