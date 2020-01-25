@@ -119,7 +119,7 @@
       beforeSend:function(e){
       },
       success: function(e){
-          var json = $.parseJSON(e);
+          var json = JSON.parse(e);
           loadData(json);
       },
       error:function(e){

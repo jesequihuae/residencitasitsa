@@ -555,6 +555,7 @@
     idOpcion                = $("#idOpcion").val();
     idGiro                  = $("#idGiro").val();
     idSector                = $("#idSector").val();
+    bImpacto                = $("#bImpacto").val();
     asesorInterno           = $("#asesorInterno").val();
     asesorExterno           = $("#asesorExterno").val();
     personasQueFirmaran     = $("#personasQueFirmaran").val();

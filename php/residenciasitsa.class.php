@@ -1738,6 +1738,35 @@
 			return $StatementSQL->fetchAll();
 		}
 
+		public function graficaImpactoAmbiental($idCarrera){
+			if(isset($idCarrera['idCarrera']))
+			{
+				$Buscar = $idCarrera['idCarrera'];
+			}
+			else
+			{
+				$Buscar = $idCarrera;
+			}
+			$StatementSQL = $this->CONNECTION->PREPARE(
+					"SELECT carr.vClave AS 'Carrera',
+					'IA' AS Impacto, 
+					carr.idCarrera AS 'idCarrera',
+					COUNT(ps.idGiro) as 'Total' FROM proyectoseleccionado as ps 
+					INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
+					INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+					INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
+					WHERE carr.idCarrera = :idCarrera
+	                AND ps.bImpactoAmbiental = 1
+					GROUP BY 
+					ps.idGiro,
+					carr.vCarrera,
+					gir.vGiro
+					HAVING COUNT(ps.bImpactoAmbiental)");
+			$StatementSQL->bindParam(":idCarrera",$Buscar);
+			$StatementSQL->execute();
+			return $StatementSQL->fetchAll();
+		}
+
 		public function graficaTotalGiro($idCarrera){
 			if(isset($idCarrera['idCarrera']))
 			{
