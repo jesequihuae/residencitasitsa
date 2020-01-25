@@ -583,6 +583,27 @@
       }
 
     }
+
+    /**
+     * RETORNA UN ARREGLO DE ALUMNOS POR ID ASESOR EXTERNO
+     */
+    public function getAlumnosByIdAsesor($idAsesorExterno){
+      $sql = "
+        SELECT 
+          b.vNombre,
+          b.vApellidoPaterno,
+          b.vApellidoMaterno,
+          b.vNumeroControl,
+          b.vCorreoInstitucional
+        FROM proyectoseleccionado a 
+        INNER JOIN alumnos b ON(a.idAlumno = b.idAlumno)
+        WHERE a.idAsesorExterno = :idAsesorExterno;";
+        $db = $this->connection->prepare($sql);
+        $db->bindParam(":idAsesorExterno",$idAsesorExterno);
+        $db->execute();
+        return $db->fetchAll();
+    }
+
     /**
      * OBTIENE LA RUTA DEL ARCHIVO POR SEGUIMIENTO
      */
@@ -604,10 +625,13 @@
      */
     public function getSeguimientos(){
       $sql = "
-        SELECT 
-          idTipoDocumento,
-          vNombre
-        FROM tiposdocumento WHERE idTipoDocumento IN(5,6,7) AND bActivo = 1
+      SELECT DISTINCT
+        a.idTipoDocumento,
+        a.vNombre,
+        IFNULL(b.idTipoDocumento,0) > 0 AS cargado
+      FROM tiposdocumento a
+      LEFT JOIN evaluacionPorSeguimiento b ON(a.idTipoDocumento = b.idTipoDocumento)
+      WHERE a.idTipoDocumento IN(5,6,7) AND bActivo = 1;
       ";
       $DB = $this->connection->prepare($sql);
       $DB->execute();

@@ -9,17 +9,21 @@
 		}
 
 		public function login($Datos) {
+			
 			try {
+				
 				$SQL = $this->CONNECTION->prepare(
 					"SELECT
 						idTipoUsuario,
-						idUsuario
+						idUsuario,
+						vUsuario
 					 FROM usuarios
 					 WHERE vUsuario = :usuario AND vContrasena = :contrasena AND bActivo = 1");
 				$SQL->bindParam(":usuario", $Datos['usuario']);
 				$SQL->bindParam(":contrasena", $Datos['contrasena']);
 				$SQL->execute();
 
+				
 				if($SQL->rowCount() > 0) {
 					$Usuario = $SQL->fetch(PDO::FETCH_ASSOC);
 					if($Usuario['idTipoUsuario'] == 1) { #ALUMNOS
@@ -46,14 +50,21 @@
 				    	$_SESSION['nombre'] = $JEFE['vNombre'];
 				    	$_SESSION['idUsuario'] = $JEFE['idJefeCarrera'];
 				    	$_SESSION['numeroControl'] = "";
+					}else{
+						@session_start();
+						$_SESSION['nombre'] = $Usuario['vUsuario'];
+				    	$_SESSION['idUsuario'] = $Usuario['idUsuario'];
+						$_SESSION['numeroControl'] = "";
+					
 					}
+					
 					# PERMISOS DE BARRA DE NAVEGACION
 					$SQLMODULOS = $this->CONNECTION->prepare("SELECT DISTINCT modulos.idModulo, modulos.vModulo FROM permisos INNER JOIN modulos ON permisos.idModulo = modulos.idModulo WHERE permisos.idTipoUsuario = :idTipoUsuario AND permisos.bActivo = 1 AND modulos.bActivo = 1");
 					$SQLMODULOS->bindParam(":idTipoUsuario", $Usuario['idTipoUsuario']);
 					$SQLMODULOS->execute();
 
 					$SQLSUBMODULOS = $this->CONNECTION->prepare("SELECT	submodulos.vSubmodulo, submodulos.vRuta FROM permisos INNER JOIN submodulos ON permisos.idSubmodulo = submodulos.idSubmodulo WHERE permisos.idTipoUsuario = :idTipoUsuario AND submodulos.bActivo = 1 AND permisos.bActivo = 1 AND permisos.idModulo = :idModulo");
-
+					
 					$NAVBAR_ = "";
 					$PERMISOS = array();
 					while($Modulos = $SQLMODULOS->fetch(PDO::FETCH_ASSOC)) {
@@ -71,6 +82,7 @@
 						}
 						$NAVBAR_ .= '</ul></li>';
 					}
+				
 					$_SESSION['navbar'] = $NAVBAR_;
 					$_SESSION['permisos'] = $PERMISOS;
 					$_SESSION['tipoUsuario'] = $Usuario['idTipoUsuario'];
@@ -511,10 +523,11 @@
 
 		public function checkSession() {
 			@session_start();
-			if(!empty($_SESSION['idUsuario']) && !empty($_SESSION['nombre']))
+			if(!empty($_SESSION['idUsuario']) && !empty($_SESSION['nombre'])){	
 				return true;
-
-			return false;
+			}else{	
+				return false;
+			}
 		}
 
 		public function logout() {
