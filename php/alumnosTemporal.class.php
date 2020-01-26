@@ -181,7 +181,8 @@
                     asesorExterno,
                     personasQueFirmaran,
                     idAnteProyecto,
-                    idAsesorExterno
+                    idAsesorExterno,
+                    idAsesorInterno
                 )
                 VALUES
                 (
@@ -197,7 +198,8 @@
                   :asesorExterno,
                   :personasQueFirmaran,
                   :idAnteProyecto,
-                  :idAsesorExterno
+                  :idAsesorExterno,
+                  :idAsesorInterno
                 )
               ";
               $prepare = $this->connection->prepare($sql);
@@ -213,6 +215,7 @@
               $prepare->bindParam(":personasQueFirmaran",$post["personasQueFirmaran"]);
               $prepare->bindParam(":idAnteProyecto",$idAnteproyecto);
               $prepare->bindParam(":idAsesorExterno",$post["idAsesorExterno"]);
+              $prepare->bindParam(":idAsesorInterno",$post["idAsesorInterno"]);
               $prepare->execute();
               $IDProyectoSeleccionado = $this->connection->lastInsertId();
 
@@ -604,6 +607,27 @@
         WHERE a.idAsesorExterno = :idAsesorExterno;";
         $db = $this->connection->prepare($sql);
         $db->bindParam(":idAsesorExterno",$idAsesorExterno);
+        $db->execute();
+        return $db->fetchAll();
+    }
+
+    /**
+     * RETORNA UN ARREGLO DE ALUMNOS POR ID ASESOR EXTERNO
+     */
+    public function getAlumnosByIdAsesorInterno($idAsesorInterno){
+      $sql = "
+        SELECT 
+          b.vNombre,
+          b.vApellidoPaterno,
+          b.vApellidoMaterno,
+          b.vNumeroControl,
+          b.vCorreoInstitucional,
+          b.idAlumno
+        FROM proyectoseleccionado a 
+        INNER JOIN alumnos b ON(a.idAlumno = b.idAlumno)
+        WHERE a.idAsesorInterno = :idAsesorInterno;";
+        $db = $this->connection->prepare($sql);
+        $db->bindParam(":idAsesorInterno",$idAsesorInterno);
         $db->execute();
         return $db->fetchAll();
     }

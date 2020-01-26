@@ -179,6 +179,20 @@
 			$sql->execute();
 			return 1;
 		}
+		function aceptarSeguimientoAsesorInterno($idDocumento){
+			$sql = "UPDATE documentos SET bAceptadoAI = 1 WHERE idDocumento = :idDocumento;";
+			$sql = $this->conection->prepare($sql);
+			$sql->bindParam(":idDocumento",$idDocumento);
+			$sql->execute();			
+			return 1;
+		}
+		function rechazarSeguimientoAsesorInterno($idDocumento){
+			$sql = "UPDATE documentos SET bAceptadoAI = 0 WHERE idDocumento = :idDocumento;";
+			$sql = $this->conection->prepare($sql);
+			$sql->bindParam(":idDocumento",$idDocumento);
+			$sql->execute();
+			return 1;
+		}
 		
 	}
 
@@ -283,6 +297,14 @@
 					echo $helper->aceptarSeguimiento($_POST["idDocumento"]);
 				}else if($_POST["rechazar"] == 1){
 					echo $helper->rechazarSeguimiento($_POST["idDocumento"]);
+				}
+			break;
+			case 8:
+				$helper = new helper();
+				if($_POST["rechazar"] == 0){
+					echo $helper->aceptarSeguimientoAsesorInterno($_POST["idDocumento"]);
+				}else if($_POST["rechazar"] == 1){
+					echo $helper->rechazarSeguimientoAsesorInterno($_POST["idDocumento"]);
 				}
 			break;
 

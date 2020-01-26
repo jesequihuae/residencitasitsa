@@ -30,11 +30,10 @@
         <!-- Navigation -->
         <?php include('../modules/navbar.php'); ?>
         <?php
-           
             include '../php/connection.php';
             if($ObjectITSA->checkSession()){
 
-                if(!$ObjectITSA->checkPermission("aceptarAsesorInterno")) {
+                if(!$ObjectITSA->checkPermission("aceptarAsesorExterno")) {
                     echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                     exit;
                 }
@@ -53,8 +52,7 @@
                     <th>Correo</th>
                     <th>Seguimientos</th>
                 </thead>
-                
-                <?php foreach($ObjectITSA1->getAlumnosByIdAsesorInterno($_SESSION["idUsuario"]) AS $row){ ?>
+                <?php foreach($ObjectITSA1->getAlumnosByIdAsesor($_SESSION["idUsuario"]) AS $row){ ?>
                     <tr>
                         <td><?php echo $row["vNombre"]; ?></td>
                         <td><?php echo $row["vApellidoPaterno"]; ?></td>
@@ -134,7 +132,7 @@
             url:"../php/helper.class.php",
             type:"POST",
             data:{
-                "operacion":8,
+                "operacion":7,
                 "idDocumento":idDocumento,
                 "rechazar":0
             },
@@ -155,7 +153,7 @@
             url:"../php/helper.class.php",
             type:"POST",
             data:{
-                "operacion":8,
+                "operacion":7,
                 "idDocumento":idDocumento,
                 "rechazar":1
             },
