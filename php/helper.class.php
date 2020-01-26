@@ -173,7 +173,7 @@
 			return 1;
 		}
 		function rechazarSeguimiento($idDocumento){
-			$sql = "UPDATE documentos SET bAceptadoAE = 1 WHERE idDocumento = :idDocumento;";
+			$sql = "UPDATE documentos SET bAceptadoAE = 0 WHERE idDocumento = :idDocumento;";
 			$sql = $this->conection->prepare($sql);
 			$sql->bindParam(":idDocumento",$idDocumento);
 			$sql->execute();
@@ -280,9 +280,9 @@
 			case 7:
 				$helper = new helper();
 				if($_POST["rechazar"] == 0){
-					echo $helper->rechazarSeguimiento($_POST["idDocumento"]);
-				}else if($_POST["rechazar"] == 1){
 					echo $helper->aceptarSeguimiento($_POST["idDocumento"]);
+				}else if($_POST["rechazar"] == 1){
+					echo $helper->rechazarSeguimiento($_POST["idDocumento"]);
 				}
 			break;
 

@@ -180,7 +180,8 @@
                     asesorInterno,
                     asesorExterno,
                     personasQueFirmaran,
-                    idAnteProyecto
+                    idAnteProyecto,
+                    idAsesorExterno
                 )
                 VALUES
                 (
@@ -195,7 +196,8 @@
                   :asesorInterno,
                   :asesorExterno,
                   :personasQueFirmaran,
-                  :idAnteProyecto
+                  :idAnteProyecto,
+                  :idAsesorExterno
                 )
               ";
               $prepare = $this->connection->prepare($sql);
@@ -210,6 +212,7 @@
               $prepare->bindParam(":asesorExterno",$post["asesorExterno"]);
               $prepare->bindParam(":personasQueFirmaran",$post["personasQueFirmaran"]);
               $prepare->bindParam(":idAnteProyecto",$idAnteproyecto);
+              $prepare->bindParam(":idAsesorExterno",$post["idAsesorExterno"]);
               $prepare->execute();
               $IDProyectoSeleccionado = $this->connection->lastInsertId();
 
