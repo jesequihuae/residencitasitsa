@@ -58,6 +58,17 @@
                           </div>
                         </div>
                         <div class="form-group row">
+                          <label for="inputEmail3" class="col-lg-2 col-form-label" >Asesor Externo:</label>
+                          <div class="col-lg-8">
+                            <select class="form-control" data-live-search="true"  id="idAsesorExterno" name="idAsesorExterno" required>
+                              <option value="0">Selecciona</option>
+                              <?php foreach ($ObjectITSA->getAsesoresExternos() as $r) { ?>
+                                  <option value="<?php echo $r["idAsesor"]; ?>"><?php echo $r["vUsuario"]; ?></option>
+                              <?php  } ?>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group row">
                           <label for="inputEmail3" class="col-lg-2 col-form-label"   >Giro:</label>
                           <div class="col-lg-8">
                             <select class="form-control" name="idGiro" id="idGiro" required>

@@ -150,6 +150,36 @@
 			$info->execute();
 			return $info->fetchAll();
 		}
+		function getSeguimientosPorAlumno($idAlumno){
+			$sql = "		
+			SELECT DISTINCT 
+				a.idDocumento,
+				b.vNombre,
+				a.vRuta,
+				a.UUID
+			FROM documentos a
+			INNER JOIN tiposdocumento b ON(a.idTipoDocumento = b.idTipoDocumento)
+			WHERE a.idTipoDocumento IN(5,6,7) AND a.asesoria = 0 AND a.idAlumno = :idAlumno ORDER BY a.idTipoDocumento ";
+			$sql = $this->conection->prepare($sql);
+			$sql->bindParam("idAlumno",$idAlumno);
+			$sql->execute();
+			return $sql->fetchAll();
+		}
+		function aceptarSeguimiento($idDocumento){
+			$sql = "UPDATE documentos SET bAceptadoAE = 1 WHERE idDocumento = :idDocumento;";
+			$sql = $this->conection->prepare($sql);
+			$sql->bindParam(":idDocumento",$idDocumento);
+			$sql->execute();			
+			return 1;
+		}
+		function rechazarSeguimiento($idDocumento){
+			$sql = "UPDATE documentos SET bAceptadoAE = 1 WHERE idDocumento = :idDocumento;";
+			$sql = $this->conection->prepare($sql);
+			$sql->bindParam(":idDocumento",$idDocumento);
+			$sql->execute();
+			return 1;
+		}
+		
 	}
 
 
@@ -232,9 +262,32 @@
 				$helper = new helper();
 				echo json_encode($helper->obtenerInformacionMensaje($_POST["idMensaje"]));
 			break;
+			case 6:
+				$helper = new helper();
+				$html = "";
+				foreach($helper->getSeguimientosPorAlumno($_POST["idAlumno"]) AS $row){
+					$html .= '<div class="panel panel-default">';
+					$html .= '  <div class="panel-heading">'.$row["vNombre"].'</div>';
+						$html .= '<div class="panel-body">';
+							$html .= '<button class="btn btn-primary col-md-3 col-md-offset-1" data-idDocumento='.$row["idDocumento"].' data-idAlumno='.$_POST["idAlumno"].' onclick="aceptar(this)">Aceptar</button>';
+							$html .= '<button class="btn btn-danger col-md-3 col-md-offset-1" data-idDocumento='.$row["idDocumento"].' data-idAlumno='.$_POST["idAlumno"].' onclick="rechazar(this)">Rechazar</button>';
+							$html .= '<button class="btn btn-info col-md-3 col-md-offset-1">Descargar</button>';
+						$html .= '</div>';
+					$html .= '</div>';
+				}
+				echo $html;
+			break;
+			case 7:
+				$helper = new helper();
+				if($_POST["rechazar"] == 0){
+					echo $helper->rechazarSeguimiento($_POST["idDocumento"]);
+				}else if($_POST["rechazar"] == 1){
+					echo $helper->aceptarSeguimiento($_POST["idDocumento"]);
+				}
+			break;
 
 			default:
-
+					
 				break;
 		}
 ?>

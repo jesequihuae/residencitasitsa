@@ -93,7 +93,7 @@
          2 AS bAceptadoAE
        FROM cronograma c
        INNER JOIN tiposdocumento td ON(td.idTipoDocumento = c.idDocumento)
-       WHERE idAlumno = $idAlumno
+       WHERE idAlumno = $idAlumno 
        GROUP BY td.idTipoDocumento,
          td.vNombre
        UNION
@@ -105,7 +105,7 @@
          d.bAceptadoAE
        FROM documentos d
        INNER JOIN tiposdocumento td ON(td.idTipoDocumento = d.idTipoDocumento)
-       WHERE d.idAlumno = $idAlumno
+       WHERE d.idAlumno = $idAlumno AND d.asesoria = 0
        ORDER BY
          iOrden
        ";

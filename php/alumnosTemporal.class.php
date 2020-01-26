@@ -591,7 +591,8 @@
           b.vApellidoPaterno,
           b.vApellidoMaterno,
           b.vNumeroControl,
-          b.vCorreoInstitucional
+          b.vCorreoInstitucional,
+          b.idAlumno
         FROM proyectoseleccionado a 
         INNER JOIN alumnos b ON(a.idAlumno = b.idAlumno)
         WHERE a.idAsesorExterno = :idAsesorExterno;";
@@ -600,7 +601,7 @@
         $db->execute();
         return $db->fetchAll();
     }
-
+    
     /**
      * OBTIENE LA RUTA DEL ARCHIVO POR SEGUIMIENTO
      */
@@ -628,7 +629,7 @@
         IFNULL(b.idTipoDocumento,0) > 0 AS cargado
       FROM tiposdocumento a
       LEFT JOIN evaluacionPorSeguimiento b ON(a.idTipoDocumento = b.idTipoDocumento)
-      WHERE a.idTipoDocumento IN(5,6,7) AND bActivo = 1;
+      WHERE a.idTipoDocumento IN(5,6,7) AND a.bActivo = 1;
       ";
       $DB = $this->connection->prepare($sql);
       $DB->execute();
@@ -643,7 +644,7 @@
           CONCAT(a.vRuta,a.UUID) AS vRuta
         FROM documentos a
         INNER JOIN tiposdocumento b ON(a.idTipoDocumento = b.idTipoDocumento)
-        WHERE a.idAlumno = :idAlumno;
+        WHERE a.idAlumno = :idAlumno AND asesoria = 0;
       ";
       $SQLINTPROCESS = $this->connection->PREPARE($sql);
       $SQLINTPROCESS->bindParam(":idAlumno",$idAlumno);
@@ -731,7 +732,8 @@
 								idEstado,
 								vNombre,
 								vRuta,
-                UUID
+                UUID,
+                asesoria
 							) 
 							VALUES 
 							(
@@ -741,7 +743,8 @@
 								:idEstado,
 								:vNombre,
 								:vRuta,
-                :UUID
+                :UUID,
+                0
               )");
       
           $fileUUIDEvaluacion .= ".".$fileExtensionEvaluacion;
@@ -765,7 +768,8 @@
 								idEstado,
 								vNombre,
 								vRuta,
-                UUID
+                UUID,
+                asesoria
 							) 
 							VALUES 
 							(
@@ -775,7 +779,8 @@
 								:idEstado,
 								:vNombre,
 								:vRuta,
-                :UUID
+                :UUID,
+                1
               )");
           $fileUUIDAsesoria .= ".".$fileExtensionAsosoria;
 					$SQLAsesoria->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);

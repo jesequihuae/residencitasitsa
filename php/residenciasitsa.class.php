@@ -674,6 +674,24 @@
 					  </div>';
 			}
 		}
+		/**
+		 * METODO QUE RETORNA LOS ASESORES EXTERNOS
+		 */
+		public function getAsesoresExternos(){
+			try {
+					$SQL = $this->CONNECTION->PREPARE("
+				SELECT 
+				idUsuario as idAsesor,
+				vUsuario 
+				FROM usuarios WHERE idTipoUsuario  = 4;");
+					$SQL->execute();
+					return $SQL;
+				} catch (PDOException $e) {
+					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+							<button type="button" class="close" data-dismiss="alert">x</button>
+							</div>';
+				}
+		}
 		public function getAllOpciones(){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("SELECT idOpcion, vOpcion FROM opciones WHERE bActivo = 1");
