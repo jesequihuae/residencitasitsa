@@ -176,6 +176,7 @@
                     idGiro,
                     idEstado,
                     idSector,
+                    bImpactoAmbiental,
                     asesorInterno,
                     asesorExterno,
                     personasQueFirmaran,
@@ -190,6 +191,7 @@
                   :idGiro,
                   3,
                   :idSector,
+                  :bImpactoAmbiental,
                   :asesorInterno,
                   :asesorExterno,
                   :personasQueFirmaran,
@@ -203,6 +205,7 @@
               $prepare->bindParam(":idOpcion",$post["idOpcion"]);
               $prepare->bindParam(":idGiro",$post["idGiro"]);
               $prepare->bindParam(":idSector",$post["idSector"]);
+              $prepare->bindParam(":bImpactoAmbiental",$post["bImpacto"]);
               $prepare->bindParam(":asesorInterno",$post["asesorInterno"]);
               $prepare->bindParam(":asesorExterno",$post["asesorExterno"]);
               $prepare->bindParam(":personasQueFirmaran",$post["personasQueFirmaran"]);

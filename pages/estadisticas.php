@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/18.2.4/css/dx.common.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/18.2.4/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/19.1.4/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/19.1.4/css/dx.light.css" />
     <!-- <meta charset="utf-8"> -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,6 +40,7 @@
               <li class="active" onclick=""><a data-toggle="tab" href="#grafica1">Grafica de Opcion</a></li>
               <li onclick=""><a data-toggle="tab" href="#grafica2">Grafica de Giro</a></li>
               <li onclick=""><a data-toggle="tab" href="#grafica3">Grafica de Sector</a></li>
+              <li onclick=""><a data-toggle="tab" href="#grafica4">Grafica Impacto Ambiental</a></li>
             </ul>
             
             <div class="tab-content">
@@ -54,6 +55,10 @@
 
               <div id="grafica3" class="tab-pane fade">
                 <?php include 'grafica3.php' ?>
+              </div>
+
+              <div id="grafica4" class="tab-pane fade">
+                <?php include 'grafica4.php' ?>
               </div>
 
             </div>

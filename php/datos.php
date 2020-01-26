@@ -1,7 +1,4 @@
 <?php 
-
-	print_r($_POST);
-	exit();
   include 'connection.php';
   $opcion = $_POST['opcion'];
   $idCarrera = $_POST['idCarrera'];
@@ -44,6 +41,14 @@
 			   $ResultadoGrafica4[] = array("Sector"=>$key['Sector'],$key["Sexo"]=>(int)$key['Total']); 
 			}
 			echo json_encode($ResultadoGrafica4);
+		}
+
+		if ($opcion == 6) {
+			$array = $ObjectITSA->graficaImpactoAmbiental($idCarrera);
+			foreach ($array as $key) {
+			   $ResultadoGrafica6[] = array("Carrera"=>$key['Carrera'],$key["Impacto"]=>(int)$key['Total']); 
+			}
+			echo json_encode($ResultadoGrafica6);
 		}
 	
  ?>

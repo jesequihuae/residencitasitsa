@@ -88,10 +88,22 @@
                             </select>
                           </div>
                         </div>
+                        <!-- Add by Memo 24 Ene 2020 Se añade si el proyecto genera un impacto ambiental-->
+                        <div class="form-group row">
+                          <label for="inputEmail3" class="col-lg-2 col-form-label">Impacto Ambiental:</label>
+                            <div class="col-lg-8">
+                                <select class="form-control" name="bImpacto" id="bImpacto" required>
+                                  <option value="0">NO</option>
+                                  <option value="1">SI</option>
+                                </select>
+                            </div>  
+                        </div>
                         <div class="form-group row">
                         <label for="asesorInterno" class="col-lg-2 col-form-label" >ASESOR(A) INTERNO(A):</label>
                         <div class="col-lg-8">
                           <input type="text" name="asesorInterno" id="asesorInterno" class="form-control" />
+                          <div class="col-lg-8">
+                          </div>
                         </div>
                       </div>
                       <div class="form-group row">
