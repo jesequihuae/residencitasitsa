@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="../css/styleFiles.css">
+<link rel="stylesheet" href="../css/alertify.min.css">
 
 <div id="wrapper">
   <div id="page-wrapper">
@@ -101,6 +102,8 @@
 <script src="../js/startmin.js"></script>
 <!-- DataTable CSS -->
 <script src="../js/datatable.min.js"></script>
+<!-- ALERTIFY -->
+<script src="../js/alertify.min.js"></script>
 <script>    
     $(document).ready(function(){
         $("#dtAlumos").DataTable();
@@ -142,7 +145,9 @@
 
             },
             success:function(e){
-                console.log(e);
+                if(e == 1){
+                    alertify.alert('ITSA', 'Aceptado con éxito', function(){  });
+                }
             },
             error:function(e){
                 console.log(e);
@@ -163,7 +168,9 @@
 
             },
             success:function(e){
-                console.log(e);
+                if(e == 1){
+                    alertify.alert('ITSA', 'Rechazado correctamente', function(){});
+                }
             },
             error:function(e){
                 console.log(e);

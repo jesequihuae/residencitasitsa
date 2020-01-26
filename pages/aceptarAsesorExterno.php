@@ -140,7 +140,9 @@
 
             },
             success:function(e){
-                console.log(e);
+                if(e == 1){
+                    alertify.alert('ITSA', 'Aceptado con éxito', function(){  });
+                }
             },
             error:function(e){
                 console.log(e);
@@ -161,7 +163,9 @@
 
             },
             success:function(e){
-                console.log(e);
+                if(e == 1){
+                    alertify.alert('ITSA', 'Rechazado correctamente', function(){ });
+                }
             },
             error:function(e){
                 console.log(e);
