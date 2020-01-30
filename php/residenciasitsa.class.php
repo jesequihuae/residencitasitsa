@@ -2174,5 +2174,57 @@
 					  </div>';
 			}
 		}
+
+		public function obtenerNumerosDeControl(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT idAlumno, vNumeroControl, vNombre, vApellidoPaterno, vApellidoMaterno FROM alumnos ORDER BY vNumeroControl DESC");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+
+		public function guardarNotificacion($idAlumno, $Notificacion, $bitTodos = false, $Periodo = 0) {
+			try {
+				if($bitTodos == true) 
+				{
+					$SQL_Periodo = $this->CONNECTION->PREPARE("SELECT idAlumno FROM alumnos WHERE idPeriodo = :periodo");
+					$SQL_Periodo->bindParam(":periodo",$Periodo);
+					$SQL_Periodo->execute();
+
+					$SQLNotificacionesPeriodo = $this->CONNECTION->PREPARE("INSERT INTO notificaciones (idAlumno, tTexto) VALUES (:idAlumno, :Texto)");
+
+					while($Alumno = $SQL_Periodo->fetch(PDO::FETCH_ASSOC)) {
+						$SQLNotificacionesPeriodoArray = array(
+							':idAlumno' => $Alumno['idAlumno'],
+							':Texto' => $Notificacion
+						);
+						
+						$SQLNotificacionesPeriodo->execute($SQLNotificacionesPeriodoArray);
+					}
+					echo '<div class="alert alert-dismissable alert-success">Notificaciones enviadas correctamente
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				} 
+				else 
+				{
+					$SQL = $this->CONNECTION->PREPARE("INSERT INTO notificaciones (idAlumno, tTexto) VALUES (:idAlumno, :Texto)");
+					$SQL->bindParam(":idAlumno", $idAlumno);
+					$SQL->bindParam(":Texto",$Notificacion);
+					$SQL->execute();
+
+					echo '<div class="alert alert-dismissable alert-success">Notificacion enviada correctamente
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+				}
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
 	}
 ?>
