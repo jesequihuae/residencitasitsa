@@ -56,7 +56,7 @@
                                         <input class="form-control" placeholder="Contraseña" name="contrasena" type="password"  required >
                                     </div>
                                     <!-- Change this to a button or input when using this as a form -->
-                                    <button type="submit" href="index.html" class="btn btn-lg btn-success btn-block" name="login">Iniciar Sesión</button>
+                                    <button type="submit" href="index.html" class="btn btn-lg btn-primary btn-block" name="login">Iniciar Sesión</button>
                                 </fieldset>
                             </form>
                         </div>

@@ -66,6 +66,9 @@
             </div>
 
             <!-- ... Your content goes here ... -->
+            <center>
+                <img src="../img/itsa.png" width="250">
+            </center>
             <?php
                 switch (@$_GET["opt"]) {
                 case '1':
