@@ -23,7 +23,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body>
+    <body style="background: url('img/background.jpg');">
 
         <div class="container">
             <div class="row">
@@ -36,10 +36,15 @@
                   }
 
                 ?>
-                <div class="col-md-4 col-md-offset-4">
+                <div class="col-md-4 col-md-offset-4" style="padding-top: 6%;">
                     <div class="login-panel panel panel-default">
                         <div class="panel-heading">
+                            <center>
+                                <!-- <img src="img/tecnm.png" width="150"><br> -->
+                                <img src="img/itsa.png" width="50">                                
+                            <br><br>
                             <h3 class="panel-title">Por favor inicia sesión</h3>
+                            </center>
                         </div>
                         <div class="panel-body">
                             <form method="post">
