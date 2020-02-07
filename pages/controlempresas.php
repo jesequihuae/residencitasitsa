@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
-    <title>Proyectos</title>
+    <title>Control de empresas</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -23,6 +23,15 @@
 
     <!-- DataTable CSS -->
     <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
+
+    <!-- ALERTIFY JS-->
+    <script src="../js/alertify.min.js"></script>
+    <link rel="stylesheet" href="../css/alertify.min.css" />
+    <link rel="stylesheet" href="../css/default.min.css" />
+
+    <link rel="shortcut icon" href="../img/logo.ico" />
+
+    <link rel="stylesheet" href="../css/ItsaStyle.css" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -56,7 +65,7 @@
             <div class="row">
 
                 <div class="col-lg-12">
-                   <h1 class="page-header"><i class="fa fa-briefcase"></i> Empresas </h1>
+                   <h1 class="page-header"><!-- <i class="fa fa-briefcase"></i> --> Empresas </h1>
                    <?php
                         if(isset($_POST) && isset($_POST['guardarEmpresa'])) {
                             if($_POST['idEmpresa'] == 0) {
@@ -233,7 +242,22 @@
     <script src="../js/datatable.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-          $("#dtEmpresas").DataTable();
+          $("#dtEmpresas").DataTable({
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron coincidencias",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No se encontraron registros",
+                "infoFiltered": "(filtrados de _MAX_ registros totales)",
+                "search": "Buscar",
+                "paginate": {
+                    "first":      "Primera",
+                    "last":       "Ultima",
+                    "next":       "Siguiente",
+                    "previous":   "Anterior"
+                }
+              }
+          });
           $("#panelRegistroEdicion").hide();
 
           $("#btnNuevaEmpresa").click(function(){

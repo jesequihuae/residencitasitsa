@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Residencias - ITSA</title>
+        <title>Iniciar sesión</title>
         <!-- Bootstrap Core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <!-- MetisMenu CSS -->
@@ -13,8 +13,12 @@
         <link href="css/startmin.css" rel="stylesheet">
         <!-- Custom Fonts -->
         <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <!-- ALERTIFY JS-->
+        <script src="js/alertify.min.js"></script>
+        <link rel="stylesheet" href="css/alertify.min.css" />
+        <link rel="stylesheet" href="css/default.min.css" />
 
-
+        <link rel="shortcut icon" href="img/logo.ico" />
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -74,6 +78,8 @@
         <script src="js/metisMenu.min.js"></script>
         <!-- Custom Theme JavaScript -->
         <script src="js/startmin.js"></script>
+        <!--ALERTIFY JS-->
+        <!-- <script src="js/alertify.min.js"></script> -->
 
     </body>
 </html>

@@ -8,6 +8,27 @@
 			$this->CONNECTION = $BD;
 		}
 
+		public function showAlertifyError($Error,$Position){
+			echo "<script>
+				 	alertify.set('notifier','position', '".$Position."');
+		            alertify.error('".$Error."');
+		         </script>";
+		}
+
+		public function showAlertifySuccess($Success, $Position){
+			echo "<script>
+				 	alertify.set('notifier','position', '".$Position."');
+		            alertify.success('".$Success."');
+		         </script>";
+		}
+		
+		public function showAlertifyWarning($Warning, $Position){
+			echo "<script>
+				 	alertify.set('notifier','position', '".$Position."');
+		            alertify.warning('".$Warning."');
+		         </script>";
+		}
+
 		public function login($Datos) {
 			
 			try {
@@ -89,14 +110,10 @@
 					header('Location: pages/');
 					// print_r($_SESSION);
 				} else {
-					echo '<div class="alert alert-dismissable alert-danger">Lo sentimos, usuario y/o contraseña no coinciden!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-					  	 </div>';
+					$this->showAlertifyError("Usuario y/o contraseña no validos","top-center");
 				}
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-					<button type="button" class="close" data-dismiss="alert">x</button>
-				  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -167,23 +184,19 @@
 					$SQLConstancia->execute();
 
 					$this->CONNECTION->commit();
-					echo '<div class="alert alert-dismissable alert-success">Proyecto Registrado correctamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-					  	  </div>';
+
+					$this->showAlertifySuccess("Proyecto Registrado correctamente!","top-center");
 				} else {
 					$this->CONNECTION->rollback();
 					unlink($RutaConstancia);
 					unlink($RutaAnteproyecto);
 					unlink($RutaSolicitud);
-					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: al subir los documentos. Intentalo nuevamente
-							<button type="button" class="close" data-dismiss="alert">x</button>
-					 	  </div>';
+
+					$this->showAlertifyError("Ocurrió un error: al subir los documentos. Intentalo nuevamente","bottom-center");
 				}
 			} catch (PDOException $e) {
 				$this->CONNECTION->rollback();
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -277,22 +290,18 @@
 					$SQLINTPROCESS->execute();
 
 					$this->CONNECTION->commit();
-					echo '<div class="alert alert-dismissable alert-success">Archivos registrados correctamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+
+					$this->showAlertifySuccess("Archivos registrados correctamente!","top-center");
 				} else {
 					$this->CONNECTION->rollback();
 					unlink($RutaPresentacion);
 					unlink($RutaAceptacion);
-					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: al subir los documentos. Intentalo nuevamente
-							<button type="button" class="close" data-dismiss="alert">x</button>
-					 	  </div>';
+
+					$this->showAlertifyError("Ocurrió un error: al subir los documentos. Intentalo nuevamente","top-center");
 				}
 			} catch (PDOException $e) {
 				$this->CONNECTION->rollback();
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 		/**
@@ -381,21 +390,15 @@
 					$SQLINTPROCESS->execute();
 
 					$this->CONNECTION->commit();
-					echo '<div class="alert alert-dismissable alert-success">Archivos registrados correctamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+					$this->showAlertifySuccess("Archivos registrados correctamente!","top-center");
 				} else {
 					$this->CONNECTION->rollback();
-					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: al subir los documentos. Intentalo nuevamente
-							<button type="button" class="close" data-dismiss="alert">x</button>
-					 	  </div>';
+					$this->showAlertifyError("Ocurrió un error: al subir los documentos. Intentalo nuevamente","top-center");
 				}
 
 			} catch (PDOException $e) {
 				$this->CONNECTION->rollback();
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -408,9 +411,7 @@
 
 				return $intProceso['iProceso'];
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -457,9 +458,7 @@
 
 				return '<span class="label label'.$tipo.'">'.$TextEstado['vEstado'].'</span>';
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -473,9 +472,7 @@
 
 				return $TextEstado['idEstado'];
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -496,9 +493,7 @@
 
 				echo '';
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -515,9 +510,7 @@
 					'.$Motivo['vMotivoNoAceptacion'].'
 					</div>';
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-				 	  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -588,9 +581,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -601,9 +592,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -613,9 +602,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -625,9 +612,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -646,9 +631,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -658,9 +641,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 		public function getAllGiros(){
@@ -669,9 +650,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 		/**
@@ -687,9 +666,7 @@
 					$SQL->execute();
 					return $SQL;
 				} catch (PDOException $e) {
-					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-							<button type="button" class="close" data-dismiss="alert">x</button>
-							</div>';
+					$this->showAlertifyError($e->getMessage(),"bottom-center");
 				}
 		}
 		/**
@@ -705,9 +682,7 @@
 					$SQL->execute();
 					return $SQL;
 				} catch (PDOException $e) {
-					echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-							<button type="button" class="close" data-dismiss="alert">x</button>
-							</div>';
+					$this->showAlertifyError($e->getMessage(),"bottom-center");
 				}
 		}
 		public function getAllOpciones(){
@@ -716,9 +691,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-						</div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 		public function getOpciones(){
@@ -727,9 +700,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-						</div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 		public function actualizarOpcion($idOpcion, $Opcion, $Clave){
@@ -747,13 +718,9 @@
 				$SQL->bindParam(":vClave",$Clave);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido actualizada exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+				$this->showAlertifySuccess('Opcion con Clave: '.$Clave.' ha sido actualizada exitosamente!',"top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-					<button type="button" class="close" data-dismiss="alert">x</button>
-				  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 		public function changeStatusOpcion($idOpcion, $status) {
@@ -774,18 +741,12 @@
 				$SQL->execute();
 
 				if($STATUSNEW == 0) {
-					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+					$this->showAlertifySuccess("Se ha desactivado correctamente","top-center");
 				} else {
-					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+					$this->showAlertifySuccess("Se ha activado corrrectamente.","top-center");
 				}
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 		public function registrarOpcion($Clave, $Opcion){
@@ -795,13 +756,9 @@
 				$SQL->bindParam(":Clave",$Opcion);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">Opcion con Clave: '.$Clave.' ha sido registrada exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+				$this->showAlertifySuccess('Opcion con Clave: '.$Clave.' ha sido registrada exitosamente!',"top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-					<button type="button" class="close" data-dismiss="alert">x</button>
-				  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 		public function getAllSectores(){
@@ -810,9 +767,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-						</div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -848,9 +803,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -860,9 +813,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -985,19 +936,14 @@
 
 					$SQL->execute();
 					$this->CONNECTION->commit();
-					echo '<div class="alert alert-dismissable alert-success">¡Alumno con número de Control: '.$NumeroControl.'  registrado exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+
+					$this->showAlertifySuccess('¡Alumno con número de Control: '.$NumeroControl.'  registrado exitosamente!',"top-center");
 				} else {
-					echo '<div class="alert alert-dismissable alert-warning">Ya existe un alumno registrado con el número de control: '.$NumeroControl.'
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+					$this->showAlertifyError('Ya existe un alumno registrado con el número de control: '.$NumeroControl.'',"bottom-center");
 				}
 			} catch (PDOException $e) {
 				$this->CONNECTION->rollback();
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1078,13 +1024,9 @@
 
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡Alumno con número de Control: '.$NumeroControl.'  actualizado exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+				$this->showAlertifyError('¡Alumno con número de Control: '.$NumeroControl.'  actualizado exitosamente!',"top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1095,13 +1037,9 @@
 				$SQL->bindParam(":Carrera",$Carrera);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡Carrera con Clave: '.$Clave.' ha sido registrada exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+				$this->showAlertifySuccess('¡Carrera con Clave: '.$Clave.' ha sido registrada exitosamente!',"top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-					<button type="button" class="close" data-dismiss="alert">x</button>
-				  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1120,13 +1058,9 @@
 				$SQL->bindParam(":vCarrera",$Carrera);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡Carrera con Clave: '.$Clave.' ha sido actualizada exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+				$this->showAlertifySuccess('¡Carrera con Clave: '.$Clave.' ha sido actualizada exitosamente!',"top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-					<button type="button" class="close" data-dismiss="alert">x</button>
-				  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1149,18 +1083,12 @@
 				$SQL->execute();
 
 				if($STATUSNEW == 0) {
-					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+					 $this->showAlertifySuccess("Se ha desactivado correctamente","top-center");
 				} else {
-					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+					$this->showAlertifySuccess("Se ha activado corrrectamente.","top-center");
 				}
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1182,18 +1110,12 @@
 				$SQL->execute();
 
 				if($STATUSNEW == 0) {
-					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+					$this->showAlertifySuccess("Se ha desactivado correctamente","top-center");
 				} else {
-					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+					$this->showAlertifySuccess("Se ha activado corrrectamente.","top-center");
 				}
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1203,13 +1125,9 @@
 				$SQL->bindParam(":Periodo",$Periodo);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡El periodo ha sido registrado exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+				$this->showAlertifySuccess("¡El periodo ha sido registrado exitosamente!","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1220,13 +1138,9 @@
 				$SQL->bindParam(":idPeriodo",$idPeriodo);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡El periodo ha sido actualizado exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+				$this->showAlertifySuccess("¡El periodo ha sido actualizado exitosamente!","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1251,13 +1165,9 @@
 				$SQL->bindParam(":dFechaFinalEntrega", $FechaFinal);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡La fecha ha sido registrada exitosamente!
-							<button type="button" class="close" data-dismiss="alert">x</button>
-						  </div>';
+				$this->showAlertifySuccess("¡La fecha ha sido registrada exitosamente!","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1279,13 +1189,9 @@
 				$SQL->bindParam(":dFechaFinalEntrega", $FechaFinal);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡La fecha ha sido actualizada exitosamente!
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifySuccess("¡La fecha ha sido actualizada exitosamente!","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1295,13 +1201,9 @@
 				$SQL->bindParam(":idFecha", $idFechaEntregaPeriodo);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡La fecha ha sido eliminada exitosamente!
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifySuccess("¡La fecha ha sido eliminada exitosamente!","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1332,13 +1234,9 @@
 				$SQL->bindParam(":vGradoEstudios", $vGradoEstudios);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡La empresa '.$Nombre.' ha sido registrada exitosamente!
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifySuccess('¡La empresa '.$Nombre.' ha sido registrada exitosamente!',"top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1365,13 +1263,9 @@
 				$SQL->bindParam(":vGradoEstudios", $vGradoEstudios);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡La empresa ha sido actualizada exitosamente!
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifySuccess("¡La empresa ha sido actualizada exitosamente!","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1414,13 +1308,9 @@
 
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡El proyecto ha sido registrado exitosamente!
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifySuccess("¡El proyecto ha sido registrado exitosamente!","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1455,13 +1345,9 @@
 
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">¡El proyecto ha sido actualizado exitosamente!
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifySuccess("¡El proyecto ha sido actualizado exitosamente!","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1483,18 +1369,12 @@
 				$SQL->execute();
 
 				if($STATUSNEW == 0) {
-					echo '<div class="alert alert-dismissable alert-success">Se ha desactivado correctamente
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+					 $this->showAlertifySuccess("Se ha desactivado correctamente","top-center");
 				} else {
-					echo '<div class="alert alert-dismissable alert-success">Se ha activado corrrectamente.
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+					$this->showAlertifySuccess("Se ha activado corrrectamente.","top-center");
 				}
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1551,9 +1431,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1609,9 +1487,7 @@
 				$SQL->bindParam(":NumeroControl", $NumeroControl);
 				$SQL->execute();
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1621,13 +1497,9 @@
 				$SQL->bindParam(":idProyecto", $idProyecto);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">Se ha aceptado correctamente la solicitud.
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifySuccess("Se ha aceptado correctamente la solicitud.","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1638,13 +1510,9 @@
 				$SQL->bindParam(":MotivoRechazo", $MotivoRechazo);
 				$SQL->execute();
 
-				echo '<div class="alert alert-dismissable alert-success">Se ha rechazado correctamente la solicitud.
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifySuccess("Se ha rechazado correctamente la solicitud.","top-center");
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1654,9 +1522,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1687,14 +1553,11 @@
 				$SQL->execute();
 
 				$this->CONNECTION->commit();
-				echo '<div class="alert alert-dismissable alert-success">Se ha realizado la actualización correctamente.
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+
+				$this->showAlertifySuccess("Se ha realizado la actualización correctamente.","top-center");
 			} catch (PDOException $e) {
 				$this->CONNECTION->rollback();
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1727,9 +1590,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -1762,9 +1623,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -2052,9 +1911,7 @@
 		                	$SQLInsertEmpresa->bindParam(":vContacto",$vContacto);
 		                	$SQLInsertEmpresa->execute();
 
-		                	echo '<div class="alert alert-dismissable alert-success">Nueva Empresa Registrada!!!
-									<button type="button" class="close" data-dismiss="alert">x</button>
-								  </div>';
+							$this->showAlertifySuccess("Nueva Empresa Registrada","top-center");
 		                }//Fin del if que registra la empresa en caso de que no exista
 		                $SQLValidarEmpresa->execute();
 		                $SuccessEmpresa = $SQLValidarEmpresa->FETCH(PDO::FETCH_ASSOC);
@@ -2116,19 +1973,13 @@
 							$SQLInsertByExcel->bindParam(":iTotalResidentes", $iTotalResidentes);
 							$SQLInsertByExcel->execute();
 
-		                	echo '<div class="alert alert-dismissable alert-success">Todo Correcto!!!
-									<button type="button" class="close" data-dismiss="alert">x</button>
-								  </div>';
+							$this->showAlertifySuccess("Todo Correcto","top-center");
 		                }//Fin del IF que compruba la existencia de los datos del Excel 
 		                else{
-		                	echo '<div class="alert alert-dismissable alert-warning">Los Datos estan mal!!:
-									<button type="button" class="close" data-dismiss="alert">x</button>
-								  </div>';
+							$this->showAlertifyWarning("Los datos son incorrectos","top-center");
 	                	}//Fin del ELSE
 	                } catch (Exception $e) {
-	                	echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+	                	$this->showAlertifyError($e->getMessage(),"bottom-center");
 	                }
               	}
 			}
@@ -2144,9 +1995,7 @@
 				$TOTAL = $SQL->FETCH(PDO::FETCH_ASSOC);
 				return $TOTAL['total'];
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -2157,9 +2006,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -2169,9 +2016,7 @@
 				$SQL->bindParam(":idAlumno",$idAlumno);
 				$SQL->execute();
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -2181,9 +2026,7 @@
 				$SQL->execute();
 				return $SQL;
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 
@@ -2205,9 +2048,8 @@
 						
 						$SQLNotificacionesPeriodo->execute($SQLNotificacionesPeriodoArray);
 					}
-					echo '<div class="alert alert-dismissable alert-success">Notificaciones enviadas correctamente
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+
+					$this->showAlertifySuccess("Notificaciones enviadas correctamente","top-center");
 				} 
 				else 
 				{
@@ -2216,14 +2058,10 @@
 					$SQL->bindParam(":Texto",$Notificacion);
 					$SQL->execute();
 
-					echo '<div class="alert alert-dismissable alert-success">Notificacion enviada correctamente
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+					$this->showAlertifySuccess("Notificacion enviada correctamente","top-center");
 				}
 			} catch (PDOException $e) {
-				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
-						<button type="button" class="close" data-dismiss="alert">x</button>
-					  </div>';
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
 		}
 	}

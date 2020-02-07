@@ -1,0 +1,15 @@
+.navbar {
+	background-color: #183866 !important;
+}
+
+.navbar-default > .sidebar {
+	background-color: #183866 !important;
+}
+
+.navbar > .nav > .nav-item > .nav-link {
+	background-color: #183866 !important;
+} 
+
+#ddSession 		{
+	background-color: #183866 !important;
+}

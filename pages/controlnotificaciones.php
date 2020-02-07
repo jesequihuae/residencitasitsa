@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
-    <title>Residencia</title>
+    <title>Notificaciones</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -28,6 +28,16 @@
 
     <!-- Default theme -->
     <link rel="stylesheet" href="../css/themes/default.min.css"/>
+
+    <!-- ALERTIFY JS-->
+<script src="../js/alertify.min.js"></script>
+<link rel="stylesheet" href="../css/alertify.min.css" />
+<link rel="stylesheet" href="../css/default.min.css" />
+
+<link rel="shortcut icon" href="../img/logo.ico" />
+
+<link rel="stylesheet" href="../css/ItsaStyle.css" />
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

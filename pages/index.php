@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
-    <title>Index</title>
+
+    <title>Inicio</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -22,6 +23,9 @@
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/styleFiles.css">
+    <link rel="stylesheet" href="../css/ItsaStyle.css">
+
+    <link rel="shortcut icon" href="../img/logo.ico" />
 
     <!-- ALERTIFY JS-->
     <link  href="../css/alertify.min.css" rel="stylesheet" type="text/css">

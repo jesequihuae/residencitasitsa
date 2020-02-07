@@ -24,7 +24,14 @@
     <link rel="stylesheet" href="../css/style.css">
 
     <!-- ALERTIFY JS-->
-    <link  href="../css/alertify.min.css" rel="stylesheet" type="text/css">
+<script src="../js/alertify.min.js"></script>
+<link rel="stylesheet" href="../css/alertify.min.css" />
+<link rel="stylesheet" href="../css/default.min.css" />
+
+<link rel="shortcut icon" href="../img/logo.ico" />
+
+<link rel="stylesheet" href="../css/ItsaStyle.css" />
+
 
     <!-- Default theme -->
     <link rel="stylesheet" href="../css/themes/default.min.css"/>
