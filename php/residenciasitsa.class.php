@@ -674,10 +674,12 @@
 		 */
 		public function getAsesoresInternos(){
 			try {
-					$SQL = $this->CONNECTION->PREPARE("
+				$SQL = $this->CONNECTION->PREPARE("
 				SELECT 
 				idUsuario as idAsesor,
-				vUsuario 
+				vUsuario,
+				vContrasena, 
+				bActivo
 				FROM usuarios WHERE idTipoUsuario  = 5;");
 					$SQL->execute();
 					return $SQL;
@@ -1111,6 +1113,33 @@
 
 				if($STATUSNEW == 0) {
 					$this->showAlertifySuccess("Se ha desactivado correctamente","top-center");
+				} else {
+					$this->showAlertifySuccess("Se ha activado corrrectamente.","top-center");
+				}
+			} catch (PDOException $e) {
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
+			}
+		}
+
+		public function changeStatusAsesorInterno($idUsuario, $status) {
+			try {
+				$STATUSNEW = "";
+				switch ($status) {
+					case '1':
+						$STATUSNEW = 0;
+						break;
+
+					case '0':
+						$STATUSNEW = 1;
+						break;
+				}
+				$SQL = $this->CONNECTION->PREPARE("UPDATE usuarios SET bActivo = :status WHERE idUsuario = :idUsuario");
+				$SQL->bindParam(":status",$STATUSNEW);
+				$SQL->bindParam(":idUsuario",$idUsuario);
+				$SQL->execute();
+
+				if($STATUSNEW == 0) {
+					 $this->showAlertifySuccess("Se ha desactivado correctamente","top-center");
 				} else {
 					$this->showAlertifySuccess("Se ha activado corrrectamente.","top-center");
 				}
@@ -2060,6 +2089,33 @@
 
 					$this->showAlertifySuccess("Notificacion enviada correctamente","top-center");
 				}
+			} catch (PDOException $e) {
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
+			}
+		}
+
+		public function registrarAsesorInterno($Usuario, $Contrasena){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("INSERT INTO usuarios (idTipoUsuario, vUsuario, vContrasena) VALUES (5,:Usuario, :Contrasena)");
+				$SQL->bindParam(":Usuario", $Usuario);
+				$SQL->bindParam(":Contrasena", $Contrasena);
+				$SQL->execute();
+
+				$this->showAlertifySuccess("Asesor interno registrado exitosamente","top-center");
+			} catch (PDOException $e) {
+				$this->showAlertifyError($e->getMessage(),"bottom-center");
+			}
+		}
+
+		public function actualizarAsesorInterno($idUsuario, $Usuario, $Contrasena){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("UPDATE usuarios SET vUsuario = :Usuario, vContrasena = :Contrasena WHERE idUsuario = :idUsuario");
+				$SQL->bindParam(":idUsuario", $idUsuario);
+				$SQL->bindParam(":Usuario", $Usuario);
+				$SQL->bindParam(":Contrasena", $Contrasena);
+				$SQL->execute();
+
+				$this->showAlertifySuccess("Asesor interno actualizado exitosamente","top-center");
 			} catch (PDOException $e) {
 				$this->showAlertifyError($e->getMessage(),"bottom-center");
 			}
