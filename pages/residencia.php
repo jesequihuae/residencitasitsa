@@ -49,6 +49,7 @@
             <!-- <input type="hidden" id="idUsuario" value="<?php @session_start(); echo $_SESSION['idUsuario']; ?>"> -->
             <div class="row">
             <?php
+            
               include '../php/connection.php';
               if($ObjectITSA->checkSession()){
                   if(!$ObjectITSA->checkPermission("residencia")) {
@@ -78,7 +79,8 @@
                             $_FILES['Anteproyecto'],
                             $_FILES['Constancia']
                           );*/
-                    
+
+
                           $ObjectITSA1->saveSolicitud(
                                                             $_POST,
                                                             $_FILES['Constancia'],
@@ -100,7 +102,7 @@
                             $_SESSION['numeroControl'],
                             $_FILES['fileEvaluacion'],
                             $_FILES['fileFormatoAsesoria'],
-                            4, 
+                            4,
                             5,
                             'PrimerReporte'
                           );
@@ -110,7 +112,7 @@
                             $_SESSION['numeroControl'],
                             $_FILES['fileEvaluacion'],
                             $_FILES['fileFormatoAsesoria'],
-                            4, 
+                            4,
                             6,
                             'SegundoReporte'
                           );
@@ -198,7 +200,7 @@
                           </form>
                           </div>
                           <!-- ESPERA DE STATUS DE PROYECTO -->
-                          
+
                           <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 2 ? 'active' : '') ?>" id="solicitudStatus">
                             <div class="design-process-content">
                               <h3 class="semi-bold">Estado de Solicitud</h3>
@@ -238,7 +240,7 @@
                           </div>
 
                           <!-- PRIMER SEGUIMIENTO -->
-                          <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4 ? 'active' : '') ?>" id="1seguimiento"> 
+                          <div role="tabpanel" class="tab-pane <?php echo ($ObjectITSA->getIntProcess($_SESSION['idUsuario']) == 4 ? 'active' : '') ?>" id="1seguimiento">
                             <div class="design-process-content">
                                 <div class="row">
                                   <div class="col-md-12">
@@ -515,9 +517,9 @@
 
   function guardar(){
     var response = 1;
-  
+
     var idTipoDeDocumento = <?php echo (isset($_SESSION["idTipoDocumento"])?$_SESSION["idTipoDocumento"]:0); ?>;
-  
+
     $.ajax({
       url: '../php/cronograma.php',
       type:'POST',
@@ -538,7 +540,7 @@
       },
       error: function(e){
         $("#salida").html(e);
-        
+
         response = -1;
       }
     });

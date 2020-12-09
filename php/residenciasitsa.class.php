@@ -9,9 +9,9 @@
 		}
 
 		public function login($Datos) {
-			
+
 			try {
-				
+
 				$SQL = $this->CONNECTION->prepare(
 					"SELECT
 						idTipoUsuario,
@@ -23,7 +23,7 @@
 				$SQL->bindParam(":contrasena", $Datos['contrasena']);
 				$SQL->execute();
 
-				
+
 				if($SQL->rowCount() > 0) {
 					$Usuario = $SQL->fetch(PDO::FETCH_ASSOC);
 					if($Usuario['idTipoUsuario'] == 1) { #ALUMNOS
@@ -55,13 +55,15 @@
 						$_SESSION['nombre'] = $Usuario['vUsuario'];
 				    	$_SESSION['idUsuario'] = $Usuario['idUsuario'];
 						$_SESSION['numeroControl'] = "";
-					
+
 					}
-					
+
 					# PERMISOS DE BARRA DE NAVEGACION
 					$SQLMODULOS = $this->CONNECTION->prepare("SELECT DISTINCT modulos.idModulo, modulos.vModulo FROM permisos INNER JOIN modulos ON permisos.idModulo = modulos.idModulo WHERE permisos.idTipoUsuario = :idTipoUsuario AND permisos.bActivo = 1 AND modulos.bActivo = 1");
 					$SQLMODULOS->bindParam(":idTipoUsuario", $Usuario['idTipoUsuario']);
 					$SQLMODULOS->execute();
+
+
 
 					$SQLSUBMODULOS = $this->CONNECTION->prepare("SELECT	submodulos.vSubmodulo, submodulos.vRuta FROM permisos INNER JOIN submodulos ON permisos.idSubmodulo = submodulos.idSubmodulo WHERE permisos.idTipoUsuario = :idTipoUsuario AND submodulos.bActivo = 1 AND permisos.bActivo = 1 AND permisos.idModulo = :idModulo");
 					
@@ -82,7 +84,8 @@
 						}
 						$NAVBAR_ .= '</ul></li>';
 					}
-				
+
+
 					$_SESSION['navbar'] = $NAVBAR_;
 					$_SESSION['permisos'] = $PERMISOS;
 					$_SESSION['tipoUsuario'] = $Usuario['idTipoUsuario'];
@@ -205,9 +208,9 @@
 
 
 				$SQLIdProyecto = $this->CONNECTION->PREPARE(
-					"SELECT 
-						idProyectoSeleccionado 
-					FROM proyectoseleccionado 
+					"SELECT
+						idProyectoSeleccionado
+					FROM proyectoseleccionado
 					WHERE idAlumno = :idAlumno");
 				$this->CONNECTION->beginTransaction();
 
@@ -297,18 +300,18 @@
 		}
 		/**
 		 * MODIFICACION HECHA POR MAICKOL RODRIGUEZ,
-		 * SE MODIFICO PARA LA NUEVA FORMA DE LAS RESIDENCIAS 
-		 * Y LOS CAMBIOS QUE PIDIO 
+		 * SE MODIFICO PARA LA NUEVA FORMA DE LAS RESIDENCIAS
+		 * Y LOS CAMBIOS QUE PIDIO
 		 */
 		public function saveReports($idAlumno, $NumeroControl,$fileEvaluacion,$fileFormatoAsesoria,$idEstadoDocumento,$idTipoDocumento,$vNumeroReporte) {
 			try {
-				
+
 				$folder = '../files/'.$NumeroControl;
-				
+
 				if(!file_exists($folder)){
 					mkdir($folder,777,true);
 				}
-			
+
 				$RutaArchivoEvaluacion	     	 = '../files/'.$NumeroControl.'/'.$vNumeroReporte;
 				if(!file_exists($RutaArchivoEvaluacion)){
 					mkdir($RutaArchivoEvaluacion,777,true);
@@ -316,8 +319,8 @@
 
 				$RutaArchivoEvaluacion .=  "/".$fileEvaluacion['name'];
 				$SuccessEvaluacion 			 	 = move_uploaded_file($fileEvaluacion['tmp_name'], $RutaArchivoEvaluacion);
-				
-			
+
+
 
 				$RutaArchivoFormatoAsesoria   	 = '../files/'.$NumeroControl.'/'.$vNumeroReporte;
 				if(!file_exists($RutaArchivoFormatoAsesoria)){
@@ -328,12 +331,12 @@
 
 
 				$SQLIdProyecto = $this->CONNECTION->PREPARE(
-					"SELECT 
-						idProyectoSeleccionado 
-					 FROM proyectoseleccionado 
+					"SELECT
+						idProyectoSeleccionado
+					 FROM proyectoseleccionado
 					 WHERE idAlumno = :idAlumno");
 				$this->CONNECTION->beginTransaction();
-				
+
 				$jsonRutas = "[{\"evaluacionNombre\":\"".$RutaArchivoEvaluacion."\",\"formatpAsesoriaNombre\":\"".$RutaArchivoFormatoAsesoria."\"}]";
 				$jsonNombre = "[{\"evaluacionNombre\":\"".$fileEvaluacion['name']."\",\"formatpAsesoriaNombre\":\"".$fileFormatoAsesoria['name']."\"}]";
 
@@ -352,8 +355,8 @@
 								idEstado,
 								vNombre,
 								vRuta
-							) 
-							VALUES 
+							)
+							VALUES
 							(
 								:idProyectoSeleccionado,
 								:idAlumno,
@@ -373,7 +376,7 @@
 					$SQLReporte->execute();
 
 					$SQLINTPROCESS = $this->CONNECTION->PREPARE(
-						"UPDATE alumnos 
+						"UPDATE alumnos
 						 	SET iProceso = ".$idTipoDocumento."
 						 WHERE idAlumno = :idAlumno"
 						 );
@@ -523,9 +526,9 @@
 
 		public function checkSession() {
 			@session_start();
-			if(!empty($_SESSION['idUsuario']) && !empty($_SESSION['nombre'])){	
+			if(!empty($_SESSION['idUsuario']) && !empty($_SESSION['nombre'])){
 				return true;
-			}else{	
+			}else{
 				return false;
 			}
 		}
@@ -680,9 +683,9 @@
 		public function getAsesoresExternos(){
 			try {
 					$SQL = $this->CONNECTION->PREPARE("
-				SELECT 
+				SELECT
 				idUsuario as idAsesor,
-				vUsuario 
+				vUsuario
 				FROM usuarios WHERE idTipoUsuario  = 4;");
 					$SQL->execute();
 					return $SQL;
@@ -698,9 +701,9 @@
 		public function getAsesoresInternos(){
 			try {
 					$SQL = $this->CONNECTION->PREPARE("
-				SELECT 
+				SELECT
 				idUsuario as idAsesor,
-				vUsuario 
+				vUsuario
 				FROM usuarios WHERE idTipoUsuario  = 5;");
 					$SQL->execute();
 					return $SQL;
@@ -1771,14 +1774,14 @@
 		/*APARTADO PARA LAS ESTADISTICAS*/
 		public function graficaOpcionElegida(){
 			$StatementSQL = $this->CONNECTION->PREPARE(
-				"SELECT carr.vClave as 'Carrera', 
+				"SELECT carr.vClave as 'Carrera',
 				op.vOpcion as 'Opcion',
 				op.vClave AS vClaveOpcion,
-				COUNT(ps.idOpcion) as 'Total' FROM proyectoseleccionado as ps 
-				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
-				INNER JOIN opciones as op ON ps.idOpcion = op.idOpcion 
-				GROUP BY 
+				COUNT(ps.idOpcion) as 'Total' FROM proyectoseleccionado as ps
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera
+				INNER JOIN opciones as op ON ps.idOpcion = op.idOpcion
+				GROUP BY
 				ps.idOpcion,
 				carr.vCarrera,
 				op.vClave
@@ -1798,15 +1801,15 @@
 			}
 			$StatementSQL = $this->CONNECTION->PREPARE(
 					"SELECT carr.vClave AS 'Carrera',
-					'IA' AS Impacto, 
+					'IA' AS Impacto,
 					carr.idCarrera AS 'idCarrera',
-					COUNT(ps.idGiro) as 'Total' FROM proyectoseleccionado as ps 
-					INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-					INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+					COUNT(ps.idGiro) as 'Total' FROM proyectoseleccionado as ps
+					INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno
+					INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera
 					INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
 					WHERE carr.idCarrera = :idCarrera
 	                AND ps.bImpactoAmbiental = 1
-					GROUP BY 
+					GROUP BY
 					ps.idGiro,
 					carr.vCarrera,
 					gir.vGiro
@@ -1826,16 +1829,16 @@
 				$Buscar = $idCarrera;
 			}
 			$StatementSQL = $this->CONNECTION->PREPARE(
-				"SELECT carr.vClave AS 'Carrera', 
+				"SELECT carr.vClave AS 'Carrera',
 				gir.vGiro AS 'Giro',
 				carr.idCarrera AS 'idCarrera',
 				gir.vClave AS 'vClaveGiro',
-				COUNT(ps.idGiro) as 'Total' FROM proyectoseleccionado as ps 
-				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				COUNT(ps.idGiro) as 'Total' FROM proyectoseleccionado as ps
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera
 				INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
 				WHERE carr.idCarrera = :idCarrera
-				GROUP BY 
+				GROUP BY
 				ps.idGiro,
 				carr.vCarrera,
 				gir.vGiro
@@ -1859,12 +1862,12 @@
 				  carr.vCarrera as 'Carrera',
 				  gir.vClave as 'vClaveGiro',
 				      IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
-				      COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
-				      INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-				      INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				      COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps
+				      INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno
+				      INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera
 				      INNER JOIN giros as gir ON ps.idGiro = gir.idGiro
 				      WHERE carr.idCarrera = :idCarrera
-				      GROUP BY 
+				      GROUP BY
 				ps.idGiro,
 				carr.vCarrera,
 				gir.vGiro,
@@ -1885,15 +1888,15 @@
 				$Buscar = $idCarrera;
 			}
 			$StatementSQL = $this->CONNECTION->PREPARE(
-				"SELECT carr.vClave as 'Carrera2', 
+				"SELECT carr.vClave as 'Carrera2',
 				sec.vSector as 'Sector',
 				sec.vClaveSector as 'vClaveSector',
-				COUNT(ps.idSector) as 'Total' FROM proyectoseleccionado as ps 
-				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				COUNT(ps.idSector) as 'Total' FROM proyectoseleccionado as ps
+				INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno
+				INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera
 				INNER JOIN sectores as sec ON ps.idSector = sec.idSector
 				                 WHERE carr.idCarrera = :idCarrera
-				GROUP BY 
+				GROUP BY
 				ps.idSector,
 				carr.vCarrera,
 				sec.idSector
@@ -1917,12 +1920,12 @@
 				  carr.vCarrera as 'Carrera',
 				  sec.vClaveSector as 'Clave',
 				      IF(al.bSexo=1, 'Hombre', 'Mujer') as Sexo,
-				      COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps 
-				      INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno 
-				      INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera 
+				      COUNT(al.bSexo) as Total FROM proyectoseleccionado as ps
+				      INNER JOIN alumnos as al ON ps.idAlumno = al.idAlumno
+				      INNER JOIN carreras as carr ON al.idCarrera = carr.idCarrera
 				      INNER JOIN sectores as sec ON ps.idSector = sec.idSector
 				      WHERE carr.idCarrera = :idCarrera
-				      GROUP BY 
+				      GROUP BY
 				ps.idSector,
 				carr.vCarrera,
 				sec.idSector,
@@ -1955,7 +1958,7 @@
 
 		    //Creamos la ruta donde se guardara el archivo
 		    //Lo guardamos con el nombre Banco de Proyectos y le concatenamos la fecha
-		    //en la cual fue subido dicho archivo      
+		    //en la cual fue subido dicho archivo
 		    $ArchivoExcel = explode('.', $FileExcel['name']);
 			$RutaExcel = '../files/Admin Residencias/Banco de Proyectos '.date("Y-m-d").'.'.$ArchivoExcel[1];
 			$SuccessExcel = move_uploaded_file($FileExcel['tmp_name'], $RutaExcel);
@@ -1966,10 +1969,10 @@
 				$inputFileType = PHPExcel_IOFactory::identify($DirectoryExcel);
 				$objReader = PHPExcel_IOFactory::createReader($inputFileType);
               	$objPHPExcel = $objReader->load($DirectoryExcel);
-              	$sheet = $objPHPExcel->getSheet(0); 
-              	$highestRow = $sheet->getHighestRow(); 
+              	$sheet = $objPHPExcel->getSheet(0);
+              	$highestRow = $sheet->getHighestRow();
               	$highestColumn = $sheet->getHighestColumn();
-              
+
 
               	for ($row = 2; $row <= $highestRow; $row++) {
               		$vNombreEmpresa = $sheet->getCell("A".$row)->getValue();
@@ -2060,7 +2063,7 @@
 		                $SuccessEmpresa = $SQLValidarEmpresa->FETCH(PDO::FETCH_ASSOC);
 
 	                	if ($SuccessCarrera['Total'] == 1 && $SuccessEmpresa['Total'] == 1 && $SuccessPeriodo['Total'] == 1) {
-	                		
+
 	                		//Obtener el id de la Carrera
 	                		$SQLidCarrera = $this->CONNECTION->PREPARE("SELECT idCarrera AS idCar FROM carreras WHERE vCarrera = :vCarrera");
 	                		$SQLidCarrera->bindParam(":vCarrera",$vCarrera);
@@ -2079,7 +2082,7 @@
 	                		$SQLidPeriodo->execute();
 	                		$IDPERIODO = $SQLidPeriodo->FETCH(PDO::FETCH_ASSOC);
 
-	                		$SQLInsertByExcel = $this->CONNECTION->PREPARE(	
+	                		$SQLInsertByExcel = $this->CONNECTION->PREPARE(
 								"INSERT INTO bancoproyectos (
 									idEmpresa,
 									idCarrera,
@@ -2092,7 +2095,7 @@
 									dFechaPropuesta,
 									iTotalResidentes,
 									bActive
-								) 
+								)
 								SELECT
 									:idEmpresa,
 									:idCarrera,
@@ -2119,7 +2122,7 @@
 		                	echo '<div class="alert alert-dismissable alert-success">Todo Correcto!!!
 									<button type="button" class="close" data-dismiss="alert">x</button>
 								  </div>';
-		                }//Fin del IF que compruba la existencia de los datos del Excel 
+		                }//Fin del IF que compruba la existencia de los datos del Excel
 		                else{
 		                	echo '<div class="alert alert-dismissable alert-warning">Los Datos estan mal!!:
 									<button type="button" class="close" data-dismiss="alert">x</button>

@@ -33,8 +33,11 @@
 
 <div id="wrapper">
 
-    <?php include('../modules/navbar.php'); ?>
     <?php
+      include('../modules/navbar.php');
+    ?>
+    <?php
+
         include_once '../php/connection.php';
         if($ObjectITSA->checkSession()){
             if($_SESSION['tipoUsuario'] != 1) {
@@ -45,6 +48,7 @@
             echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
             exit;
         }
+
     ?>
 
 
@@ -54,24 +58,24 @@
         <div class="container-fluid">
             <!-- <input type="hidden" id="idUsuario" value="<?php @session_start(); echo $_SESSION['idUsuario']; ?>"> -->
 
-            <!-- ... Your content goes here ... --> 
+            <!-- ... Your content goes here ... -->
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header"><i class="fa fa-bell"></i> Notificaciones </h1>
-                
+
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-lg-12">
-                    <?php 
+                    <?php
                     @session_start();
                         $NOTIFICACIONES_QUERY = $ObjectITSA->obtenerNotificacionesAlumno($_SESSION['idUsuario']);
                         while($NOTIFICACIONES_ = $NOTIFICACIONES_QUERY->fetch(PDO::FETCH_ASSOC)) {
                     ?>
                         <?php if($NOTIFICACIONES_['bVista'] == 1) { ?>
                             <div class="panel panel-primary">
-                                <div class="panel-heading">                                    
+                                <div class="panel-heading">
                                     <i class="fa fa-bell"></i> <?php echo $NOTIFICACIONES_['dFecha']; ?>
                                 </div>
                                 <div class="panel-body">
@@ -80,7 +84,7 @@
                             </div>
                         <?php } else { ?>
                              <div class="panel panel-default">
-                                <div class="panel-heading">                                   
+                                <div class="panel-heading">
                                     <i class="fa fa-bell-o"></i> <?php echo $NOTIFICACIONES_['dFecha']; ?>
                                 </div>
                                 <div class="panel-body">
@@ -89,7 +93,7 @@
                             </div>
                         <?php } ?>
                     <?php } ?>
-                    <?php $ObjectITSA->actualizarNotificacionesVistas($_SESSION['idUsuario']); ?> 
+                    <?php $ObjectITSA->actualizarNotificacionesVistas($_SESSION['idUsuario']); ?>
                 </div>
             </div>
 
@@ -98,7 +102,7 @@
 </div>
     <!-- jQuery -->
 
-    
+
     <!-- jQuery -->
     <script src="../js/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
