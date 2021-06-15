@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- <meta charset="utf-8"> -->
+<!-- <meta charset="utf-8"> -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  	<meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
+    <meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
     <title>Notificaciones</title>
 
     <!-- Bootstrap Core CSS -->
@@ -20,9 +20,25 @@
     <!-- Custom Fonts -->
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
+    <link rel="stylesheet" href="../css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="../css/style.css">
 
-    <!-- DataTable CSS -->
-    <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
+    <!-- ALERTIFY JS-->
+    <link  href="../css/alertify.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Default theme -->
+    <link rel="stylesheet" href="../css/themes/default.min.css"/>
+
+    <!-- ALERTIFY JS-->
+<script src="../js/alertify.min.js"></script>
+<link rel="stylesheet" href="../css/alertify.min.css" />
+<link rel="stylesheet" href="../css/default.min.css" />
+
+<link rel="shortcut icon" href="../img/logo.ico" />
+
+<link rel="stylesheet" href="../css/ItsaStyle.css" />
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -61,46 +77,76 @@
             </div>
 
             <div class="row">
+                <?php 
+                    if(isset($_POST['guardarRegistro'])) {
+                        if($_POST['asignacion'] == 'A')
+                            $ObjectITSA->guardarNotificacion(
+                                $_POST['idAlumno'],
+                                $_POST['vAviso']
+                            );
+
+                        if($_POST['asignacion'] == 'P')
+                            $ObjectITSA->guardarNotificacion(
+                                $_POST['idAlumno'],
+                                $_POST['vAviso'],
+                                true,
+                                $_POST['idPeriodo']
+                            );
+
+                        print_r($_POST);
+                    }
+                ?>
                 <div class="col-lg-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                         </div>
                         <div class="panel-body">
-                            <div class="row">
-                                <!-- <div class="col-lg-3">
-                                    <div class="form-group">
-                                      <select class="form-control">
-                                        <option>Sistemas</option>
-                                      </select>
-                                    </div>
-                                </div> -->
-                                <div class="col-lg-4">                                    
-                                    <div class="form-group">
-                                      <label class="control-label col-lg-3"># Control</label>
-                                      <input class="form-control" type="" name="">
-                                    </div>
-                                </div>
-                            </div>  
-
                             <form class="form-horizontal" method="POST">
+                                 <center id="opcionesAlerta">
+                          <label class="radio-inline">
+                          <input type="radio" name="asignacion" checked value="A">Por Alumno
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" name="asignacion" value="P">Por Periodo
+                          </label>
+                        </center><br>
+                                <div class="form-group" id="panelPorPeriodo">
+                                  <label for="inputEmail4" class="control-label col-lg-3">Periodo:</label>
+                                  <div class="col-lg-9">
+                                    <select class="form-control selectpicker" data-live-search="true" name="idPeriodo" id="idPeriodo" required>
+                                      <?php foreach ($ObjectITSA->getAllPeriodos() as $r) { ?>
+                                          <option value="<?php echo $r["idPeriodo"]; ?>">
+                                            <?php echo $r["vPeriodo"]; ?>
+                                          </option>
+                                      <?php  } ?>
+                                    </select>
+                                  </div>
+                                </div>
+
+                                <div class="form-group" id="panelPorAlumno">
+                                  <label for="inputEmail4" class="control-label col-lg-3"># Control:</label>
+                                  <div class="col-lg-9">
+                                    <select class="form-control selectpicker" data-live-search="true" name="idAlumno" id="idAlumno" required>
+                                      <?php foreach ($ObjectITSA->obtenerNumerosDeControl() as $r) { ?>
+                                          <option value="<?php echo $r["idAlumno"]; ?>">
+                                            <?php echo $r["vNumeroControl"] . ' - ' . $r["vNombre"] .' '. $r["vApellidoPaterno"] . ' ' . $r["vApellidoMaterno"]; ?>
+                                          </option>
+                                      <?php  } ?>
+                                    </select>
+                                  </div>
+                                </div> 
                                 <div class="form-group">
-                                    <label class="control-label col-lg-3">Notificación:</label>
+                                    <label class="control-label col-lg-3">Mensaje:</label>
                                     <div class="col-lg-9">
                                         <textarea class="form-control" name="vAviso" id="vAviso" placeholder="Mensaje" required></textarea>
                                     </div>                                    
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label class="control-label col-lg-3">¿Generar alerta?:</label>
                                     <div class="col-lg-9">
                                         <input type="checkbox" value="">
                                     </div>
-                                </div>
-                                <button 
-                                    type="button" 
-                                    class="btn btn-default" 
-                                    id="cancelarRegistro">
-                                        <i class="fa fa-times-circle"></i> Cancelar
-                                </button>
+                                </div> -->
                                 <button 
                                     type="submit" 
                                     class="btn btn-info pull-right" 
@@ -131,8 +177,22 @@
 
     <!-- DataTable CSS -->
     <script src="../js/datatable.min.js"></script>
+    <script src="../js/bootstrap-select.js"></script>
     <script type="text/javascript">
+        $(document).ready(function(){
+            $("#panelPorPeriodo").hide();
 
+            $("input[name=asignacion]").click(function () {
+                if($(this).val() == 'A') {
+                  $("#panelPorPeriodo").hide(100);
+                  $("#panelPorAlumno").show(100);
+                }
+                if($(this).val() == 'P') {
+                  $("#panelPorAlumno").hide(100);
+                  $("#panelPorPeriodo").show(100);
+                }
+            });
+        });
     </script>
 </body>
 </html>

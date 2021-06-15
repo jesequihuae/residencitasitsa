@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Residencias - ITSA</title>
+        <title>Iniciar sesión</title>
         <!-- Bootstrap Core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <!-- MetisMenu CSS -->
@@ -13,8 +13,12 @@
         <link href="css/startmin.css" rel="stylesheet">
         <!-- Custom Fonts -->
         <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <!-- ALERTIFY JS-->
+        <script src="js/alertify.min.js"></script>
+        <link rel="stylesheet" href="css/alertify.min.css" />
+        <link rel="stylesheet" href="css/default.min.css" />
 
-
+        <link rel="shortcut icon" href="img/logo.ico" />
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,7 +27,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body>
+    <body style="background: url('img/background.jpg');">
 
         <div class="container">
             <div class="row">
@@ -37,10 +41,15 @@
                   }
 
                 ?>
-                <div class="col-md-4 col-md-offset-4">
+                <div class="col-md-4 col-md-offset-4" style="padding-top: 6%;">
                     <div class="login-panel panel panel-default">
                         <div class="panel-heading">
+                            <center>
+                                <!-- <img src="img/tecnm.png" width="150"><br> -->
+                                <img src="img/itsa.png" width="50">                                
+                            <br><br>
                             <h3 class="panel-title">Por favor inicia sesión</h3>
+                            </center>
                         </div>
                         <div class="panel-body">
                             <form method="post">
@@ -52,7 +61,8 @@
                                         <input class="form-control" placeholder="Contraseña" name="contrasena" type="password"  required >
                                     </div>
                                     <!-- Change this to a button or input when using this as a form -->
-                                    <button type="submit" href="index.php" class="btn btn-lg btn-success btn-block" name="login">Iniciar Sesión</button>
+
+                                    <button type="submit" href="index.html" class="btn btn-lg btn-primary btn-block" name="login">Iniciar Sesión</button>
                                 </fieldset>
                             </form>
                         </div>
@@ -70,6 +80,8 @@
         <script src="js/metisMenu.min.js"></script>
         <!-- Custom Theme JavaScript -->
         <script src="js/startmin.js"></script>
+        <!--ALERTIFY JS-->
+        <!-- <script src="js/alertify.min.js"></script> -->
 
     </body>
 </html>

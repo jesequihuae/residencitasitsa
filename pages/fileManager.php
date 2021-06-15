@@ -23,6 +23,15 @@
 <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="../css/styleFiles.css">
+<!-- ALERTIFY JS-->
+<script src="../js/alertify.min.js"></script>
+<link rel="stylesheet" href="../css/alertify.min.css" />
+<link rel="stylesheet" href="../css/default.min.css" />
+
+<link rel="shortcut icon" href="../img/logo.ico" />
+
+<link rel="stylesheet" href="../css/ItsaStyle.css" />
+
 
 <div id="wrapper">
   <div id="page-wrapper">

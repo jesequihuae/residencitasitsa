@@ -22,6 +22,15 @@
     <link rel="stylesheet" href="../css/jquery.datetimepicker.css" type="text/css">
     <!-- DataTable CSS -->
     <link href="../css/datatable.min.css" rel="stylesheet" type="text/css">
+    <!-- ALERTIFY JS-->
+<script src="../js/alertify.min.js"></script>
+<link rel="stylesheet" href="../css/alertify.min.css" />
+<link rel="stylesheet" href="../css/default.min.css" />
+
+<link rel="shortcut icon" href="../img/logo.ico" />
+
+<link rel="stylesheet" href="../css/ItsaStyle.css" />
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -56,7 +65,7 @@
             <div class="row">
 
                 <div class="col-lg-12">
-                    <h1 class="page-header"><i class="fa fa-briefcase"></i> Dictámenes de Residencias </h1>
+                    <h1 class="page-header"><!-- <i class="fa fa-briefcase"></i> --> Dictámenes de Residencias </h1>
                    
                 </div>
             </div>

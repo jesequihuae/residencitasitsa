@@ -28,7 +28,6 @@
 
     <!-- Default theme -->
     <link rel="stylesheet" href="../css/themes/default.min.css"/>
-
      <!-- jQuery -->
      <script src="../js/jquery.min.js"></script>
       <!-- Bootstrap Core JavaScript -->
@@ -41,6 +40,15 @@
       <script src="../js/index.js"></script>
       <script src="../js/bootstrap-select.js"></script>
       <script src="../js/alertify.js"></script>
+        <!-- ALERTIFY JS-->
+    <script src="../js/alertify.min.js"></script>
+    <link rel="stylesheet" href="../css/alertify.min.css" />
+    <link rel="stylesheet" href="../css/default.min.css" />
+
+    <link rel="shortcut icon" href="../img/logo.ico" />
+
+    <link rel="stylesheet" href="../css/ItsaStyle.css" />
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

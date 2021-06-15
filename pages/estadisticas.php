@@ -9,6 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="tipo_contenido"  content="text/html;" http-equiv="content-type" charset="utf-8">
     <title>Estadísticas</title>
+    <!-- ALERTIFY JS-->
+<script src="../js/alertify.min.js"></script>
+<link rel="stylesheet" href="../css/alertify.min.css" />
+<link rel="stylesheet" href="../css/default.min.css" />
+
+<link rel="shortcut icon" href="../img/logo.ico" />
+
+<link rel="stylesheet" href="../css/ItsaStyle.css" />
+
 </head>
 <body>
 <div id="wrapper">

@@ -1,7 +1,7 @@
 <?php include_once '../php/connection.php'; ?>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">ITSA</a>
+            <!-- <a class="navbar-brand" href="#">ITSA</a> -->
         </div>
         <?php @session_start(); ?>
 
@@ -39,7 +39,7 @@
                 }
             ?>
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <a id="ddSession" class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-user fa-fw"></i><?php @session_start(); echo 'Hola '.@$_SESSION['nombre']; ?><b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
