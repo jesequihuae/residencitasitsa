@@ -4,10 +4,10 @@
 
 	$capsule->addConnection([
 		'driver' => 'mysql',
-		'host'   => '185.201.11.65',
-		'database' => 'u276604013_dbres',
-		'username' => 'u276604013_itsa',
-		'password' => 'jesus_321',
+		'host'   => 'localhost',
+		'database' => 'residenciasitsa',
+		'username' => 'root',
+		'password' => '',
 		'charset' => 'utf8',
 		'collation' => 'utf8_unicode_ci',
 		'prefix' => ''

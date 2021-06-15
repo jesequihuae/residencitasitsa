@@ -1,11 +1,13 @@
 <?php
-
+ 
     require 'vendor/autoload.php';
     require 'conection.php';
+    
     use Slim\Container;
     use \Psr\Http\Message\ServerRequestInterface as Request;
     use \Psr\Http\Message\ResponseInterface as Response;
 
+    
     $c = new \Slim\Container();
     $c['errorHandler'] = function ($c) {
         return function ($request, $response, $exception) use ($c) {
@@ -17,13 +19,15 @@
     };
 
     $app = new \Slim\App($c);
+    
     require 'utils.php';
     $container = $app->getContainer();
+    
     $container['pdo'] = function (Container $container) {
             global $bd,$servidor,$usuariobd,$clavebd;
             $charset = 'utf8';
             $collate = 'utf8_unicode_ci';
-            $dsn = "mysql:host=185.201.11.65;dbname=u276604013_dbres;charset=$charset";
+            $dsn = "mysql:host=localhost;dbname=residenciasitsa;charset=$charset";
             $options = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_PERSISTENT => false,
@@ -31,18 +35,19 @@
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES $charset COLLATE $collate"
             ];
-            return new PDO($dsn, 'u276604013_itsa', 'jesus_321', $options);
+            return new PDO($dsn, 'root', '', $options);
     };
+    
     $app->post('/getData',function(Request $request, Response $response, $args){
         $data = $request->getParsedBody();
         return sendOkResponse("{\"response\":200,\"body\":\"".$data["name2"]."\"}",$response);
     });
+    
     $app->get('/getData/{name}',function(Request $request, Response $response, $args){
         return sendOkResponse("{\"response\":200,\"body\":\"".$args['name']."\"}",$response);
     });
-    $app->head('/getData/{name}',function(Request $request, Response $response, $args){
-        return sendOkResponse("{\"response\":200,\"body\":\"".$args['name']."\"}",$response);
-    });
+    
+
     $app->post("/ConvertWeight",function(Request $request, Response $response, $args){
         $data       = $request->getParsedBody();
         $weight     = $data["Weight"];
@@ -80,7 +85,64 @@
         $userRows = $pdo->query($sql)->fetchAll();
         return sendOkResponse(json_encode($userRows),$response);
     });
-    $app->post("/getSeguimiento",function(Request $req, Response $res, $args){
+
+    $app->post('/savePermissions',function(Request $req,Response $res){
+        $data       = $req->getParsedBody();
+        $json       = $data["json"];
+        $array      = json_decode($json,true);
+        $sql ="
+        INSERT INTO permisos
+        (
+            idTipoUsuario,
+            idModulo,
+            idSubmodulo,
+            bActivo
+        )
+        VALUES";
+        $idTipoUsuario = "";
+        foreach ($array as $value => $val){
+            $sql .= "(";
+                $idTipoUsuario = $val["idTipoUsuario"];
+                $sql .= $idTipoUsuario.",";
+                $sql .= $val["idModulo"].",";
+                $sql .= $val["idSubmodulo"].",";
+                $sql .= "1";
+            $sql .= "),";
+        }
+        $sql = substr($sql,0,strlen($sql)-1);
+        
+        $pdo = $this->get('pdo');
+    
+        $delete = "DELETE FROM permisos WHERE idTipoUsuario = ".$idTipoUsuario;
+        $pdo->query($delete);
+        $pdo->query($sql);
+
+        return sendOkResponse("ok",$res);
+        
+        
+    });
+
+    $app->get('/getModuloSubModulo/{idTipoUsuario}',function(Request $req,Response $res,$args){
+        $sql =
+        "
+            SELECT 
+                m.idModulo,
+                m.vModulo,
+                s.idSubmodulo,
+                s.vSubmodulo,
+                IFNULL(p.idPermiso,0) AS idPermiso
+            FROM modulos AS m
+            INNER JOIN submodulos AS s ON(m.idModulo = s.idModulo)
+            LEFT JOIN permisos AS p ON(p.idModulo = m.idModulo AND p.idSubmodulo = s.idSubmodulo AND p.bActivo = 1 AND p.idTipoUsuario = ".$args["idTipoUsuario"].")
+            WHERE m.bActivo = 1 AND s.bActivo = 1 ;
+        ";
+        $pdo = $this->get('pdo');
+ 
+        $seg = $pdo->query($sql)->fetchAll();
+        return sendOkResponse(json_encode($seg),$res);
+    });
+
+    $app->post("/getSeguimiento",function(Request $req, Response $res){
       $data = $req->getParsedBody();
       $idAlumno = $data["idAlumno"];
       $sql =

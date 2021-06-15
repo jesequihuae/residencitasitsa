@@ -251,7 +251,7 @@
 
               $periodo = $row["vPeriodo"];
 
-
+                  
 
               $sql =
                     "
@@ -268,7 +268,7 @@
               $carrera = $row["vClave"];
 
 
-
+              
               if(!file_exists($url)){
                 if(!mkdir($url)){
                   die("fallo al crear la carpeta");
@@ -753,29 +753,31 @@
 					$IDProyecto = $SQLIdProyecto->fetch(PDO::FETCH_ASSOC);
 
           // GUARDAMOS EVALUACION
-					$SQLReporte = $this->connection->PREPARE(
-						"INSERT INTO documentos
-							(
-								idProyectoSeleccionado,
-								idAlumno,
-								idTipoDocumento,
-								idEstado,
-								vNombre,
-								vRuta,
-                UUID,
-                asesoria
-							) 
-							VALUES 
-							(
-								:idProyectoSeleccionado,
-								:idAlumno,
-								:idTipoDocumento,
-								:idEstado,
-								:vNombre,
-								:vRuta,
-                :UUID,
-                0
-              )");
+          $sql = "INSERT INTO documentos
+          (
+            idProyectoSeleccionado,
+            idAlumno,
+            idTipoDocumento,
+            idEstado,
+            vNombre,
+            vRuta,
+            UUID,
+            asesoria
+          ) 
+          VALUES 
+          (
+            :idProyectoSeleccionado,
+            :idAlumno,
+            :idTipoDocumento,
+            :idEstado,
+            :vNombre,
+            :vRuta,
+            :UUID,
+            0
+          )";
+					$SQLReporte = $this->connection->PREPARE($sql);
+
+          
       
           $fileUUIDEvaluacion .= ".".$fileExtensionEvaluacion;
 					$SQLReporte->bindParam(":idProyectoSeleccionado",$IDProyecto['idProyectoSeleccionado']);

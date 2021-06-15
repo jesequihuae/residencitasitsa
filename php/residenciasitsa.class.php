@@ -553,8 +553,266 @@
 				return false;
 			}
 		}
+		/*SUB MODULOS*/
+		public function getSubModulos(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT
+													 s.idSubmodulo,
+													 s.vSubmodulo,
+													 m.vModulo,
+													 m.idModulo,
+													 s.bActivo,
+													 s.vRuta
+													FROM submodulos AS s
+													LEFT JOIN modulos AS m ON(s.idModulo = m.idModulo)
+													");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+		/*TIPO USUARIO*/
+		public function getTipoUsuario(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT 
+														idTipoUsuario,
+														vTipoUsuario
+													FROM tipousuarios
+													WHERE bActivo = 1;
+													");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+		/* 
+		ALUMNOS EN SEGUIMIENTO
+		*/
+		public function getAlumnosEnSeguimiento(){
+			try{
+				$SQL = $this->CONNECTION->PREPARE(
+					"
+					SELECT 
+						a.idAlumno,
+						a.vNumeroControl,
+						a.vNombre,
+						a.vApellidoPaterno,
+						a.vApellidoMaterno,
+						p.Descripcion,
+						p.idProceso
+					FROM alumnos AS a
+					LEFT JOIN proceso AS p ON(a.iProceso = p.idProceso)"
+				);
+				$SQL->execute();
+				return $SQL;
+			}catch(PDPException $e){
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+				<button type="button" class="close" data-dismiss="alert">x</button>
+			  </div>';
+			}
+		}
+		/***
+		 * REGISTRO DE USUARIO
+		 */
+		public function registroUsuario($Nombre,$Contrasenia,$idTipoUsuario,$bActive,$idCarrera){
+			$SQLID = $this->CONNECTION->prepare("INSERT INTO usuarios
+				(
+					idTipoUsuario,
+					vUsuario,
+					vContrasena,
+					bActivo
+				)
+				VALUES
+				(
+					:idTipoUsuario,
+					:vUsuario,
+					:vContrasena,
+					:bActivo	
+				)");
+			$SQLID->bindParam(":idTipoUsuario",$idTipoUsuario);
+			$SQLID->bindParam(":vUsuario",$Nombre);
+			$SQLID->bindParam(":vContrasena",$Contrasenia);
+			$SQLID->bindParam(":bActivo",$bActive);
+			$SQLID->execute();
+			$idUsuario = $this->CONNECTION->lastInsertId();
 
+			if($idTipoUsuario == 3){
+				$SQLID = $this->CONNECTION->prepare("INSERT INTO jefescarrera
+				(
+					idCarrera,
+					idUsuario,
+					vNombre
+				)
+				VALUES
+				(
+					:idCarrera,
+					:idUsuario,
+					:vNombre
+				)");
+				$SQLID->bindParam(":idCarrera",$idCarrera);
+				$SQLID->bindParam(":idUsuario",$idUsuario);
+				$SQLID->bindParam(":vNombre",$Nombre);
+				$SQLID->execute();
+			}
+		}
+		/**
+		 * ACTUALIZAR USUARIO
+		 */
+		public function actualizarUsuario($idUsuario,$Nombre,$Contrasenia,$idTipoUsuario,$bActive,$idCarrera){
+			$SQLID = $this->CONNECTION->prepare("UPDATE usuarios
+				SET 
+					idTipoUsuario	= :idTipoUsuario,
+					vUsuario		= :vUsuario,
+					vContrasena		= :vContrasena,
+					bActivo			= :bActivo
+				WHERE idUsuario = :idUsuario
+				");
+			$SQLID->bindParam(":idUsuario",$idUsuario);
+			$SQLID->bindParam(":idTipoUsuario",$idTipoUsuario);
+			$SQLID->bindParam(":vUsuario",$Nombre);
+			$SQLID->bindParam(":vContrasena",$Contrasenia);
+			$SQLID->bindParam(":bActivo",$bActive);
+			$SQLID->execute();
 
+			if($idTipoUsuario == 3){
+				$SQLID = $this->CONNECTION->prepare("UPDATE jefescarrera
+				SET
+					idCarrera	= :idCarrera,
+					idUsuario	= :idUsuario,
+					vNombre		= :vNombre
+				WHERE idUsuario = :idUsuario
+				");
+				$SQLID->bindParam(":idCarrera",$idCarrera);
+				$SQLID->bindParam(":idUsuario",$idUsuario);
+				$SQLID->bindParam(":vNombre",$Nombre);
+				$SQLID->bindParam(":idUsuario",$idUsuario);
+				$SQLID->execute();
+			}
+		}
+		/*USUARIOS*/
+		public function getUsuarios(){
+			try{
+				$SQL = $this->CONNECTION->prepare("SELECT 
+														u.idUsuario,
+														tu.vTipoUsuario,
+														tu.idTipoUsuario,
+														u.vUsuario,
+														u.bActivo,
+														u.vContrasena,
+														j.idCarrera
+													FROM usuarios AS u 
+													INNER JOIN tipousuarios AS tu ON(u.idTipoUsuario = tu.idTipoUsuario)
+													LEFT JOIN jefescarrera	AS j  ON(u.idUsuario     = j.idUsuario);
+				");
+				$SQL->execute();
+				return $SQL;
+				
+			}catch(PDOException $e){
+
+			}
+		}
+		/*MODULOS*/
+		public function getModulos(){
+			try {
+				$SQL = $this->CONNECTION->PREPARE("SELECT
+													 idModulo,
+													 vModulo,
+													 bActivo
+													FROM modulos
+													");
+				$SQL->execute();
+				return $SQL;
+			} catch (PDOException $e) {
+				echo '<div class="alert alert-dismissable alert-danger">Ocurrió un error: '.$e->getMessage().'
+						<button type="button" class="close" data-dismiss="alert">x</button>
+					  </div>';
+			}
+		}
+		
+		/*ACTUALIZAR SUB MODULO*/
+		public function actualizarSubModulo($idSubModulo,$idModulo,$submodulo,$vRuta,$bActive){
+			$SQLID = $this->CONNECTION->PREPARE("
+						UPDATE submodulos 
+						SET
+							idModulo	 = :idModulo,
+							vSubmodulo	 = :vSubModulo,
+							bActivo		 = :bActive,
+							vRuta		 = :vRuta
+						WHERE idSubmodulo = :idSubmodulo
+					");
+					$SQLID->bindParam(":idModulo",$idModulo);
+					$SQLID->bindParam(":vSubModulo",$submodulo);
+					$SQLID->bindParam(":bActive",$bActive);
+					$SQLID->bindParam(":vRuta",$vRuta);
+					$SQLID->bindParam(":idSubmodulo",$idSubModulo);
+					$SQLID->execute();
+		}
+		/*AGREGAR SUB MODULO*/
+		public function registrarSubModulo($idModulo,$submodulo,$vRuta,$activo){
+			$sql = "
+						INSERT INTO submodulos 
+						(
+							idModulo,
+							vSubmodulo,
+							bActivo,
+							vRuta
+						) 
+						VALUES
+						(
+							:idModulo,
+							:vSubmodulo,
+							:bActivo,
+							:vRuta
+						);
+			";
+			$SQLID = $this->CONNECTION->PREPARE($sql);
+			$SQLID->bindParam(":idModulo",$idModulo);
+			$SQLID->bindParam(":vSubmodulo",$submodulo);
+			$SQLID->bindParam(":vRuta",$vRuta);
+			$SQLID->bindParam(":bActivo",$activo);
+			$SQLID->execute();
+			
+		}
+		/*AGREGAR MODULO*/
+		public function registrarModulo($modulo,$activo){
+			$sql = "
+						INSERT INTO modulos 
+						(
+							vModulo,
+							bActivo
+						) 
+						VALUES
+						(
+							:vModulo,
+							:bActive
+						);
+			";
+			$SQLID = $this->CONNECTION->PREPARE($sql);
+			$SQLID->bindParam(":vModulo",$modulo);
+			$SQLID->bindParam(":bActive",$activo);
+			$SQLID->execute();
+			
+		}
+		/*ACTUALIZAR MODULO*/
+		public function actualizarModulo($idModulo,$modulo,$activo){
+			$SQLID = $this->CONNECTION->PREPARE("
+						UPDATE modulos 
+						SET
+							vModulo	 = :vModulo,
+							bActivo	 = :bActive	
+						WHERE idModulo = :idModulo
+					");
+					$SQLID->bindParam(":idModulo",$idModulo);
+					$SQLID->bindParam(":vModulo",$modulo);
+					$SQLID->bindParam(":bActive",$activo);
+					$SQLID->execute();
+		}
 		/* ADMINISTRADOR */
 		public function getAlumnos() {
 			try {
@@ -818,7 +1076,6 @@
 						</div>';
 			}
 		}
-
 		public function getAllProyectos(){
 			try {
 				$SQL = $this->CONNECTION->PREPARE("

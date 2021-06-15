@@ -29,6 +29,19 @@
     <!-- Default theme -->
     <link rel="stylesheet" href="../css/themes/default.min.css"/>
 
+     <!-- jQuery -->
+     <script src="../js/jquery.min.js"></script>
+      <!-- Bootstrap Core JavaScript -->
+      <script src="../js/bootstrap.min.js"></script>
+      <!-- Metis Menu Plugin JavaScript -->
+      <script src="../js/metisMenu.min.js"></script>
+      <!-- Custom Theme JavaScript -->
+      <script src="../js/startmin.js"></script>
+      <script src="../js/jquery.datetimepicker.full.min.js"></script>
+      <script src="../js/index.js"></script>
+      <script src="../js/bootstrap-select.js"></script>
+      <script src="../js/alertify.js"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -37,7 +50,155 @@
     <![endif]-->
 </head>
 <body>
+<script>
+  function validacionGuardar(){
+    
 
+    var idProyecto = 0,idPeriodo = 0;
+
+    idProyecto              = $("#idProyecto").val();
+    idPeriodo               = $("#idPeriodo").val();
+    idOpcion                = $("#idOpcion").val();
+    idGiro                  = $("#idGiro").val();
+    idSector                = $("#idSector").val();
+    bImpacto                = $("#bImpacto").val();
+    asesorInterno           = $("#asesorInterno").val();
+    asesorExterno           = $("#asesorExterno").val();
+    personasQueFirmaran     = $("#personasQueFirmaran").val();
+
+
+    nombreAlumno            = $("#nombreAlumno").val();
+    numeroDeControl         = $("#numeroDeControl").val();
+    domicilioAlumno         = $("#domicilioAlumno").val();
+    coloniaAlumno           = $("#coloniaAlumno").val();
+    ciudadEstado            = $("#ciudadEstado").val();
+    correo                  = $("#correo").val();
+    cp                      = $("#cp").val();
+    telefono                = $("#telefono").val();
+    correo                  = $("#correo").val();
+    idSeguroSocial          = $("#idSeguroSocial").val();
+    numeroSeguro            = $("#numeroSeguro").val();
+
+
+    tituloAnteproyecto        = $("#tituloAnteproyecto").val();
+    objectivoGeneral          = $("#objectivoGeneral").val();
+    objectivoEspecifico       = $("#objectivoEspecifico").val();
+    alcancesDelimitaciones    = $("#alcancesDelimitaciones").val();
+    descripcionActividades    = $("#descripcionActividades").val();
+    areaOLugarImplementacion  = $("#areaOLugarImplementacion").val();
+
+    alertify.set('notifier','position', 'top-center');
+    if(idProyecto == 0){
+      alertify.notify('Proyecto obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idPeriodo == 0){
+      alertify.notify('Periodo obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idOpcion == 0){
+      alertify.notify('Opcion obligatoria', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idGiro == 0){
+      alertify.notify('Giro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idSector == 0){
+      alertify.notify('Sector obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(asesorInterno == ""){
+      alertify.notify('Asesor interno obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(asesorExterno == ""){
+      alertify.notify('Asesor externo obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(personasQueFirmaran == ""){
+      alertify.notify('Personas que firmaran obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+
+
+
+    if(nombreAlumno == ""){
+      alertify.notify('Nombre del alumno obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(numeroDeControl == ""){
+      alertify.notify('Numero de control obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(domicilioAlumno == ""){
+      alertify.notify('Domicilio obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(coloniaAlumno == ""){
+      alertify.notify('Colonia obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(ciudadEstado == ""){
+      alertify.notify('Ciudad y Estado obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(cp == ""){
+      alertify.notify('Codigo postal obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(telefono == ""){
+      alertify.notify('telefono obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(correo == ""){
+      alertify.notify('Correo obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(idSeguroSocial == 0){
+      alertify.notify('Seguro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(numeroSeguro == 0){
+      alertify.notify('Numero de seguro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+
+    if(tituloAnteproyecto == ""){
+      alertify.notify('Titulo del anteproyecto obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(objectivoGeneral == ""){
+      alertify.notify('Objectivo general obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(objectivoEspecifico == ""){
+      alertify.notify('Objectivo especifico obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(alcancesDelimitaciones == ""){
+      alertify.notify('Alcances y delimitaciónes obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(descripcionActividades == ""){
+      alertify.notify('Descripcion de las actividades obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    if(areaOLugarImplementacion == ""){
+      alertify.notify('Lugar de la implementacion obligatorio', 'error', 5, function(){  console.log('dismissed'); });
+      return false;
+    }
+    var guardarCron = guardar();
+    if(guardarCron == 0){
+      alertify.alert('ITSA', 'Debes de seleccionar por lo menos una actividad en el cronograma', function(){ alertify.success('Ok'); });
+    }else if(guardarCron == -1){
+      alertify.alert('ITSA', 'Algo salio mal al guardar el cronograma', function(){ alertify.success('Ok'); });
+    }
+
+
+
+  }
+</script>
 <div id="wrapper">
 
     <!-- Navigation -->
@@ -60,6 +221,7 @@
                   echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
                   exit;
               }
+              
             ?>
                 <div class="col-lg-12">
                     <h1 class="page-header">
@@ -347,18 +509,7 @@
 
 </div>
 
-    <!-- jQuery -->
-    <script src="../js/jquery.min.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="../js/bootstrap.min.js"></script>
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="../js/metisMenu.min.js"></script>
-    <!-- Custom Theme JavaScript -->
-    <script src="../js/startmin.js"></script>
-    <script src="../js/jquery.datetimepicker.full.min.js"></script>
-    <script src="../js/index.js"></script>
-    <script src="../js/bootstrap-select.js"></script>
-    <script src="../js/alertify.js"></script>
+   
 </body>
 <script type="text/javascript">
   $('#process-tab .opcionHdr').click(function(event){
@@ -548,151 +699,6 @@
     return response;
   }
 
-  function validacionGuardar(){
 
-    var idProyecto = 0,idPeriodo = 0;
-
-    idProyecto              = $("#idProyecto").val();
-    idPeriodo               = $("#idPeriodo").val();
-    idOpcion                = $("#idOpcion").val();
-    idGiro                  = $("#idGiro").val();
-    idSector                = $("#idSector").val();
-    bImpacto                = $("#bImpacto").val();
-    asesorInterno           = $("#asesorInterno").val();
-    asesorExterno           = $("#asesorExterno").val();
-    personasQueFirmaran     = $("#personasQueFirmaran").val();
-
-
-    nombreAlumno            = $("#nombreAlumno").val();
-    numeroDeControl         = $("#numeroDeControl").val();
-    domicilioAlumno         = $("#domicilioAlumno").val();
-    coloniaAlumno           = $("#coloniaAlumno").val();
-    ciudadEstado            = $("#ciudadEstado").val();
-    correo                  = $("#correo").val();
-    cp                      = $("#cp").val();
-    telefono                = $("#telefono").val();
-    correo                  = $("#correo").val();
-    idSeguroSocial          = $("#idSeguroSocial").val();
-    numeroSeguro            = $("#numeroSeguro").val();
-
-
-    tituloAnteproyecto        = $("#tituloAnteproyecto").val();
-    objectivoGeneral          = $("#objectivoGeneral").val();
-    objectivoEspecifico       = $("#objectivoEspecifico").val();
-    alcancesDelimitaciones    = $("#alcancesDelimitaciones").val();
-    descripcionActividades    = $("#descripcionActividades").val();
-    areaOLugarImplementacion  = $("#areaOLugarImplementacion").val();
-
-    alertify.set('notifier','position', 'top-center');
-    if(idProyecto == 0){
-      alertify.notify('Proyecto obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(idPeriodo == 0){
-      alertify.notify('Periodo obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(idOpcion == 0){
-      alertify.notify('Opcion obligatoria', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(idGiro == 0){
-      alertify.notify('Giro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(idSector == 0){
-      alertify.notify('Sector obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(asesorInterno == ""){
-      alertify.notify('Asesor interno obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(asesorExterno == ""){
-      alertify.notify('Asesor externo obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(personasQueFirmaran == ""){
-      alertify.notify('Personas que firmaran obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-
-
-
-    if(nombreAlumno == ""){
-      alertify.notify('Nombre del alumno obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(numeroDeControl == ""){
-      alertify.notify('Numero de control obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(domicilioAlumno == ""){
-      alertify.notify('Domicilio obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(coloniaAlumno == ""){
-      alertify.notify('Colonia obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(ciudadEstado == ""){
-      alertify.notify('Ciudad y Estado obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(cp == ""){
-      alertify.notify('Codigo postal obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(telefono == ""){
-      alertify.notify('telefono obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(correo == ""){
-      alertify.notify('Correo obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(idSeguroSocial == 0){
-      alertify.notify('Seguro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(numeroSeguro == 0){
-      alertify.notify('Numero de seguro obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-
-    if(tituloAnteproyecto == ""){
-      alertify.notify('Titulo del anteproyecto obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(objectivoGeneral == ""){
-      alertify.notify('Objectivo general obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(objectivoEspecifico == ""){
-      alertify.notify('Objectivo especifico obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(alcancesDelimitaciones == ""){
-      alertify.notify('Alcances y delimitaciónes obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(descripcionActividades == ""){
-      alertify.notify('Descripcion de las actividades obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    if(areaOLugarImplementacion == ""){
-      alertify.notify('Lugar de la implementacion obligatorio', 'error', 5, function(){  console.log('dismissed'); });
-      return false;
-    }
-    var guardarCron = guardar();
-    if(guardarCron == 0){
-      alertify.alert('ITSA', 'Debes de seleccionar por lo menos una actividad en el cronograma', function(){ alertify.success('Ok'); });
-    }else if(guardarCron == -1){
-      alertify.alert('ITSA', 'Algo salio mal al guardar el cronograma', function(){ alertify.success('Ok'); });
-    }
-
-
-
-  }
 </script>
 </html>
