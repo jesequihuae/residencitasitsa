@@ -18,6 +18,23 @@
       $con->execute();
       return $con->fetchAll();
     }
+    public function guardarArchivoAnexo($archivoAnexo){
+      $url = "../documentos/anexo/";
+      if(!file_exists($url)){
+        if(!mkdir($url)){
+          die("fallo al crear la carpeta");
+        }
+      }
+      $ext = pathinfo($archivoAnexo['name'],PATHINFO_EXTENSION);
+      $name = "anexo.".$ext;
+      if(!move_uploaded_file($archivoAnexo['tmp_name'],$url.$name)){
+        die("Fallo al guardar el archivo");
+      }
+
+      echo '<div class="alert alert-dismissable alert-success">Archivo guardado exitosamente!
+      <button type="button" class="close" data-dismiss="alert">x</button>
+        </div>';
+    }
 
     public function getInfoSolicitud(){
       $idAlumno = $_SESSION["idUsuario"];

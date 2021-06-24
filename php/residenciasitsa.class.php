@@ -44,7 +44,6 @@
 				$SQL->bindParam(":contrasena", $Datos['contrasena']);
 				$SQL->execute();
 
-
 				if($SQL->rowCount() > 0) {
 					$Usuario = $SQL->fetch(PDO::FETCH_ASSOC);
 					if($Usuario['idTipoUsuario'] == 1) { #ALUMNOS

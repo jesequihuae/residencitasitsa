@@ -46,13 +46,14 @@
       include('../modules/navbar.php');
     ?>
     <?php
-
         include_once '../php/connection.php';
+        
         if($ObjectITSA->checkSession()){
-            if($_SESSION['tipoUsuario'] != 1) {
-                echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
-                exit;
-            }
+            
+            // if($_SESSION['tipoUsuario'] != 1) {
+            //     echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
+            //     exit;
+            // }
         } else {
             echo '<script language = javascript> self.location = "javascript:history.back(-1);" </script>';
             exit;
